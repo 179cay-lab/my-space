@@ -651,7 +651,7 @@ textarea.input{
       <div class="card">
         <button class="btn" onclick="openCamera()">📸 Chụp ảnh</button>
         <button class="btn btn-secondary" onclick="openUpload()">📁 Upload ảnh</button>
-        <button class="btn btn-secondary" onclick="archiveOldImages()">🗑️ Dọn ảnh cũ</button>
+        <button class="btn btn-secondary" onclick="archiveOldImages()">🗑️ Dọn ảnh cũ (Giải phóng dung lượng)</button>
       </div>
 
       <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImage(event)">
@@ -702,7 +702,20 @@ textarea.input{
       
       <div class="card">
         <div style="font-size:16px;font-weight:700;margin-bottom:12px">🔍 Bộ lọc thời gian</div>
-        <div class="input-group">
+        
+        <div class="input-group" style="grid-template-columns: 1fr; margin-bottom: 12px;">
+          <div>
+            <label class="label">Lọc nhanh</label>
+            <select id="quickFilter" class="input" onchange="applyQuickFilter()">
+              <option value="month">Tháng này</option>
+              <option value="week">Tuần này</option>
+              <option value="today">Hôm nay</option>
+              <option value="custom">Tuỳ chọn khoảng ngày...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group" id="customDateRange" style="display:none;">
           <div>
             <label class="label">Từ ngày</label>
             <input id="statFilterFrom" class="input" type="date" onchange="renderExpenseStats()">
@@ -712,15 +725,15 @@ textarea.input{
             <input id="statFilterTo" class="input" type="date" onchange="renderExpenseStats()">
           </div>
         </div>
-        <button class="btn btn-secondary" style="margin-top:16px" onclick="exportExpenseStats()">📥 Xuất báo cáo (JSON)</button>
+        <button class="btn btn-secondary" style="margin-top:16px" onclick="exportExpenseStatsTxt()">📥 Xuất báo cáo (TXT)</button>
       </div>
 
       <div class="card">
         <div style="font-size:16px;font-weight:700;margin-bottom:12px">💰 Tổng quan chi tiêu</div>
-        <div class="stats-grid">
+        <div class="stats-grid" style="grid-template-columns: 1fr;">
           <div class="stat-card">
             <div class="stat-value" id="statExpenseTotal">0đ</div>
-            <div class="stat-label">Tổng khoảng TG</div>
+            <div class="stat-label">Tổng chi tiêu trong khoảng thời gian lọc</div>
           </div>
         </div>
       </div>
@@ -761,7 +774,7 @@ textarea.input{
         <div class="setting-row">
           <div>
             <div style="font-weight:600">Xuất dữ liệu</div>
-            <div class="sub">Lưu JSON backup</div>
+            <div class="sub">Lưu JSON backup toàn bộ App</div>
           </div>
           <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="exportData()">Xuất</button>
         </div>
@@ -951,26 +964,49 @@ function loadDB(){
   }
 }
 
-function initFilters() {
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-  
+function applyQuickFilter() {
+  const val = document.getElementById("quickFilter").value;
   const fromEl = document.getElementById("statFilterFrom");
   const toEl = document.getElementById("statFilterTo");
+  const customGroup = document.getElementById("customDateRange");
   
-  if(fromEl && toEl) {
-      fromEl.value = firstDay.toISOString().split('T')[0];
-      toEl.value = now.toISOString().split('T')[0];
+  const now = new Date();
+  let fromDate = new Date();
+  let toDate = new Date();
+  
+  if(val === "custom") {
+    customGroup.style.display = "grid";
+    renderExpenseStats();
+    return;
+  } else {
+    customGroup.style.display = "none";
   }
+
+  if(val === "today") {
+    fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    toDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  } else if(val === "week") {
+    fromDate = new Date(now);
+    // Tính lùi về thứ 2 đầu tuần
+    const day = now.getDay() || 7; 
+    fromDate.setDate(now.getDate() - day + 1);
+    fromDate.setHours(0,0,0,0);
+  } else if(val === "month") {
+    fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+
+  if(fromEl && toEl) {
+    fromEl.value = fromDate.toISOString().split('T')[0];
+    toEl.value = toDate.toISOString().split('T')[0];
+  }
+  renderExpenseStats();
 }
 
 function init(){
-  initFilters();
+  applyQuickFilter(); // Khởi tạo filter lúc load app
   renderTodos();
   renderExpenses();
-  renderStats();
   calcStorage();
-  checkMonthlyCleanup();
   updatePasscodeToggle();
 }
 
@@ -1109,7 +1145,7 @@ function saveExpense(){
 }
 
 function deleteExpense(id){
-  if(!confirm("Xoá chi tiêu này?")) return;
+  if(!confirm("Xoá toàn bộ khoản chi tiêu này?")) return;
   DB.expenses = DB.expenses.filter(e => e.id !== id);
   saveDB();
   renderExpenses();
@@ -1206,7 +1242,6 @@ function editTodo(id){
   document.getElementById("todoPriority").value = todo.priority || "medium";
   document.getElementById("todoCategory").value = todo.category || "Personal";
   
-  // Convert old date format to datetime-local if necessary
   let dDate = todo.dueDate || "";
   if(dDate && dDate.length === 10) dDate += "T00:00";
   document.getElementById("todoDueDate").value = dDate;
@@ -1228,7 +1263,6 @@ function editTodo(id){
     renderTodos();
     renderStats();
     
-    // reset onclick back to saveTodo
     btn.onclick = saveTodo;
     btn.innerText = "Tạo công việc";
   };
@@ -1325,7 +1359,7 @@ function renderTodos(){
 }
 
 /* ======================
-STATISTICS
+STATISTICS & EXPORT
 ====================== */
 
 function renderStats(){
@@ -1435,7 +1469,7 @@ function renderExpenseStats(){
       `).join("");
   }
 
-  // Daily stats for chart (hightest up to 7 days from filtered data)
+  // Daily stats for chart
   const dailyData = {};
   data.forEach(e => {
     const d = new Date(e.createdAt);
@@ -1448,25 +1482,29 @@ function renderExpenseStats(){
      const [d1, m1, y1] = a.split('/');
      const [d2, m2, y2] = b.split('/');
      return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
-  }).slice(-7);
+  }).slice(-7); // Chỉ lấy 7 ngày gần nhất trong khoảng lọc để biểu đồ không bị nát
   
   const maxDaily = Math.max(...Object.values(dailyData), 1);
 
   const dayDiv = document.getElementById("expenseDailyStats");
-  dayDiv.innerHTML = days.map(date => {
-    const amount = dailyData[date];
-    const percent = (amount / maxDaily) * 100;
-    return `
-      <div class="chart-bar">
-        <div style="min-width:60px;font-size:12px">${date}</div>
-        <div class="bar" style="width:${percent}%"></div>
-        <div style="min-width:50px;text-align:right;font-size:12px;color:var(--green)">${amount.toLocaleString()}đ</div>
-      </div>
-    `;
-  }).join("");
+  if(days.length === 0) {
+      dayDiv.innerHTML = '<div class="sub">Không có dữ liệu</div>';
+  } else {
+      dayDiv.innerHTML = days.map(date => {
+        const amount = dailyData[date];
+        const percent = (amount / maxDaily) * 100;
+        return `
+          <div class="chart-bar">
+            <div style="min-width:60px;font-size:12px">${date}</div>
+            <div class="bar" style="width:${percent}%"></div>
+            <div style="min-width:50px;text-align:right;font-size:12px;color:var(--green)">${amount.toLocaleString()}đ</div>
+          </div>
+        `;
+      }).join("");
+  }
 }
 
-function exportExpenseStats() {
+function exportExpenseStatsTxt() {
   const fromVal = document.getElementById("statFilterFrom").value;
   const toVal = document.getElementById("statFilterTo").value;
   
@@ -1481,13 +1519,41 @@ function exportExpenseStats() {
     endDate.setHours(23,59,59,999);
     data = data.filter(e => new Date(e.createdAt) <= endDate);
   }
+
+  data.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+  let txt = "========================================================================\n";
+  txt +=    "                            BÁO CÁO CHI TIÊU                            \n";
+  txt +=    `      Từ ngày: ${fromVal ? fromVal.split('-').reverse().join('/') : '---'}  -  Đến ngày: ${toVal ? toVal.split('-').reverse().join('/') : '---'}\n`;
+  txt +=    "========================================================================\n";
   
-  const json = JSON.stringify(data, null, 2);
-  const blob = new Blob([json], {type: 'application/json'});
+  // Header bảng
+  txt += String("Ngày").padEnd(12) + " | " + 
+         String("Danh mục").padEnd(15) + " | " + 
+         String("Tên khoản chi").padEnd(20) + " | " + 
+         String("Số tiền").padStart(15) + "\n";
+  txt += "------------------------------------------------------------------------\n";
+  
+  let total = 0;
+  data.forEach(e => {
+    total += e.price;
+    const d = new Date(e.createdAt).toLocaleDateString('vi');
+    const cat = (e.category || "").substring(0, 15).padEnd(15);
+    const name = (e.name || "").substring(0, 20).padEnd(20);
+    const price = e.price.toLocaleString() + "đ";
+    
+    txt += `${String(d).padEnd(12)} | ${cat} | ${name} | ${price.padStart(15)}\n`;
+  });
+  
+  txt += "------------------------------------------------------------------------\n";
+  txt += String("TỔNG CỘNG:").padEnd(53) + (total.toLocaleString() + "đ").padStart(15) + "\n";
+  txt += "========================================================================\n";
+
+  const blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `expenses-${fromVal||'all'}-to-${toVal||'all'}.json`;
+  a.download = `Bao_Cao_Chi_Tieu_${new Date().toISOString().slice(0, 10)}.txt`;
   a.click();
 }
 
@@ -1558,57 +1624,21 @@ function calcStorage(){
   document.getElementById("storageInfo").innerText = "Storage: " + sizeKB + " KB";
 }
 
-function checkMonthlyCleanup(){
-  const now = new Date();
-  const currentMonth = `${now.getFullYear()}-${now.getMonth()}`;
-  
-  if(DB.lastCleanupMonth !== currentMonth){
-    const oldImages = DB.expenses.filter(e => {
-      const d = new Date(e.createdAt);
-      return d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear();
-    });
-
-    if(oldImages.length > 0){
-      const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-      
-      setTimeout(() => {
-        if(confirm(`Sang tháng mới! Xoá ${oldImages.length} ảnh cũ để tiết kiệm (${sizeBefore} KB)?`)){
-          DB.expenses = DB.expenses.map(e => ({
-            ...e,
-            image: (new Date(e.createdAt).getMonth() !== now.getMonth() || 
-                    new Date(e.createdAt).getFullYear() !== now.getFullYear()) ? "" : e.image
-          }));
-          DB.lastCleanupMonth = currentMonth;
-          saveDB();
-          const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-          alert(`Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
-          renderExpenses();
-          calcStorage();
-        } else {
-          DB.lastCleanupMonth = currentMonth;
-          saveDB();
-        }
-      }, 500);
-    } else {
-      DB.lastCleanupMonth = currentMonth;
-      saveDB();
-    }
-  }
-}
-
 function archiveOldImages(){
-  const now = new Date();
+  if(!confirm("⚠️ Bạn có chắc muốn xoá TOÀN BỘ ảnh đính kèm để giải phóng dung lượng?\n(Các khoản chi tiêu vẫn được giữ nguyên, chỉ xoá hình ảnh)")) return;
+  
   const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
   
-  DB.expenses = DB.expenses.map(e => ({
-    ...e,
-    image: (new Date(e.createdAt).getMonth() !== now.getMonth() || 
-            new Date(e.createdAt).getFullYear() !== now.getFullYear()) ? "" : e.image
-  }));
+  let deletedCount = 0;
+  DB.expenses = DB.expenses.map(e => {
+    if(e.image) deletedCount++;
+    return { ...e, image: "" };
+  });
 
   saveDB();
   const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-  alert(`Đã xoá ảnh cũ. Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
+  alert(`✅ Đã xoá ${deletedCount} ảnh.\n📉 Tiết kiệm được: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
+  
   renderExpenses();
   calcStorage();
 }
