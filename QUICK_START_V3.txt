@@ -1,0 +1,254 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║           MY SPACE MINI v3.0 - QUICK START                        ║
+║          Advanced Todo + Expense Tracker (PWA)                    ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+🎉 WHAT'S NEW IN v3.0?
+─────────────────────────────────────────────────────────────────
+✅ Modal forms (capture photo → immediate form)
+✅ File upload support (was missing)
+✅ Advanced todo features (priority, due date, recurring)
+✅ Split stats (separate Todo & Expense tabs)
+✅ Passcode toggle (enable/disable)
+✅ Settings panel
+✅ Image compression: 5-6x smaller
+✅ Search & filter todos
+✅ Export data as JSON
+
+🔐 SETUP (First Time)
+─────────────────────────────────────────────────────────────────
+1. Open index.html in browser
+2. Default PIN: 6089
+3. Go to ⚙️ Settings tab
+4. Optional: 
+   - Change PIN
+   - Disable passcode for instant access
+   - Enable/disable as needed
+
+💰 TAB 1: EXPENSES (Chi tiêu)
+─────────────────────────────────────────────────────────────────
+QUICK WORKFLOW:
+1. Click "📸 Chụp ảnh" or "📁 Upload ảnh"
+2. Select/capture photo → MODAL OPENS
+3. Choose category
+4. Enter product name
+5. Enter price (see suggestions)
+6. Click suggestion or type custom
+7. Add optional note
+8. Click "Lưu chi tiêu" → Done!
+
+DIFFERENCES FROM v2:
+❌ No more scrolling
+✅ Modal appears immediately after photo
+✅ File upload added (not just camera)
+✅ Images 5-6x more compressed
+
+📋 TAB 2: TODOS (Công việc)
+─────────────────────────────────────────────────────────────────
+NEW TODOIST-LIKE FEATURES:
+• Priority: 🔴 High | 🟡 Medium | 🟢 Low
+• Due Date: With tracking (overdue, today, days left)
+• Category: Personal, Work, Health, Other
+• Description: Add detailed notes
+• Recurring: Daily, Weekly, Monthly, None
+• Status Filter: Active, Done, Overdue
+• Search: Type to find instantly
+• Edit: Click ✏️ to modify
+
+BADGES EXPLAINED:
+🔴 Cao = High priority
+🟡 Trung = Medium priority
+🟢 Thấp = Low priority
+⏰ Quá hạn = Past due date
+📅 Hôm nay = Due today
+📅 Ngày mai = Due tomorrow
+📅 5d = Due in 5 days
+🔁 daily/weekly/monthly = Recurring task
+
+ACTIONS:
+✅ Click circle to complete/uncomplete
+✏️ Edit button to modify
+🗑️ Delete button to remove
+
+📊 TAB 3: TODO STATS
+─────────────────────────────────────────────────────────────────
+Shows:
+• Total tasks
+• Completed tasks
+• Overdue tasks
+• Completion percentage
+• Stats by category
+• Stats by priority (High/Medium/Low)
+
+📈 TAB 4: CHI TIÊU STATS
+─────────────────────────────────────────────────────────────────
+Shows:
+• Total spending (this month)
+• Average per day
+• Today's total
+• This week's total
+• Breakdown by category %
+• Last 7 days bar chart
+
+⚙️ TAB 5: SETTINGS
+─────────────────────────────────────────────────────────────────
+PASSCODE:
+• Toggle: ON/OFF
+• Change PIN: Only when ON
+• Default: 6089
+
+EXPORT:
+• Click "Xuất" to download JSON backup
+• File: myspace-backup-YYYY-MM-DD.json
+
+RESET:
+• Click "Xoá" to delete everything
+• ⚠️  Cannot undo!
+
+🎯 KEY FEATURES
+─────────────────────────────────────────────────────────────────
+✅ Modal forms (no scrolling)
+✅ Immediate feedback (modal after photo)
+✅ File upload (+ camera)
+✅ Advanced todos (5+ fields each)
+✅ Todo filtering & search
+✅ Split statistics
+✅ Passcode management
+✅ Data export
+✅ 5-6x image compression
+✅ Smooth animations
+
+💡 PRO TIPS
+─────────────────────────────────────────────────────────────────
+1. Disable passcode at home for instant access
+   (Settings → Passcode → Toggle OFF)
+
+2. Use high priority for urgent todos
+   (Shows with 🔴 red badge)
+
+3. Set due dates for important tasks
+   (Track overdue automatically)
+
+4. Search todos instantly
+   (Type in search box)
+
+5. Export weekly backups
+   (Settings → Xuất)
+
+6. Photos are tiny (10-15 KB each!)
+   (vs 50-80 KB in v2.0)
+
+7. Recurring todos for habits
+   (Daily/Weekly/Monthly)
+
+8. Notes on expenses
+   (Add details to each expense)
+
+📱 INSTALL AS APP
+─────────────────────────────────────────────────────────────────
+Android Chrome:
+  Menu (⋮) → "Install app"
+
+iPhone Safari:
+  Share → "Add to Home Screen"
+
+Result: App-like experience, offline capable
+
+🔄 DATA MANAGEMENT
+─────────────────────────────────────────────────────────────────
+BACKUP:
+  Settings → Xuất → Gets JSON file
+
+RESTORE:
+  Manually copy-paste JSON (advanced users)
+
+DELETE ALL:
+  Settings → Xoá → Confirm twice
+
+AUTO CLEANUP:
+  Old month images auto-deleted
+  Keeps expense data, removes photos only
+
+💾 STORAGE NOTES
+─────────────────────────────────────────────────────────────────
+• Typical usage: 50-200 KB localStorage
+• Image compression: 5-6x smaller than v2
+• Browser limit: 5-50MB usually
+• Auto cleanup: Removes old month photos
+
+EXAMPLES:
+• 100 todos: ~20-30 KB
+• 100 expenses with photos: ~100-150 KB
+• 1 year of data: ~300-500 KB
+
+❓ TROUBLESHOOTING
+─────────────────────────────────────────────────────────────────
+Modal not appearing?
+  → Reload page
+  → Check browser permissions
+  → Clear cache
+
+Forgot PIN?
+  → Settings → Passcode OFF (if you remember any)
+  → Otherwise: Clear localStorage
+
+Storage full?
+  → Settings → Xuất (export backup)
+  → Reset all data
+  → Start fresh
+
+Images too small?
+  → Still readable (highly compressed)
+  → Quality is intentional (storage savings)
+
+🔒 PRIVACY
+─────────────────────────────────────────────────────────────────
+✅ 100% local storage (your device only)
+✅ No internet needed (after loading)
+✅ No tracking, no ads
+✅ Offline-first design
+✅ Can clear anytime
+✅ Export when you want
+✅ Delete everything option
+
+⚡ PERFORMANCE
+─────────────────────────────────────────────────────────────────
+• No dependencies (vanilla JS)
+• Fast search filtering
+• Smooth animations
+• Instant modals
+• Optimized images
+
+🆚 V2.0 vs V3.0 COMPARISON
+─────────────────────────────────────────────────────────────────
+Feature              | v2.0      | v3.0
+─────────────────────┼──────────┼──────────
+Photo capture        | Yes       | Yes ✅
+File upload          | No        | Yes ✅
+Modal form           | No        | Yes ✅
+Todo features        | Basic     | Advanced ✅
+Priority             | No        | Yes ✅
+Due dates            | No        | Yes ✅
+Todo categories      | No        | Yes ✅
+Recurring            | No        | Yes ✅
+Todo search          | No        | Yes ✅
+Passcode toggle      | No        | Yes ✅
+Settings            | No        | Yes ✅
+Data export         | No        | Yes ✅
+Split stats         | No        | Yes ✅
+Image compression   | 0.35      | 0.2 ✅
+Size per image      | 50-80 KB  | 10-15 KB ✅
+
+📞 SUPPORT
+─────────────────────────────────────────────────────────────────
+Works on:
+• Chrome, Edge, Firefox, Safari (desktop)
+• Chrome, Firefox, Safari (mobile)
+• iOS home screen app
+• Android home screen app
+• Offline mode (after first load)
+
+─────────────────────────────────────────────────────────────────
+My Space v3.0
+Major Redesign - Modal-First UX - Advanced Features
+─────────────────────────────────────────────────────────────────

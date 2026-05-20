@@ -1,7 +1,6 @@
 <!-- =========================
-MY SPACE MINI
-Todo + Expense Camera
-Deployable on GitHub Pages
+MY SPACE MINI V3.0
+Todo + Expense Tracker (Redesigned)
 ========================= -->
 
 <!DOCTYPE html>
@@ -9,11 +8,8 @@ Deployable on GitHub Pages
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-
 <title>My Space</title>
-
 <link rel="manifest" href="manifest.json">
-
 <style>
 :root{
   --bg:#0f1115;
@@ -24,6 +20,7 @@ Deployable on GitHub Pages
   --accent:#6c7cff;
   --green:#3bd17f;
   --red:#ff5d73;
+  --yellow:#ffc107;
   --radius:18px;
 }
 
@@ -41,8 +38,9 @@ body{
   overflow-x:hidden;
 }
 
-button,input{
+button,input,select,textarea{
   font-family:inherit;
+  color:inherit;
 }
 
 .hidden{
@@ -50,7 +48,6 @@ button,input{
 }
 
 /* LOCK */
-
 #lock{
   position:fixed;
   inset:0;
@@ -63,20 +60,20 @@ button,input{
 }
 
 .logo{
-  font-size:26px;
+  font-size:32px;
   font-weight:700;
   margin-bottom:30px;
 }
 
 .pin-box{
   display:flex;
-  gap:10px;
+  gap:12px;
   margin-bottom:30px;
 }
 
 .dot{
-  width:16px;
-  height:16px;
+  width:18px;
+  height:18px;
   border-radius:50%;
   border:2px solid #444;
 }
@@ -99,10 +96,16 @@ button,input{
   background:var(--card);
   color:#fff;
   font-size:24px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.key:active{
+  background:var(--accent);
 }
 
 /* APP */
-
 .app{
   max-width:700px;
   margin:auto;
@@ -121,22 +124,28 @@ button,input{
 .sub{
   color:var(--muted);
   margin-top:4px;
+  font-size:14px;
 }
 
 .tabs{
   display:flex;
-  gap:10px;
-  padding:0 20px 20px;
+  gap:8px;
+  padding:0 12px 16px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
 }
 
 .tab{
-  flex:1;
+  flex-shrink:0;
   border:none;
   background:var(--card);
   color:var(--muted);
-  padding:14px;
-  border-radius:14px;
-  font-size:15px;
+  padding:12px 16px;
+  border-radius:12px;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 .tab.active{
@@ -145,15 +154,15 @@ button,input{
 }
 
 .section{
-  padding:0 20px;
+  padding:0 16px;
 }
 
 .card{
   background:var(--card);
   border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:18px;
-  margin-bottom:16px;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:12px;
 }
 
 .row{
@@ -162,25 +171,157 @@ button,input{
   align-items:center;
 }
 
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  z-index:2000;
+  align-items:flex-end;
+  justify-content:center;
+  animation:slideUp 0.3s ease;
+}
+
+.modal.show{
+  display:flex;
+}
+
+@keyframes slideUp{
+  from{transform:translateY(100%);opacity:0}
+  to{transform:translateY(0);opacity:1}
+}
+
+.modal-content{
+  background:var(--card);
+  border-radius:24px 24px 0 0;
+  padding:24px;
+  width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.modal-title{
+  font-size:20px;
+  font-weight:700;
+}
+
+.modal-close{
+  background:none;
+  border:none;
+  color:var(--text);
+  font-size:24px;
+  cursor:pointer;
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* INPUT */
+.input{
+  width:100%;
+  background:#10131a;
+  border:1px solid var(--line);
+  color:#fff;
+  border-radius:12px;
+  padding:12px;
+  margin-top:8px;
+  font-size:14px;
+}
+
+.input:focus{
+  outline:none;
+  border-color:var(--accent);
+}
+
+select.input,textarea.input{
+  font-size:14px;
+}
+
+textarea.input{
+  resize:vertical;
+  min-height:80px;
+}
+
+.input-group{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:12px;
+}
+
+.input-group .input{
+  margin-top:0;
+}
+
+.label{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:12px;
+  margin-bottom:4px;
+  display:block;
+}
+
+.btn{
+  width:100%;
+  border:none;
+  border-radius:12px;
+  padding:14px;
+  margin-top:16px;
+  background:var(--accent);
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.btn:active{
+  opacity:0.8;
+}
+
+.btn-secondary{
+  background:#222836;
+}
+
+.btn-danger{
+  background:var(--red);
+}
+
+/* TODO ITEM */
 .todo-item{
   display:flex;
   gap:12px;
+  padding:14px;
+  background:#10131a;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:10px;
   align-items:flex-start;
-  padding:14px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.todo-item:last-child{
-  border-bottom:none;
 }
 
 .check{
-  width:22px;
-  height:22px;
+  width:24px;
+  height:24px;
   border-radius:50%;
   border:2px solid #555;
   flex-shrink:0;
   margin-top:2px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.check:hover{
+  border-color:var(--accent);
 }
 
 .check.done{
@@ -188,155 +329,134 @@ button,input{
   border-color:var(--green);
 }
 
+.todo-content{
+  flex:1;
+  min-width:0;
+}
+
+.todo-text{
+  font-weight:500;
+  word-break:break-word;
+}
+
 .todo-text.done{
   text-decoration:line-through;
-  opacity:.45;
+  opacity:0.5;
 }
 
 .todo-meta{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:4px;
-}
-
-.input{
-  width:100%;
-  background:#10131a;
-  border:1px solid var(--line);
-  color:#fff;
-  border-radius:14px;
-  padding:14px;
-  margin-top:10px;
-}
-
-.btn{
-  width:100%;
-  border:none;
-  border-radius:14px;
-  padding:14px;
-  margin-top:12px;
-  background:var(--accent);
-  color:#fff;
-  font-size:15px;
-  font-weight:600;
-}
-
-.expense-img{
-  width:64px;
-  height:64px;
-  object-fit:cover;
-  border-radius:12px;
-}
-
-.expense-item{
-  display:flex;
-  gap:14px;
-  padding:14px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.expense-item:last-child{
-  border-bottom:none;
-}
-
-.money{
-  color:var(--green);
-  font-weight:700;
-}
-
-.storage{
-  font-size:13px;
-  color:var(--muted);
-  margin-top:8px;
-}
-
-.small-btn{
-  border:none;
-  background:#222836;
-  color:#fff;
-  padding:10px 12px;
-  border-radius:10px;
-  margin-top:10px;
-}
-
-.camera{
-  width:100%;
-  border:2px dashed #394050;
-  border-radius:18px;
-  padding:30px;
-  text-align:center;
-  color:var(--muted);
-  margin-top:12px;
-}
-
-/* IMAGE PREVIEW */
-
-.preview-img{
-  width:100%;
-  max-height:300px;
-  object-fit:cover;
-  border-radius:14px;
-  margin-top:12px;
-}
-
-.delete-btn{
-  background:var(--red);
-  border:none;
-  color:#fff;
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:12px;
-  cursor:pointer;
-}
-
-.delete-btn:hover{
-  opacity:0.8;
-}
-
-/* SUGGESTIONS */
-
-.suggestions{
   display:flex;
   gap:8px;
-  margin-top:8px;
+  margin-top:6px;
   flex-wrap:wrap;
 }
 
-.suggestion-btn{
-  background:var(--card);
-  border:1px solid var(--line);
+.badge{
+  font-size:11px;
+  padding:3px 8px;
+  border-radius:6px;
+  background:#1a1f2e;
   color:var(--muted);
-  padding:8px 12px;
-  border-radius:8px;
-  font-size:12px;
-  cursor:pointer;
 }
 
-.suggestion-btn:hover{
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
+.badge.high{
+  background:#5a2020;
+  color:#ff7070;
+}
+
+.badge.medium{
+  background:#5a4520;
+  color:#ffaa70;
+}
+
+.badge.low{
+  background:#205a20;
+  color:#70ff70;
+}
+
+.badge.overdue{
+  background:#5a2030;
+  color:var(--red);
+}
+
+.todo-actions{
+  display:flex;
+  gap:6px;
+}
+
+.icon-btn{
+  background:none;
+  border:none;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:16px;
+  padding:4px;
+}
+
+.icon-btn:hover{
+  color:var(--accent);
+}
+
+/* EXPENSE ITEM */
+.expense-item{
+  display:flex;
+  gap:12px;
+  padding:12px;
+  background:#10131a;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
+.expense-img{
+  width:60px;
+  height:60px;
+  object-fit:cover;
+  border-radius:8px;
+  flex-shrink:0;
+  background:#222;
+}
+
+.expense-content{
+  flex:1;
+  min-width:0;
+}
+
+.expense-name{
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.expense-price{
+  color:var(--green);
+  font-weight:700;
+  font-size:14px;
+}
+
+.expense-meta{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
 }
 
 /* STATS */
-
-.stats-container{
+.stats-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-top:12px;
+  gap:12px;
+  margin-bottom:12px;
 }
 
 .stat-card{
-  background:var(--card);
+  background:#10131a;
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:12px;
   padding:14px;
   text-align:center;
 }
 
 .stat-value{
-  font-size:24px;
+  font-size:22px;
   font-weight:700;
   color:var(--accent);
 }
@@ -347,20 +467,10 @@ button,input{
   margin-top:6px;
 }
 
-.chart{
-  width:100%;
-  height:200px;
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px;
-  margin-top:12px;
-}
-
 .category-row{
   display:flex;
   justify-content:space-between;
-  padding:10px 0;
+  padding:12px 0;
   border-bottom:1px solid var(--line);
   font-size:14px;
 }
@@ -375,85 +485,85 @@ button,input{
 
 .category-amount{
   color:var(--green);
-  font-weight:700;
+  font-weight:600;
+  margin:0 12px;
 }
 
 .category-percent{
   color:var(--muted);
-  margin-left:10px;
   font-size:12px;
+  min-width:40px;
+  text-align:right;
 }
 
-/* MODAL */
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  z-index:2000;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-.modal.show{
+.chart-bar{
   display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 0;
 }
 
-.modal-content{
-  background:var(--card);
-  border-radius:20px;
-  padding:24px;
-  max-width:500px;
-  width:100%;
-  max-height:80vh;
-  overflow-y:auto;
+.bar{
+  height:6px;
+  background:var(--accent);
+  border-radius:3px;
+  flex:1;
+  min-width:20px;
 }
 
-.modal-close{
-  float:right;
-  background:none;
+/* SETTINGS */
+.setting-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.setting-row:last-child{
+  border-bottom:none;
+}
+
+.toggle{
+  width:48px;
+  height:28px;
+  background:#555;
   border:none;
-  color:var(--text);
-  font-size:24px;
+  border-radius:14px;
   cursor:pointer;
-}
-
-.modal-title{
-  font-size:20px;
-  font-weight:700;
-  margin-bottom:16px;
-  clear:both;
-}
-
-/* EXPENSE ITEM ENHANCED */
-
-.expense-item-wrapper{
   position:relative;
+  transition:0.3s;
 }
 
-.expense-item-delete{
+.toggle::after{
+  content:'';
   position:absolute;
-  top:0;
-  right:0;
-  width:30px;
-  height:30px;
-  background:var(--red);
-  border:none;
+  width:24px;
+  height:24px;
+  background:#fff;
   border-radius:50%;
-  color:#fff;
-  cursor:pointer;
-  font-size:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  opacity:0;
-  transition:opacity 0.2s;
+  top:2px;
+  left:2px;
+  transition:0.3s;
 }
 
-.expense-item-wrapper:hover .expense-item-delete{
-  opacity:1;
+.toggle.on{
+  background:var(--accent);
+}
+
+.toggle.on::after{
+  left:22px;
+}
+
+.empty-state{
+  text-align:center;
+  padding:40px 20px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  font-size:48px;
+  margin-bottom:12px;
 }
 </style>
 </head>
@@ -492,229 +602,327 @@ button,input{
 
   <div class="header">
     <div class="title">My Space</div>
-    <div class="sub">Todo + Expense Camera</div>
+    <div class="sub">Todo + Expense Tracker</div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('todo',this)">Todo</button>
-    <button class="tab" onclick="switchTab('expense',this)">Chi tiêu</button>
-    <button class="tab" onclick="switchTab('stats',this)">Thống kê</button>
+    <button class="tab active" onclick="switchTab('todos',this)">📋 Todo</button>
+    <button class="tab" onclick="switchTab('expenses',this)">💰 Chi tiêu</button>
+    <button class="tab" onclick="switchTab('todo-stats',this)">📊 Todo Stats</button>
+    <button class="tab" onclick="switchTab('expense-stats',this)">📈 Chi tiêu Stats</button>
+    <button class="tab" onclick="switchTab('settings',this)">⚙️ Cài đặt</button>
   </div>
 
-  <!-- TODO -->
-  <div id="todo">
-
+  <!-- TODOS TAB -->
+  <div id="todos">
     <div class="section">
-
       <div class="card">
-
         <div class="row">
           <div>
-            <div style="font-size:20px;font-weight:700" id="todoCount">0</div>
-            <div class="sub">Công việc</div>
+            <div style="font-size:20px;font-weight:700" id="todoTotal">0</div>
+            <div class="sub">Tổng cộng</div>
           </div>
           <div>
-            <div style="font-size:20px;font-weight:700" id="todoDoneCount">0</div>
+            <div style="font-size:20px;font-weight:700" id="todoDone">0</div>
             <div class="sub">Hoàn thành</div>
           </div>
+          <div>
+            <div style="font-size:20px;font-weight:700" id="todoOverdue">0</div>
+            <div class="sub">Quá hạn</div>
+          </div>
         </div>
-
       </div>
 
       <div class="card">
-
-        <input id="todoInput" class="input" placeholder="Việc cần làm..." />
-
-        <button class="btn" onclick="addTodo()">
-          Thêm công việc
-        </button>
-
-      </div>
-
-      <div class="card" id="todoList"></div>
-
-    </div>
-
-  </div>
-
-  <!-- EXPENSE -->
-  <div id="expense" class="hidden">
-
-    <div class="section">
-
-      <div class="card">
-
-        <div style="font-size:20px;font-weight:700" id="totalMoney">
-          0đ
-        </div>
-
-        <div class="sub">
-          Tổng chi tiêu
-        </div>
-
-        <div class="storage" id="storageInfo">
-          Storage: calculating...
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <input type="file"
-               id="imageInput"
-               accept="image/*"
-               capture="environment"
-               class="hidden"
-               onchange="handleImage(event)">
-
-        <div class="camera" onclick="pickImage()">
-          📸 Chụp / Upload bill
-        </div>
-
-        <img id="previewImg" class="preview-img hidden" />
-
-        <select id="expenseCategory" class="input">
-          <option value="">-- Chọn danh mục --</option>
-          <option value="Ăn uống">Ăn uống</option>
-          <option value="Di chuyển">Di chuyển</option>
-          <option value="Giải trí">Giải trí</option>
-          <option value="Mua sắm">Mua sắm</option>
-          <option value="Sức khỏe">Sức khỏe</option>
-          <option value="Giáo dục">Giáo dục</option>
-          <option value="Khác">Khác</option>
+        <button class="btn" onclick="openTodoModal()">+ Thêm Todo</button>
+        <input id="searchTodos" class="input" placeholder="Tìm kiếm..." oninput="filterTodos()">
+        <select id="filterStatus" class="input" onchange="filterTodos()">
+          <option value="">Tất cả</option>
+          <option value="active">Đang làm</option>
+          <option value="done">Hoàn thành</option>
+          <option value="overdue">Quá hạn</option>
         </select>
-
-        <input id="expenseName"
-               class="input"
-               placeholder="Tên sản phẩm">
-
-        <input id="expensePrice"
-               class="input"
-               placeholder="Giá tiền"
-               type="number"
-               oninput="showSuggestions()">
-
-        <div class="suggestions" id="suggestions"></div>
-
-        <button class="btn" onclick="saveExpense()">
-          Lưu chi tiêu
-        </button>
-
       </div>
 
-      <div class="card">
-        <button class="small-btn" onclick="archiveOldImages()">
-          Dọn ảnh tháng cũ
-        </button>
-        <button class="small-btn" onclick="deleteAllExpenses()" style="background:#8b0000;">
-          Xoá tất cả chi tiêu
-        </button>
-      </div>
-
-      <div class="card" id="expenseList"></div>
-
+      <div id="todoList"></div>
     </div>
-
   </div>
 
-  <!-- STATS -->
-  <div id="stats" class="hidden">
-
+  <!-- EXPENSES TAB -->
+  <div id="expenses" class="hidden">
     <div class="section">
-
       <div class="card">
-        <div style="font-size:20px;font-weight:700">Thống kê</div>
-        <div class="sub">Phân tích chi tiêu</div>
+        <div style="font-size:20px;font-weight:700" id="expenseTotal">0đ</div>
+        <div class="sub">Tổng chi tiêu (tháng này)</div>
+        <div class="sub" id="storageInfo" style="margin-top:8px">Storage: 0 KB</div>
       </div>
 
       <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">📊 Tổng quát</div>
-        <div class="stats-container">
+        <button class="btn" onclick="openCamera()">📸 Chụp ảnh</button>
+        <button class="btn btn-secondary" onclick="openUpload()">📁 Upload ảnh</button>
+        <button class="btn btn-secondary" onclick="archiveOldImages()">🗑️ Dọn ảnh cũ</button>
+      </div>
+
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImage">
+      <input type="file" id="uploadInput" accept="image/*" class="hidden" onchange="handleImage">
+
+      <div id="expenseList"></div>
+    </div>
+  </div>
+
+  <!-- TODO STATS TAB -->
+  <div id="todo-stats" class="hidden">
+    <div class="section">
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;margin-bottom:12px">📊 Thống kê công việc</div>
+        <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-value" id="statTotalExpense">0đ</div>
-            <div class="stat-label">Tổng chi tiêu</div>
+            <div class="stat-value" id="statTodoTotal">0</div>
+            <div class="stat-label">Tổng cộng</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" id="statAvgExpense">0đ</div>
+            <div class="stat-value" id="statTodoDone">0</div>
+            <div class="stat-label">Hoàn thành</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statTodoOverdue">0</div>
+            <div class="stat-label">Quá hạn</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statTodoCompletion">0%</div>
+            <div class="stat-label">Tỷ lệ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">💼 Theo danh mục</div>
+        <div id="todoCategoryStats"></div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">⏱️ Theo ưu tiên</div>
+        <div id="todoPriorityStats"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPENSE STATS TAB -->
+  <div id="expense-stats" class="hidden">
+    <div class="section">
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;margin-bottom:12px">💰 Thống kê chi tiêu</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statExpenseTotal">0đ</div>
+            <div class="stat-label">Tháng này</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statExpenseDaily">0đ</div>
             <div class="stat-label">Trung bình/ngày</div>
           </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">📈 Thống kê hôm nay</div>
-        <div class="stats-container">
           <div class="stat-card">
-            <div class="stat-value" id="statTodayExpense">0đ</div>
+            <div class="stat-value" id="statExpenseToday">0đ</div>
             <div class="stat-label">Hôm nay</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" id="statThisWeekExpense">0đ</div>
+            <div class="stat-value" id="statExpenseWeek">0đ</div>
             <div class="stat-label">Tuần này</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">💳 Theo danh mục (tháng này)</div>
-        <div id="categoryChart"></div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">📁 Theo danh mục</div>
+        <div id="expenseCategoryStats"></div>
       </div>
 
       <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">📅 Theo ngày (7 ngày gần nhất)</div>
-        <div id="dailyChart"></div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px">📅 7 ngày gần nhất</div>
+        <div id="expenseDailyStats"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div id="settings" class="hidden">
+    <div class="section">
+      <div class="card">
+        <div style="font-size:16px;font-weight:700;margin-bottom:16px">⚙️ Cài đặt</div>
+
+        <div class="setting-row">
+          <div>
+            <div style="font-weight:600">Passcode</div>
+            <div class="sub">Bật/tắt khóa PIN</div>
+          </div>
+          <button class="toggle" id="passcodeToggle" onclick="togglePasscode()"></button>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <div style="font-weight:600">Thay đổi Passcode</div>
+            <div class="sub">PIN hiện tại: 6089</div>
+          </div>
+          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="changePasscode()">Đổi</button>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <div style="font-weight:600">Xuất dữ liệu</div>
+            <div class="sub">Lưu JSON backup</div>
+          </div>
+          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="exportData()">Xuất</button>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <div style="font-weight:600">Xoá tất cả dữ liệu</div>
+            <div class="sub">Không thể hoàn tác</div>
+          </div>
+          <button class="btn btn-danger" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="resetAll()">Xoá</button>
+        </div>
       </div>
 
+      <div class="card">
+        <div style="font-size:12px;color:var(--muted)">
+          <div style="margin-bottom:8px">📱 <strong>My Space v3.0</strong></div>
+          <div>✅ Privacy-first - Tất cả dữ liệu lưu trên máy</div>
+          <div>✅ Offline-ready - Hoạt động khi không có internet</div>
+          <div>✅ Progressive Web App</div>
+        </div>
+      </div>
     </div>
-
   </div>
 
 </div>
 
+<!-- MODALS -->
+
+<!-- EXPENSE MODAL -->
+<div class="modal" id="expenseModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Thêm chi tiêu</div>
+      <button class="modal-close" onclick="closeModal('expenseModal')">×</button>
+    </div>
+
+    <img id="previewExpense" class="input" style="width:100%;border-radius:12px;margin-bottom:16px;max-height:200px;object-fit:cover" />
+
+    <label class="label">Danh mục</label>
+    <select id="expenseCategory" class="input">
+      <option value="">-- Chọn --</option>
+      <option value="Ăn uống">🍔 Ăn uống</option>
+      <option value="Di chuyển">🚗 Di chuyển</option>
+      <option value="Giải trí">🎬 Giải trí</option>
+      <option value="Mua sắm">🛍️ Mua sắm</option>
+      <option value="Sức khỏe">⚕️ Sức khỏe</option>
+      <option value="Giáo dục">📚 Giáo dục</option>
+      <option value="Khác">📌 Khác</option>
+    </select>
+
+    <label class="label">Tên sản phẩm</label>
+    <input id="expenseName" class="input" placeholder="Ví dụ: Cơm chiên">
+
+    <label class="label">Giá tiền</label>
+    <input id="expensePrice" class="input" type="number" placeholder="Nhập giá">
+    <div id="priceSuggestions" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>
+
+    <label class="label">Ghi chú</label>
+    <textarea id="expenseNote" class="input" placeholder="Thêm ghi chú (tuỳ chọn)"></textarea>
+
+    <button class="btn" onclick="saveExpense()">Lưu chi tiêu</button>
+    <button class="btn btn-secondary" onclick="closeModal('expenseModal')">Huỷ</button>
+  </div>
+</div>
+
+<!-- TODO MODAL -->
+<div class="modal" id="todoModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Thêm công việc</div>
+      <button class="modal-close" onclick="closeModal('todoModal')">×</button>
+    </div>
+
+    <label class="label">Tên công việc</label>
+    <input id="todoName" class="input" placeholder="Ví dụ: Mua sắm đồ tết">
+
+    <label class="label">Mô tả (tuỳ chọn)</label>
+    <textarea id="todoDesc" class="input" placeholder="Thêm chi tiết..."></textarea>
+
+    <div class="input-group">
+      <div>
+        <label class="label">Ưu tiên</label>
+        <select id="todoPriority" class="input">
+          <option value="low">🟢 Thấp</option>
+          <option value="medium">🟡 Trung bình</option>
+          <option value="high">🔴 Cao</option>
+        </select>
+      </div>
+      <div>
+        <label class="label">Danh mục</label>
+        <select id="todoCategory" class="input">
+          <option value="Personal">Cá nhân</option>
+          <option value="Work">Công việc</option>
+          <option value="Health">Sức khỏe</option>
+          <option value="Other">Khác</option>
+        </select>
+      </div>
+    </div>
+
+    <label class="label">Hạn chót</label>
+    <input id="todoDueDate" class="input" type="date">
+
+    <label class="label">Lặp lại</label>
+    <select id="todoRecurring" class="input">
+      <option value="none">Không lặp</option>
+      <option value="daily">Mỗi ngày</option>
+      <option value="weekly">Mỗi tuần</option>
+      <option value="monthly">Mỗi tháng</option>
+    </select>
+
+    <button class="btn" onclick="saveTodo()">Tạo công việc</button>
+    <button class="btn btn-secondary" onclick="closeModal('todoModal')">Huỷ</button>
+  </div>
+</div>
+
 <script>
 /* ======================
-PIN
+PIN LOCK
 ====================== */
 
-const PIN = "6089";
+const DEFAULT_PIN = "6089";
 let currentPin = "";
+let pinEnabled = true;
 
 function press(n){
+  if(!pinEnabled) return;
   if(currentPin.length >= 4) return;
-
   currentPin += n;
-
   updateDots();
-
   if(currentPin.length === 4){
-
-    setTimeout(()=>{
-
-      if(currentPin === PIN){
+    setTimeout(() => {
+      if(currentPin === localStorage.getItem("pin") || currentPin === DEFAULT_PIN){
         document.getElementById("lock").classList.add("hidden");
         document.getElementById("app").classList.remove("hidden");
         init();
       }else{
-        alert("Sai PIN");
+        alert("Sai PIN!");
         currentPin = "";
         updateDots();
       }
-
-    },150);
+    }, 150);
   }
 }
 
 function del(){
-  currentPin = currentPin.slice(0,-1);
+  if(!pinEnabled) return;
+  currentPin = currentPin.slice(0, -1);
   updateDots();
 }
 
 function updateDots(){
-
-  for(let i=1;i<=4;i++){
-
-    const el = document.getElementById("d"+i);
-
+  for(let i = 1; i <= 4; i++){
+    const el = document.getElementById("d" + i);
     if(i <= currentPin.length){
       el.classList.add("fill");
     }else{
@@ -724,317 +932,176 @@ function updateDots(){
 }
 
 /* ======================
-DB
+DATABASE
 ====================== */
 
 let DB = {
   todos: [],
   expenses: [],
+  pin: DEFAULT_PIN,
+  pinEnabled: true,
   lastCleanupMonth: null
 };
 
 function saveDB(){
-  localStorage.setItem("myspace_mini",JSON.stringify(DB));
+  localStorage.setItem("myspace", JSON.stringify(DB));
 }
 
 function loadDB(){
-
-  const raw = localStorage.getItem("myspace_mini");
-
+  const raw = localStorage.getItem("myspace");
   if(raw){
     DB = JSON.parse(raw);
   }
-
-  checkMonthlyCleanup();
+  pinEnabled = DB.pinEnabled !== false;
+  
+  if(!pinEnabled){
+    document.getElementById("lock").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    init();
+  }
 }
 
-/* ======================
-INIT
-====================== */
-
 function init(){
-
-  loadDB();
-
   renderTodos();
   renderExpenses();
   renderStats();
   calcStorage();
+  checkMonthlyCleanup();
+  updatePasscodeToggle();
 }
 
 /* ======================
-TAB
+MODALS
 ====================== */
 
-function switchTab(tab,btn){
+let currentPhoto = null;
 
-  document.querySelectorAll(".tab")
-    .forEach(t=>t.classList.remove("active"));
-
-  btn.classList.add("active");
-
-  document.getElementById("todo")
-    .classList.add("hidden");
-
-  document.getElementById("expense")
-    .classList.add("hidden");
-
-  document.getElementById(tab)
-    .classList.remove("hidden");
+function openModal(id){
+  document.getElementById(id).classList.add("show");
 }
 
-/* ======================
-TODO
-====================== */
-
-function addTodo(){
-
-  const input = document.getElementById("todoInput");
-
-  if(!input.value.trim()) return;
-
-  DB.todos.unshift({
-    id: Date.now(),
-    text: input.value,
-    done:false,
-    createdAt:new Date().toISOString()
-  });
-
-  input.value = "";
-
-  saveDB();
-  renderTodos();
+function closeModal(id){
+  document.getElementById(id).classList.remove("show");
 }
 
-function toggleTodo(id){
-
-  const todo = DB.todos.find(t=>t.id===id);
-
-  todo.done = !todo.done;
-
-  saveDB();
-  renderTodos();
-  renderStats();
+function openCamera(){
+  currentPhoto = null;
+  document.getElementById("cameraInput").click();
 }
 
-function deleteTodo(id){
-
-  DB.todos = DB.todos.filter(t=>t.id !== id);
-
-  saveDB();
-  renderTodos();
-  renderStats();
+function openUpload(){
+  currentPhoto = null;
+  document.getElementById("uploadInput").click();
 }
 
-function renderTodos(){
-
-  const list = document.getElementById("todoList");
-
-  list.innerHTML = "";
-
-  const totalTodos = DB.todos.length;
-  const doneTodos = DB.todos.filter(t=>t.done).length;
-
-  document.getElementById("todoCount")
-    .innerText = totalTodos;
-
-  document.getElementById("todoDoneCount")
-    .innerText = doneTodos;
-
-  DB.todos.forEach(todo=>{
-
-    const div = document.createElement("div");
-
-    div.className = "todo-item";
-
-    div.innerHTML = `
-      <div class="check ${todo.done ? 'done':''}"
-           onclick="toggleTodo(${todo.id})">
-      </div>
-
-      <div style="flex:1">
-        <div class="todo-text ${todo.done ? 'done':''}">
-          ${todo.text}
-        </div>
-
-        <div class="todo-meta">
-          ${new Date(todo.createdAt).toLocaleString()}
-        </div>
-      </div>
-
-      <button style="background:var(--red);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;"
-              onclick="deleteTodo(${todo.id})">
-        Xoá
-      </button>
-    `;
-
-    list.appendChild(div);
-  });
+function openTodoModal(){
+  closeModal("expenseModal");
+  document.getElementById("todoName").value = "";
+  document.getElementById("todoDesc").value = "";
+  document.getElementById("todoPriority").value = "medium";
+  document.getElementById("todoCategory").value = "Personal";
+  document.getElementById("todoDueDate").value = "";
+  document.getElementById("todoRecurring").value = "none";
+  openModal("todoModal");
 }
 
-/* ======================
-IMAGE COMPRESS & PREVIEW
-====================== */
-
-let compressedImage = "";
-
-function pickImage(){
-  document.getElementById("imageInput").click();
-}
-
-function handleImage(event){
-
-  const file = event.target.files[0];
-
+async function handleImage(e){
+  const file = e.target.files[0];
   if(!file) return;
 
   const reader = new FileReader();
-
-  reader.onload = function(e){
-
+  reader.onload = (event) => {
     const img = new Image();
-
-    img.onload = function(){
-
+    img.onload = () => {
       const canvas = document.createElement("canvas");
-
-      const maxWidth = 480;
-
+      const maxWidth = 380;
       const scale = maxWidth / img.width;
-
+      
       canvas.width = maxWidth;
       canvas.height = img.height * scale;
-
+      
       const ctx = canvas.getContext("2d");
-
-      ctx.drawImage(img,0,0,canvas.width,canvas.height);
-
-      compressedImage =
-        canvas.toDataURL("image/jpeg",0.35);
-
-      // Show preview
-      const previewImg = document.getElementById("previewImg");
-      previewImg.src = compressedImage;
-      previewImg.classList.remove("hidden");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      
+      currentPhoto = canvas.toDataURL("image/jpeg", 0.2);
+      document.getElementById("previewExpense").src = currentPhoto;
+      
+      openModal("expenseModal");
     };
-
-    img.src = e.target.result;
+    img.src = event.target.result;
   };
-
   reader.readAsDataURL(file);
 }
 
 /* ======================
-AMOUNT SUGGESTIONS
+EXPENSE FUNCTIONS
 ====================== */
 
-function showSuggestions(){
+function showPriceSuggestions(){
+  const price = parseFloat(document.getElementById("expensePrice").value) || 0;
+  const sugDiv = document.getElementById("priceSuggestions");
+  
+  if(price === 0){
+    sugDiv.innerHTML = "";
+    return;
+  }
 
-  const priceInput = document.getElementById("expensePrice");
-  const value = priceInput.value.trim();
-
-  const suggestionsDiv = document.getElementById("suggestions");
-  suggestionsDiv.innerHTML = "";
-
-  if(!value || isNaN(value)) return;
-
-  const num = Number(value);
   const suggestions = [
-    num * 1000,
-    num * 10000,
-    num * 100000,
-    num * 1000000
+    price * 1000,
+    price * 10000,
+    price * 100000,
+    price * 1000000
   ];
 
-  suggestions.forEach(sug => {
-    const btn = document.createElement("button");
-    btn.className = "suggestion-btn";
-    btn.textContent = formatMoney(sug);
-    btn.onclick = (e) => {
-      e.preventDefault();
-      priceInput.value = sug;
-      suggestionsDiv.innerHTML = "";
-    };
-    suggestionsDiv.appendChild(btn);
-  });
+  sugDiv.innerHTML = suggestions.map(s => 
+    `<button class="btn btn-secondary" style="width:auto;flex:1;min-width:70px;padding:8px;margin-top:0;font-size:12px" onclick="setPriceFromSuggest(${s})">
+      ${formatPrice(s)}
+    </button>`
+  ).join("");
 }
 
-function formatMoney(num){
-  if(num >= 1000000){
-    return (num/1000000).toFixed(1) + "M";
-  }else if(num >= 1000){
-    return (num/1000).toFixed(0) + "K";
-  }
+function formatPrice(num){
+  if(num >= 1000000) return (num/1000000).toFixed(1) + "M";
+  if(num >= 1000) return (num/1000).toFixed(0) + "K";
   return num.toString();
 }
 
-/* ======================
-EXPENSE
-====================== */
+function setPriceFromSuggest(price){
+  document.getElementById("expensePrice").value = price;
+}
 
 function saveExpense(){
-
-  const name =
-    document.getElementById("expenseName").value;
-
-  const price =
-    document.getElementById("expensePrice").value;
-
-  const category =
-    document.getElementById("expenseCategory").value;
+  const name = document.getElementById("expenseName").value;
+  const price = parseFloat(document.getElementById("expensePrice").value);
+  const category = document.getElementById("expenseCategory").value;
+  const note = document.getElementById("expenseNote").value;
 
   if(!name || !price || !category){
-    alert("Nhập đủ thông tin");
+    alert("Điền đủ thông tin!");
     return;
   }
 
   DB.expenses.unshift({
     id: Date.now(),
     name,
-    price: Number(price),
+    price,
     category,
-    image: compressedImage,
-    createdAt:new Date().toISOString()
+    note,
+    image: currentPhoto || "",
+    createdAt: new Date().toISOString()
   });
 
   saveDB();
-
-  document.getElementById("expenseName").value="";
-  document.getElementById("expensePrice").value="";
-  document.getElementById("expenseCategory").value="";
-  document.getElementById("previewImg").classList.add("hidden");
-  document.getElementById("suggestions").innerHTML="";
-
-  compressedImage="";
-
+  closeModal("expenseModal");
   renderExpenses();
   renderStats();
   calcStorage();
+  currentPhoto = null;
 }
 
 function deleteExpense(id){
-
-  const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-
-  DB.expenses = DB.expenses.filter(exp => exp.id !== id);
-
-  saveDB();
-
-  const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-
-  alert(`Đã xoá. Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
-
-  renderExpenses();
-  renderStats();
-  calcStorage();
-}
-
-function deleteAllExpenses(){
-
-  if(!confirm("Bạn chắc chắn muốn xoá TẤT CẢ chi tiêu?")) return;
-
-  DB.expenses = [];
-
+  if(!confirm("Xoá chi tiêu này?")) return;
+  DB.expenses = DB.expenses.filter(e => e.id !== id);
   saveDB();
   renderExpenses();
   renderStats();
@@ -1042,175 +1109,191 @@ function deleteAllExpenses(){
 }
 
 function renderExpenses(){
-
-  const list =
-    document.getElementById("expenseList");
-
-  list.innerHTML = "";
-
-  let total = 0;
-
-  DB.expenses.forEach(exp=>{
-
-    total += exp.price;
-
-    const div = document.createElement("div");
-
-    div.className = "expense-item-wrapper";
-
-    div.innerHTML = `
-      <button class="expense-item-delete" onclick="deleteExpense(${exp.id})">✕</button>
-
-      <div class="expense-item">
-
-        <img class="expense-img"
-             src="${exp.image || ''}"
-             style="background:#222;">
-
-        <div style="flex:1">
-
-          <div>
-            <span style="font-weight:600">
-              ${exp.name}
-            </span>
-            <span class="sub" style="margin-left:8px;">
-              ${exp.category}
-            </span>
-          </div>
-
-          <div class="money">
-            ${exp.price.toLocaleString()}đ
-          </div>
-
-          <div class="todo-meta">
-            ${new Date(exp.createdAt).toLocaleString()}
-          </div>
-
-        </div>
-      </div>
-    `;
-
-    list.appendChild(div);
+  const list = document.getElementById("expenseList");
+  const now = new Date();
+  
+  const thisMonth = DB.expenses.filter(e => {
+    const d = new Date(e.createdAt);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
 
-  document.getElementById("totalMoney")
-    .innerText =
-      total.toLocaleString() + "đ";
-}
+  const total = thisMonth.reduce((sum, e) => sum + e.price, 0);
+  
+  document.getElementById("expenseTotal").innerText = total.toLocaleString() + "đ";
 
-/* ======================
-STORAGE
-====================== */
-
-function calcStorage(){
-
-  const data =
-    localStorage.getItem("myspace_mini") || "";
-
-  const sizeKB =
-    (new Blob([data]).size / 1024).toFixed(1);
-
-  document.getElementById("storageInfo")
-    .innerText =
-      "Storage: " + sizeKB + " KB";
-}
-
-/* ======================
-ARCHIVE
-====================== */
-
-function checkMonthlyCleanup(){
-
-  const now = new Date();
-  const currentMonth = `${now.getFullYear()}-${now.getMonth()}`;
-
-  if(DB.lastCleanupMonth !== currentMonth){
-
-    const oldImages = DB.expenses.filter(exp=>{
-      const d = new Date(exp.createdAt);
-      return d.getMonth() !== now.getMonth() || 
-             d.getFullYear() !== now.getFullYear();
-    });
-
-    if(oldImages.length > 0){
-
-      const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-
-      setTimeout(()=>{
-
-        if(confirm(`Sang tháng mới! Bạn có muốn xoá ${oldImages.length} ảnh tháng cũ để tiết kiệm dung lượng không?\n\nDung lượng trước: ${sizeBefore} KB`)){
-
-          DB.expenses = DB.expenses.map(exp=>{
-
-            const d = new Date(exp.createdAt);
-
-            const isOld =
-              d.getMonth() !== now.getMonth() ||
-              d.getFullYear() !== now.getFullYear();
-
-            if(isOld){
-              return {
-                ...exp,
-                image:""
-              };
-            }
-
-            return exp;
-          });
-
-          DB.lastCleanupMonth = currentMonth;
-
-          saveDB();
-
-          const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-
-          alert(`Đã xoá ảnh tháng cũ. Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB\n\nDung lượng sau: ${sizeAfter} KB`);
-
-          renderExpenses();
-          calcStorage();
-        }
-
-      }, 500);
-    }else{
-      DB.lastCleanupMonth = currentMonth;
-      saveDB();
-    }
+  if(thisMonth.length === 0){
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div>Chưa có chi tiêu</div>';
+    return;
   }
+
+  list.innerHTML = thisMonth.map(e => `
+    <div class="expense-item">
+      ${e.image ? `<img src="${e.image}" class="expense-img">` : '<div class="expense-img"></div>'}
+      <div class="expense-content">
+        <div class="expense-name">${e.name}</div>
+        <div class="expense-price">${e.price.toLocaleString()}đ</div>
+        <div class="expense-meta">${e.category} • ${new Date(e.createdAt).toLocaleDateString('vi')}</div>
+        ${e.note ? `<div class="expense-meta" style="color:var(--accent)">${e.note}</div>` : ''}
+      </div>
+      <button class="icon-btn" onclick="deleteExpense(${e.id})">🗑️</button>
+    </div>
+  `).join("");
 }
 
-function archiveOldImages(){
+/* ======================
+TODO FUNCTIONS
+====================== */
 
-  const now = new Date();
+function saveTodo(){
+  const name = document.getElementById("todoName").value;
+  if(!name.trim()){
+    alert("Nhập tên công việc!");
+    return;
+  }
 
-  const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-
-  DB.expenses = DB.expenses.map(exp=>{
-
-    const d = new Date(exp.createdAt);
-
-    const isOld =
-      d.getMonth() !== now.getMonth() ||
-      d.getFullYear() !== now.getFullYear();
-
-    if(isOld){
-
-      return {
-        ...exp,
-        image:""
-      };
-    }
-
-    return exp;
+  DB.todos.unshift({
+    id: Date.now(),
+    name,
+    desc: document.getElementById("todoDesc").value,
+    priority: document.getElementById("todoPriority").value,
+    category: document.getElementById("todoCategory").value,
+    dueDate: document.getElementById("todoDueDate").value,
+    recurring: document.getElementById("todoRecurring").value,
+    done: false,
+    createdAt: new Date().toISOString()
   });
 
   saveDB();
+  closeModal("todoModal");
+  renderTodos();
+  renderStats();
+}
 
-  const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
+function toggleTodo(id){
+  const todo = DB.todos.find(t => t.id === id);
+  if(todo) todo.done = !todo.done;
+  saveDB();
+  renderTodos();
+  renderStats();
+}
 
-  alert(`Đã xoá ảnh tháng cũ. Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
+function deleteTodo(id){
+  if(!confirm("Xoá công việc?")) return;
+  DB.todos = DB.todos.filter(t => t.id !== id);
+  saveDB();
+  renderTodos();
+  renderStats();
+}
 
-  renderExpenses();
-  calcStorage();
+function editTodo(id){
+  const todo = DB.todos.find(t => t.id === id);
+  if(!todo) return;
+
+  document.getElementById("todoName").value = todo.name;
+  document.getElementById("todoDesc").value = todo.desc || "";
+  document.getElementById("todoPriority").value = todo.priority || "medium";
+  document.getElementById("todoCategory").value = todo.category || "Personal";
+  document.getElementById("todoDueDate").value = todo.dueDate || "";
+  document.getElementById("todoRecurring").value = todo.recurring || "none";
+
+  openModal("todoModal");
+  
+  const btn = document.querySelector("#todoModal .btn");
+  btn.onclick = () => {
+    todo.name = document.getElementById("todoName").value;
+    todo.desc = document.getElementById("todoDesc").value;
+    todo.priority = document.getElementById("todoPriority").value;
+    todo.category = document.getElementById("todoCategory").value;
+    todo.dueDate = document.getElementById("todoDueDate").value;
+    todo.recurring = document.getElementById("todoRecurring").value;
+    saveDB();
+    closeModal("todoModal");
+    renderTodos();
+    renderStats();
+  };
+}
+
+function filterTodos(){
+  const search = document.getElementById("searchTodos").value.toLowerCase();
+  const status = document.getElementById("filterStatus").value;
+  
+  const items = document.querySelectorAll("#todoList .todo-item");
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  items.forEach(item => {
+    const id = parseInt(item.dataset.id);
+    const todo = DB.todos.find(t => t.id === id);
+    if(!todo) return;
+
+    const matchesSearch = todo.name.toLowerCase().includes(search);
+    let matchesStatus = true;
+
+    if(status === "active") matchesStatus = !todo.done;
+    if(status === "done") matchesStatus = todo.done;
+    if(status === "overdue"){
+      if(todo.dueDate){
+        const dueDate = new Date(todo.dueDate);
+        matchesStatus = dueDate < now && !todo.done;
+      }else{
+        matchesStatus = false;
+      }
+    }
+
+    item.style.display = (matchesSearch && matchesStatus) ? "" : "none";
+  });
+}
+
+function renderTodos(){
+  const list = document.getElementById("todoList");
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  const total = DB.todos.length;
+  const done = DB.todos.filter(t => t.done).length;
+  const overdue = DB.todos.filter(t => {
+    if(t.done || !t.dueDate) return false;
+    const dueDate = new Date(t.dueDate);
+    return dueDate < now;
+  }).length;
+
+  document.getElementById("todoTotal").innerText = total;
+  document.getElementById("todoDone").innerText = done;
+  document.getElementById("todoOverdue").innerText = overdue;
+
+  if(total === 0){
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>Chưa có công việc</div>';
+    return;
+  }
+
+  list.innerHTML = DB.todos.map(todo => {
+    const isOverdue = todo.dueDate && !todo.done && new Date(todo.dueDate) < now;
+    const daysLeft = todo.dueDate ? Math.ceil((new Date(todo.dueDate) - now) / (1000*60*60*24)) : null;
+
+    return `
+      <div class="todo-item" data-id="${todo.id}">
+        <div class="check ${todo.done ? 'done' : ''}" onclick="toggleTodo(${todo.id})"></div>
+        <div class="todo-content">
+          <div class="todo-text ${todo.done ? 'done' : ''}">${todo.name}</div>
+          <div class="todo-meta">
+            <span class="badge priority-${todo.priority} ${todo.priority === 'high' ? 'high' : todo.priority === 'medium' ? 'medium' : 'low'}">
+              ${todo.priority === 'high' ? '🔴 Cao' : todo.priority === 'medium' ? '🟡 Trung' : '🟢 Thấp'}
+            </span>
+            <span class="badge">${todo.category}</span>
+            ${todo.dueDate ? `<span class="badge ${isOverdue ? 'overdue' : ''}">
+              ${isOverdue ? '⏰ Quá hạn' : daysLeft === 0 ? '📅 Hôm nay' : daysLeft === 1 ? '📅 Ngày mai' : `📅 ${daysLeft}d`}
+            </span>` : ''}
+            ${todo.recurring !== 'none' ? `<span class="badge">🔁 ${todo.recurring}</span>` : ''}
+          </div>
+          ${todo.desc ? `<div class="sub" style="margin-top:6px">${todo.desc}</div>` : ''}
+        </div>
+        <div class="todo-actions">
+          <button class="icon-btn" onclick="editTodo(${todo.id})">✏️</button>
+          <button class="icon-btn" onclick="deleteTodo(${todo.id})">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
 /* ======================
@@ -1218,139 +1301,309 @@ STATISTICS
 ====================== */
 
 function renderStats(){
+  renderTodoStats();
+  renderExpenseStats();
+}
 
+function renderTodoStats(){
+  const total = DB.todos.length;
+  const done = DB.todos.filter(t => t.done).length;
+  const overdue = DB.todos.filter(t => {
+    if(t.done || !t.dueDate) return false;
+    const dueDate = new Date(t.dueDate);
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return dueDate < now;
+  }).length;
+
+  document.getElementById("statTodoTotal").innerText = total;
+  document.getElementById("statTodoDone").innerText = done;
+  document.getElementById("statTodoOverdue").innerText = overdue;
+  document.getElementById("statTodoCompletion").innerText = total ? Math.round((done/total)*100) + "%" : "0%";
+
+  // Category stats
+  const categories = {};
+  DB.todos.forEach(t => {
+    if(!categories[t.category]) categories[t.category] = {total: 0, done: 0};
+    categories[t.category].total++;
+    if(t.done) categories[t.category].done++;
+  });
+
+  const catDiv = document.getElementById("todoCategoryStats");
+  if(Object.keys(categories).length === 0){
+    catDiv.innerHTML = '<div class="sub">Không có dữ liệu</div>';
+  }else{
+    catDiv.innerHTML = Object.entries(categories).map(([cat, stats]) => `
+      <div class="category-row">
+        <div class="category-name">${cat}</div>
+        <div class="category-amount">${stats.done}/${stats.total}</div>
+        <div class="category-percent">${Math.round((stats.done/stats.total)*100)}%</div>
+      </div>
+    `).join("");
+  }
+
+  // Priority stats
+  const priorities = {high: 0, medium: 0, low: 0};
+  DB.todos.forEach(t => {
+    if(!t.done) priorities[t.priority || 'low']++;
+  });
+
+  const priDiv = document.getElementById("todoPriorityStats");
+  priDiv.innerHTML = `
+    <div class="category-row">
+      <div class="category-name">🔴 Cao</div>
+      <div class="category-amount">${priorities.high}</div>
+    </div>
+    <div class="category-row">
+      <div class="category-name">🟡 Trung</div>
+      <div class="category-amount">${priorities.medium}</div>
+    </div>
+    <div class="category-row">
+      <div class="category-name">🟢 Thấp</div>
+      <div class="category-amount">${priorities.low}</div>
+    </div>
+  `;
+}
+
+function renderExpenseStats(){
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  // Current month expenses only
-  const thisMonthExpenses = DB.expenses.filter(exp=>{
-    const d = new Date(exp.createdAt);
+  
+  const thisMonth = DB.expenses.filter(e => {
+    const d = new Date(e.createdAt);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
 
-  const totalExpense = thisMonthExpenses.reduce((sum, exp) => sum + exp.price, 0);
+  const total = thisMonth.reduce((sum, e) => sum + e.price, 0);
+  const daily = Math.round(total / new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate());
 
-  // Today
-  const todayExpenses = thisMonthExpenses.filter(exp=>{
-    const d = new Date(exp.createdAt);
+  const todayExp = thisMonth.filter(e => {
+    const d = new Date(e.createdAt);
     const expToday = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     return expToday.getTime() === today.getTime();
-  });
+  }).reduce((sum, e) => sum + e.price, 0);
 
-  const todayTotal = todayExpenses.reduce((sum, exp) => sum + exp.price, 0);
-
-  // This week
   const weekStart = new Date(today);
   weekStart.setDate(today.getDate() - today.getDay());
+  const weekExp = thisMonth.filter(e => {
+    const d = new Date(e.createdAt);
+    return d >= weekStart && d <= now;
+  }).reduce((sum, e) => sum + e.price, 0);
 
-  const weekExpenses = thisMonthExpenses.filter(exp=>{
-    const d = new Date(exp.createdAt);
-    return d >= weekStart && d <= today;
-  });
+  document.getElementById("statExpenseTotal").innerText = total.toLocaleString() + "đ";
+  document.getElementById("statExpenseDaily").innerText = daily.toLocaleString() + "đ";
+  document.getElementById("statExpenseToday").innerText = todayExp.toLocaleString() + "đ";
+  document.getElementById("statExpenseWeek").innerText = weekExp.toLocaleString() + "đ";
 
-  const weekTotal = weekExpenses.reduce((sum, exp) => sum + exp.price, 0);
-
-  // Days in month
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const avgDaily = Math.round(totalExpense / daysInMonth);
-
-  // Update stats
-  document.getElementById("statTotalExpense").innerText = totalExpense.toLocaleString() + "đ";
-  document.getElementById("statAvgExpense").innerText = avgDaily.toLocaleString() + "đ";
-  document.getElementById("statTodayExpense").innerText = todayTotal.toLocaleString() + "đ";
-  document.getElementById("statThisWeekExpense").innerText = weekTotal.toLocaleString() + "đ";
-
-  // Category breakdown
-  renderCategoryChart(thisMonthExpenses, totalExpense);
-
-  // Daily chart
-  renderDailyChart(thisMonthExpenses);
-}
-
-function renderCategoryChart(expenses, total){
-
-  if(total === 0){
-    document.getElementById("categoryChart").innerHTML = "<div class='sub'>Chưa có dữ liệu</div>";
-    return;
-  }
-
+  // Category stats
   const categories = {};
-
-  expenses.forEach(exp=>{
-    if(!categories[exp.category]){
-      categories[exp.category] = 0;
-    }
-    categories[exp.category] += exp.price;
+  thisMonth.forEach(e => {
+    if(!categories[e.category]) categories[e.category] = 0;
+    categories[e.category] += e.price;
   });
 
-  let html = "";
-
-  Object.entries(categories)
-    .sort((a,b) => b[1] - a[1])
-    .forEach(([cat, amount]) => {
-      const percent = ((amount / total) * 100).toFixed(1);
-      html += `
+  const catDiv = document.getElementById("expenseCategoryStats");
+  if(total === 0){
+    catDiv.innerHTML = '<div class="sub">Không có dữ liệu</div>';
+  }else{
+    catDiv.innerHTML = Object.entries(categories)
+      .sort((a, b) => b[1] - a[1])
+      .map(([cat, amount]) => `
         <div class="category-row">
           <div class="category-name">${cat}</div>
-          <div>
-            <span class="category-amount">${amount.toLocaleString()}đ</span>
-            <span class="category-percent">${percent}%</span>
-          </div>
+          <div class="category-amount">${amount.toLocaleString()}đ</div>
+          <div class="category-percent">${((amount/total)*100).toFixed(1)}%</div>
         </div>
-      `;
-    });
-
-  document.getElementById("categoryChart").innerHTML = html;
-}
-
-function renderDailyChart(expenses){
-
-  if(expenses.length === 0){
-    document.getElementById("dailyChart").innerHTML = "<div class='sub'>Chưa có dữ liệu</div>";
-    return;
+      `).join("");
   }
 
+  // Daily stats
   const dailyData = {};
-
-  expenses.forEach(exp=>{
-    const d = new Date(exp.createdAt);
-    const dateStr = d.toLocaleDateString('vi-VN');
-    if(!dailyData[dateStr]){
-      dailyData[dateStr] = 0;
-    }
-    dailyData[dateStr] += exp.price;
+  thisMonth.forEach(e => {
+    const d = new Date(e.createdAt);
+    const dateStr = d.toLocaleDateString('vi');
+    if(!dailyData[dateStr]) dailyData[dateStr] = 0;
+    dailyData[dateStr] += e.price;
   });
 
-  // Get last 7 days
   const days = Object.keys(dailyData).sort().slice(-7);
+  const maxDaily = Math.max(...Object.values(dailyData), 1);
 
-  let html = "";
-
-  days.forEach(day => {
-    const amount = dailyData[day];
-    const percent = (amount / Math.max(...Object.values(dailyData))) * 100;
-
-    html += `
-      <div class="category-row">
-        <div class="category-name">${day}</div>
-        <div>
-          <div style="background:var(--accent);height:8px;width:${percent}%;border-radius:4px;margin-bottom:4px;"></div>
-          <span class="category-amount">${amount.toLocaleString()}đ</span>
-        </div>
+  const dayDiv = document.getElementById("expenseDailyStats");
+  dayDiv.innerHTML = days.map(date => {
+    const amount = dailyData[date];
+    const percent = (amount / maxDaily) * 100;
+    return `
+      <div class="chart-bar">
+        <div style="min-width:60px;font-size:12px">${date}</div>
+        <div class="bar" style="width:${percent}%"></div>
+        <div style="min-width:50px;text-align:right;font-size:12px;color:var(--green)">${amount.toLocaleString()}đ</div>
       </div>
     `;
-  });
-
-  document.getElementById("dailyChart").innerHTML = html;
+  }).join("");
 }
 
 /* ======================
-PWA
+SETTINGS
 ====================== */
 
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js");
+function togglePasscode(){
+  DB.pinEnabled = !DB.pinEnabled;
+  saveDB();
+  updatePasscodeToggle();
+  alert(DB.pinEnabled ? "Đã bật Passcode" : "Đã tắt Passcode");
 }
+
+function updatePasscodeToggle(){
+  const toggle = document.getElementById("passcodeToggle");
+  if(DB.pinEnabled){
+    toggle.classList.add("on");
+  }else{
+    toggle.classList.remove("on");
+  }
+}
+
+function changePasscode(){
+  const newPin = prompt("Nhập PIN mới (4 số):");
+  if(!newPin || newPin.length !== 4 || isNaN(newPin)){
+    alert("PIN phải là 4 số!");
+    return;
+  }
+  DB.pin = newPin;
+  saveDB();
+  alert("Đã đổi PIN!");
+}
+
+function exportData(){
+  const json = JSON.stringify(DB, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'myspace-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+}
+
+function resetAll(){
+  if(!confirm("⚠️ Xoá TẤT CẢ dữ liệu? Không thể hoàn tác!")) return;
+  if(!confirm("Bạn chắc chắn?")) return;
+  
+  DB = {
+    todos: [],
+    expenses: [],
+    pin: DEFAULT_PIN,
+    pinEnabled: true,
+    lastCleanupMonth: null
+  };
+  saveDB();
+  alert("Đã xoá tất cả!");
+  location.reload();
+}
+
+/* ======================
+STORAGE & CLEANUP
+====================== */
+
+function calcStorage(){
+  const data = localStorage.getItem("myspace") || "";
+  const sizeKB = (new Blob([data]).size / 1024).toFixed(1);
+  document.getElementById("storageInfo").innerText = "Storage: " + sizeKB + " KB";
+}
+
+function checkMonthlyCleanup(){
+  const now = new Date();
+  const currentMonth = `${now.getFullYear()}-${now.getMonth()}`;
+  
+  if(DB.lastCleanupMonth !== currentMonth){
+    const oldImages = DB.expenses.filter(e => {
+      const d = new Date(e.createdAt);
+      return d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear();
+    });
+
+    if(oldImages.length > 0){
+      const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
+      
+      setTimeout(() => {
+        if(confirm(`Sang tháng mới! Xoá ${oldImages.length} ảnh cũ để tiết kiệm (${sizeBefore} KB)?`)){
+          DB.expenses = DB.expenses.map(e => ({
+            ...e,
+            image: (new Date(e.createdAt).getMonth() !== now.getMonth() || 
+                    new Date(e.createdAt).getFullYear() !== now.getFullYear()) ? "" : e.image
+          }));
+          DB.lastCleanupMonth = currentMonth;
+          saveDB();
+          const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
+          alert(`Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
+          renderExpenses();
+          calcStorage();
+        } else {
+          DB.lastCleanupMonth = currentMonth;
+          saveDB();
+        }
+      }, 500);
+    } else {
+      DB.lastCleanupMonth = currentMonth;
+      saveDB();
+    }
+  }
+}
+
+function archiveOldImages(){
+  const now = new Date();
+  const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
+  
+  DB.expenses = DB.expenses.map(e => ({
+    ...e,
+    image: (new Date(e.createdAt).getMonth() !== now.getMonth() || 
+            new Date(e.createdAt).getFullYear() !== now.getFullYear()) ? "" : e.image
+  }));
+
+  saveDB();
+  const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
+  alert(`Đã xoá ảnh cũ. Tiết kiệm: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
+  renderExpenses();
+  calcStorage();
+}
+
+/* ======================
+UI HELPERS
+====================== */
+
+function switchTab(tab, btn){
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  
+  document.querySelectorAll("[id$=s]:not(#d1):not(#d2):not(#d3):not(#d4):not(#d):not(#app):not(#lock)").forEach(el => {
+    if(['todos', 'expenses', 'todo-stats', 'expense-stats', 'settings'].includes(el.id)){
+      el.classList.add("hidden");
+    }
+  });
+  
+  document.getElementById(tab)?.classList.remove("hidden");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadDB();
+  if(!pinEnabled) {
+    document.getElementById("lock").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    init();
+  }
+});
+
+// PWA
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
+// Close modals on outside click
+document.addEventListener("click", (e) => {
+  if(e.target.classList.contains("modal")){
+    e.target.classList.remove("show");
+  }
+});
+
+document.getElementById("expensePrice").addEventListener("input", showPriceSuggestions);
 </script>
 
 </body>
