@@ -714,7 +714,7 @@ textarea.input{
 <div class="modal" id="expenseModal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title">Khoản chi mới</div>
+      <div class="modal-title" id="expenseModalTitle">Khoản chi mới</div>
       <button class="modal-close" onclick="closeModal('expenseModal')">✕</button>
     </div>
 
@@ -737,7 +737,7 @@ textarea.input{
     <label class="label">Tên khoản chi / Ghi chú (Không bắt buộc)</label>
     <input id="expenseName" class="input" placeholder="Ví dụ: Cà phê sáng...">
 
-    <button class="btn" onclick="saveExpense()">Lưu ngay</button>
+    <button class="btn" id="btnSaveExpense" onclick="saveExpense()">Lưu ngay</button>
   </div>
 </div>
 
@@ -932,6 +932,13 @@ function resetExpenseForm() {
   document.getElementById("expenseName").value = "";
   document.getElementById("expenseCategory").value = "";
   document.getElementById("priceSuggestions").innerHTML = "";
+  
+  document.getElementById("expenseModalTitle").innerText = "Khoản chi mới";
+  const btn = document.getElementById("btnSaveExpense");
+  if(btn){
+    btn.innerText = "Lưu ngay";
+    btn.onclick = saveExpense;
+  }
 }
 
 /* ======================
@@ -970,6 +977,52 @@ function saveExpense(){
   calcStorage();
 }
 
+function editExpense(id) {
+  const exp = DB.expenses.find(e => e.id === id);
+  if(!exp) return;
+
+  document.getElementById("expenseModalTitle").innerText = "Sửa khoản chi";
+  
+  document.getElementById("expensePrice").value = exp.price;
+  document.getElementById("expenseCategory").value = (exp.category === "Khác" || !exp.category) ? "" : exp.category;
+  document.getElementById("expenseName").value = exp.name === "Chưa phân loại" ? "" : exp.name;
+  
+  const preview = document.getElementById("previewExpense");
+  if(exp.image) {
+    preview.src = exp.image;
+    preview.classList.remove("hidden");
+    currentPhoto = exp.image;
+  } else {
+    preview.src = "";
+    preview.classList.add("hidden");
+    currentPhoto = null;
+  }
+
+  const btn = document.getElementById("btnSaveExpense");
+  btn.innerText = "Cập nhật";
+  btn.onclick = () => {
+    const price = parseFloat(document.getElementById("expensePrice").value);
+    if(!price){ alert("Vui lòng nhập số tiền!"); return; }
+    
+    exp.price = price;
+    exp.name = document.getElementById("expenseName").value.trim() || "Chưa phân loại";
+    exp.category = document.getElementById("expenseCategory").value || "Khác";
+    exp.image = currentPhoto || "";
+    
+    saveDB(); 
+    closeModal("expenseModal"); 
+    renderExpenses(); 
+    renderStats(); 
+    calcStorage();
+    
+    // Reset lại trạng thái nút
+    btn.innerText = "Lưu ngay";
+    btn.onclick = saveExpense;
+  };
+
+  openModal("expenseModal");
+}
+
 function deleteExpense(id){
   if(!confirm("Xoá khoản chi này?")) return;
   DB.expenses = DB.expenses.filter(e => e.id !== id);
@@ -995,7 +1048,10 @@ function renderExpenses(){
         <div class="expense-price">${e.price.toLocaleString()}đ</div>
         <div style="font-size:12px;color:var(--muted);margin-top:4px">${e.category} • ${new Date(e.createdAt).toLocaleDateString('vi')}</div>
       </div>
-      <button style="background:none;border:none;color:var(--muted);padding:8px" onclick="deleteExpense(${e.id})">✕</button>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button style="background:none;border:none;color:var(--accent);padding:4px;font-size:16px" onclick="editExpense(${e.id})">✏️</button>
+        <button style="background:none;border:none;color:var(--muted);padding:4px;font-size:16px" onclick="deleteExpense(${e.id})">✕</button>
+      </div>
     </div>
   `).join("");
 }
