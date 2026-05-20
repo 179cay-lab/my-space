@@ -1,0 +1,134 @@
+╔════════════════════════════════════════════════════════════════╗
+║           MY SPACE MINI - QUICK START GUIDE                    ║
+║        Privacy-First Todo + Expense Tracker PWA                ║
+╚════════════════════════════════════════════════════════════════╝
+
+🔐 FIRST TIME SETUP
+────────────────────────────────────────────────────────────────
+1. Open index.html in browser
+2. Enter PIN: 6089
+3. ⚠️  CHANGE PIN immediately (modify in code)
+
+📋 TAB: TODO (Công việc)
+────────────────────────────────────────────────────────────────
+- ✏️  Type task + click "Thêm công việc"
+- ✅ Click circle to complete/uncomplete
+- 🗑️  Click red button to delete
+- Shows: Total tasks | Completed tasks
+
+💰 TAB: CHI TIÊU (Expenses)
+────────────────────────────────────────────────────────────────
+WORKFLOW:
+1. 📸 Click camera to take/upload photo
+2. 🖼️ See preview appear
+3. 📁 Choose category (required)
+4. 📝 Enter product name
+5. 💵 Enter price (or click suggestion)
+6. 💾 Click "Lưu chi tiêu"
+
+TIPS:
+- Amount suggestions: Type "1" → see 1K/10K/100K/1M
+- Hover expense → red ✕ to delete (shows KB saved!)
+- See storage used in gray text above categories
+- "Dọn ảnh tháng cũ" = Manual cleanup button
+
+📊 TAB: THỐNG KÊ (Statistics)
+────────────────────────────────────────────────────────────────
+- Total spending this month
+- Daily average spending
+- Today's total + this week's total
+- Category breakdown with % breakdown
+- Bar chart: Last 7 days spending
+
+🧹 AUTOMATIC MONTHLY CLEANUP
+────────────────────────────────────────────────────────────────
+When you enter a NEW MONTH:
+→ App asks: "Delete old images to save storage?"
+→ Shows: Before size | After size | Savings KB
+→ You choose: Yes/No
+→ Images deleted, expense data kept
+
+🚀 KEY FEATURES
+────────────────────────────────────────────────────────────────
+✅ Everything saved locally (no internet needed)
+✅ PIN protected
+✅ Image preview before save
+✅ Auto amount suggestions
+✅ Category breakdown with %
+✅ Daily/weekly/monthly stats
+✅ Auto old image cleanup
+✅ Storage KB display
+✅ Works offline (PWA)
+✅ Install as mobile app
+
+💾 DATA MANAGEMENT
+────────────────────────────────────────────────────────────────
+BACKUP DATA:
+- Open DevTools (F12) → Console
+- Paste: console.log(JSON.stringify(DB, null, 2))
+- Copy output and save
+
+RESET EVERYTHING:
+- DevTools → Application → LocalStorage → Clear All
+- Refresh page
+- PIN: 6089 (default)
+
+❓ TROUBLESHOOTING
+────────────────────────────────────────────────────────────────
+Can't remember PIN?
+  → Clear browser data → Restart → Default: 6089
+
+Storage full?
+  → Click "Dọn ảnh tháng cũ"
+  → Or: Go to Stats to see what's costing storage
+
+Image not showing?
+  → Reload page
+  → Clear cache
+  → Re-upload image
+
+📱 INSTALL AS APP (Android/iPhone)
+────────────────────────────────────────────────────────────────
+Android Chrome:
+  1. Open in Chrome
+  2. Menu (⋮) → "Install app"
+  3. App added to home screen
+
+iPhone Safari:
+  1. Open in Safari
+  2. Share → "Add to Home Screen"
+  3. App available on home screen
+
+🔒 PRIVACY & SECURITY
+────────────────────────────────────────────────────────────────
+✅ All data on YOUR device
+✅ No cloud sync
+✅ No tracking
+✅ No ads
+✅ You own your data
+✅ Delete anytime
+
+⚙️ CUSTOMIZATION
+────────────────────────────────────────────────────────────────
+To CHANGE PIN (edit index.html):
+- Find: const PIN = "6089";
+- Change to: const PIN = "YOUR_NEW_PIN";
+- Save and reload
+
+To CHANGE CATEGORIES:
+- Go to Chi tiêu tab
+- Categories already include main ones
+- You can type custom in the dropdown
+
+📞 SUPPORT
+────────────────────────────────────────────────────────────────
+This is a standalone PWA - works on any modern browser:
+- Chrome/Edge ✅
+- Firefox ✅
+- Safari ✅
+- Mobile browsers ✅
+
+───────────────────────────────────────────────────────────────
+Version: 2.0 (Enhanced) | Last Updated: 2024
+Made for: Privacy-focused personal finance tracking
+───────────────────────────────────────────────────────────────
