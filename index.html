@@ -170,7 +170,7 @@ button,input,select,textarea{
   align-items:center;
 }
 
-/* BOTTOM NAVIGATION (Cách 1) */
+/* BOTTOM NAVIGATION */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -539,8 +539,6 @@ textarea.input{
   </div>
   <div class="pinpad">
     <button class="key" onclick="press(1)">1</button><button class="key" onclick="press(2)">2</button><button class="key" onclick="press(3)">3</button>
-    <button class="key" onclick="press(4)">4</button><button class="key" onclick="press(5)">5</button><button class="key" onclick="press(6)">6</button>
-    <button class="key" onclick="press(7)">7</button><button class="key" onclick="press(8)">8</button><button class="key" onclick="press(9)">9</button>
     <button class="key" style="opacity:0"></button><button class="key" onclick="press(0)">0</button><button class="key" onclick="del()">⌫</button>
   </div>
 </div>
@@ -548,11 +546,33 @@ textarea.input{
 <div class="app hidden" id="app">
 
   <div class="header">
-    <div class="title" id="pageTitle">Todo</div>
-    <div class="sub" id="pageSub">Danh sách công việc của bạn</div>
+    <div class="title" id="pageTitle">Chi tiêu</div>
+    <div class="sub" id="pageSub">Quản lý dòng tiền thông minh</div>
   </div>
 
-  <div id="todos" class="tab-content">
+  <div id="expenses" class="tab-content">
+    <div class="section">
+      <div class="card">
+        <div style="font-size:28px;font-weight:800;color:var(--green)" id="expenseTotal">0đ</div>
+        <div class="sub">Tổng chi tiêu tháng này</div>
+        <div class="sub" id="storageInfo" style="margin-top:8px; font-size:12px;">Storage: 0 KB</div>
+      </div>
+
+      <div class="card">
+        <button class="btn" style="margin-top:0" onclick="openCamera()">📸 Chụp ảnh biên lai / sản phẩm</button>
+        <div class="input-group" style="margin-top:12px">
+            <button class="btn btn-secondary" style="margin-top:0" onclick="openUpload()">📁 Tải ảnh lên</button>
+            <button class="btn btn-secondary" style="margin-top:0; color:var(--red)" onclick="openExpenseNoImage()">💰 Nhập tay</button>
+        </div>
+      </div>
+
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImage(event)">
+      <input type="file" id="uploadInput" accept="image/*" class="hidden" onchange="handleImage(event)">
+      <div id="expenseList"></div>
+    </div>
+  </div>
+
+  <div id="todos" class="tab-content hidden">
     <div class="section">
       <div class="card" style="padding: 16px;">
         <div class="row">
@@ -574,28 +594,6 @@ textarea.input{
         </div>
       </div>
       <div id="todoList"></div>
-    </div>
-  </div>
-
-  <div id="expenses" class="tab-content hidden">
-    <div class="section">
-      <div class="card">
-        <div style="font-size:28px;font-weight:800;color:var(--green)" id="expenseTotal">0đ</div>
-        <div class="sub">Tổng chi tiêu tháng này</div>
-        <div class="sub" id="storageInfo" style="margin-top:8px; font-size:12px;">Storage: 0 KB</div>
-      </div>
-
-      <div class="card">
-        <button class="btn" style="margin-top:0" onclick="openCamera()">📸 Chụp ảnh biên lai / sản phẩm</button>
-        <div class="input-group" style="margin-top:12px">
-            <button class="btn btn-secondary" style="margin-top:0" onclick="openUpload()">📁 Tải ảnh lên</button>
-            <button class="btn btn-secondary" style="margin-top:0; color:var(--red)" onclick="openExpenseNoImage()">💰 Nhập tay</button>
-        </div>
-      </div>
-
-      <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImage(event)">
-      <input type="file" id="uploadInput" accept="image/*" class="hidden" onchange="handleImage(event)">
-      <div id="expenseList"></div>
     </div>
   </div>
 
@@ -685,13 +683,13 @@ textarea.input{
 </div>
 
 <div class="bottom-nav" id="bottomNav">
-  <button class="nav-item active" onclick="switchMainTab('todos', this)">
-    <div class="nav-icon">📋</div>
-    <span>Todo</span>
-  </button>
-  <button class="nav-item" onclick="switchMainTab('expenses', this)">
+  <button class="nav-item active" onclick="switchMainTab('expenses', this)">
     <div class="nav-icon">💰</div>
     <span>Chi tiêu</span>
+  </button>
+  <button class="nav-item" onclick="switchMainTab('todos', this)">
+    <div class="nav-icon">📋</div>
+    <span>Todo</span>
   </button>
   <button class="nav-item" onclick="switchMainTab('stats', this)">
     <div class="nav-icon">📊</div>
@@ -789,11 +787,11 @@ function switchMainTab(tabId, btnElement) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
   document.getElementById(tabId).classList.remove('hidden');
 
-  // Đổi Header Titles
+  // Đổi Header Titles tương ứng
   const title = document.getElementById("pageTitle");
   const sub = document.getElementById("pageSub");
-  if(tabId === 'todos') { title.innerText = "Todo"; sub.innerText = "Danh sách công việc của bạn"; }
-  else if(tabId === 'expenses') { title.innerText = "Chi tiêu"; sub.innerText = "Quản lý dòng tiền thông minh"; }
+  if(tabId === 'expenses') { title.innerText = "Chi tiêu"; sub.innerText = "Quản lý dòng tiền thông minh"; }
+  else if(tabId === 'todos') { title.innerText = "Todo"; sub.innerText = "Danh sách công việc của bạn"; }
   else if(tabId === 'stats') { title.innerText = "Thống kê"; sub.innerText = "Báo cáo tổng quan dữ liệu"; }
   else if(tabId === 'settings') { title.innerText = "Cài đặt"; sub.innerText = "Tuỳ chỉnh hệ thống"; }
 }
@@ -927,7 +925,7 @@ function resetExpenseForm() {
 }
 
 /* ======================
-EXPENSES (Bypass logic)
+EXPENSES
 ====================== */
 document.getElementById("expensePrice").addEventListener("input", () => {
   const price = parseFloat(document.getElementById("expensePrice").value) || 0;
@@ -945,7 +943,6 @@ function saveExpense(){
   const price = parseFloat(document.getElementById("expensePrice").value);
   if(!price){ alert("Vui lòng nhập số tiền!"); return; }
 
-  // Bypass logic: Tự điền nếu user để trống
   const name = document.getElementById("expenseName").value.trim() || "Chưa phân loại";
   const category = document.getElementById("expenseCategory").value || "Khác";
 
