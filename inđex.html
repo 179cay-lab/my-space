@@ -1,0 +1,779 @@
+<!-- =========================
+MY SPACE MINI
+Todo + Expense Camera
+Deployable on GitHub Pages
+========================= -->
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+<title>My Space</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+:root{
+  --bg:#0f1115;
+  --card:#171a21;
+  --line:#242936;
+  --text:#f3f5f7;
+  --muted:#8e96a3;
+  --accent:#6c7cff;
+  --green:#3bd17f;
+  --red:#ff5d73;
+  --radius:18px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  overflow-x:hidden;
+}
+
+button,input{
+  font-family:inherit;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* LOCK */
+
+#lock{
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.logo{
+  font-size:26px;
+  font-weight:700;
+  margin-bottom:30px;
+}
+
+.pin-box{
+  display:flex;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.dot{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  border:2px solid #444;
+}
+
+.dot.fill{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.pinpad{
+  display:grid;
+  grid-template-columns:repeat(3,80px);
+  gap:12px;
+}
+
+.key{
+  height:80px;
+  border:none;
+  border-radius:50%;
+  background:var(--card);
+  color:#fff;
+  font-size:24px;
+}
+
+/* APP */
+
+.app{
+  max-width:700px;
+  margin:auto;
+  padding-bottom:100px;
+}
+
+.header{
+  padding:24px 20px 10px;
+}
+
+.title{
+  font-size:28px;
+  font-weight:700;
+}
+
+.sub{
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.tabs{
+  display:flex;
+  gap:10px;
+  padding:0 20px 20px;
+}
+
+.tab{
+  flex:1;
+  border:none;
+  background:var(--card);
+  color:var(--muted);
+  padding:14px;
+  border-radius:14px;
+  font-size:15px;
+}
+
+.tab.active{
+  background:var(--accent);
+  color:#fff;
+}
+
+.section{
+  padding:0 20px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px;
+  margin-bottom:16px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.todo-item{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.todo-item:last-child{
+  border-bottom:none;
+}
+
+.check{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  border:2px solid #555;
+  flex-shrink:0;
+  margin-top:2px;
+}
+
+.check.done{
+  background:var(--green);
+  border-color:var(--green);
+}
+
+.todo-text.done{
+  text-decoration:line-through;
+  opacity:.45;
+}
+
+.todo-meta{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:4px;
+}
+
+.input{
+  width:100%;
+  background:#10131a;
+  border:1px solid var(--line);
+  color:#fff;
+  border-radius:14px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.btn{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:14px;
+  margin-top:12px;
+  background:var(--accent);
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+}
+
+.expense-img{
+  width:64px;
+  height:64px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.expense-item{
+  display:flex;
+  gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.expense-item:last-child{
+  border-bottom:none;
+}
+
+.money{
+  color:var(--green);
+  font-weight:700;
+}
+
+.storage{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:8px;
+}
+
+.small-btn{
+  border:none;
+  background:#222836;
+  color:#fff;
+  padding:10px 12px;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.camera{
+  width:100%;
+  border:2px dashed #394050;
+  border-radius:18px;
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+  margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOCK -->
+<div id="lock">
+  <div class="logo">My Space</div>
+
+  <div class="pin-box">
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
+    <div class="dot" id="d4"></div>
+  </div>
+
+  <div class="pinpad">
+    <button class="key" onclick="press(1)">1</button>
+    <button class="key" onclick="press(2)">2</button>
+    <button class="key" onclick="press(3)">3</button>
+    <button class="key" onclick="press(4)">4</button>
+    <button class="key" onclick="press(5)">5</button>
+    <button class="key" onclick="press(6)">6</button>
+    <button class="key" onclick="press(7)">7</button>
+    <button class="key" onclick="press(8)">8</button>
+    <button class="key" onclick="press(9)">9</button>
+    <button class="key"></button>
+    <button class="key" onclick="press(0)">0</button>
+    <button class="key" onclick="del()">⌫</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app hidden" id="app">
+
+  <div class="header">
+    <div class="title">My Space</div>
+    <div class="sub">Todo + Expense Camera</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('todo',this)">Todo</button>
+    <button class="tab" onclick="switchTab('expense',this)">Chi tiêu</button>
+  </div>
+
+  <!-- TODO -->
+  <div id="todo">
+
+    <div class="section">
+
+      <div class="card">
+
+        <div class="row">
+          <div>
+            <div style="font-size:20px;font-weight:700" id="todoCount">0</div>
+            <div class="sub">Công việc</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <input id="todoInput" class="input" placeholder="Việc cần làm..." />
+
+        <button class="btn" onclick="addTodo()">
+          Thêm công việc
+        </button>
+
+      </div>
+
+      <div class="card" id="todoList"></div>
+
+    </div>
+
+  </div>
+
+  <!-- EXPENSE -->
+  <div id="expense" class="hidden">
+
+    <div class="section">
+
+      <div class="card">
+
+        <div style="font-size:20px;font-weight:700" id="totalMoney">
+          0đ
+        </div>
+
+        <div class="sub">
+          Tổng chi tiêu
+        </div>
+
+        <div class="storage" id="storageInfo">
+          Storage: calculating...
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <input type="file"
+               id="imageInput"
+               accept="image/*"
+               capture="environment"
+               class="hidden"
+               onchange="handleImage(event)">
+
+        <div class="camera" onclick="pickImage()">
+          📸 Chụp / Upload bill
+        </div>
+
+        <input id="expenseName"
+               class="input"
+               placeholder="Tên sản phẩm">
+
+        <input id="expensePrice"
+               class="input"
+               placeholder="Giá tiền">
+
+        <button class="btn" onclick="saveExpense()">
+          Lưu chi tiêu
+        </button>
+
+      </div>
+
+      <div class="card">
+        <button class="small-btn" onclick="archiveOldImages()">
+          Dọn ảnh tháng cũ
+        </button>
+      </div>
+
+      <div class="card" id="expenseList"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* ======================
+PIN
+====================== */
+
+const PIN = "6089";
+let currentPin = "";
+
+function press(n){
+  if(currentPin.length >= 4) return;
+
+  currentPin += n;
+
+  updateDots();
+
+  if(currentPin.length === 4){
+
+    setTimeout(()=>{
+
+      if(currentPin === PIN){
+        document.getElementById("lock").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+        init();
+      }else{
+        alert("Sai PIN");
+        currentPin = "";
+        updateDots();
+      }
+
+    },150);
+  }
+}
+
+function del(){
+  currentPin = currentPin.slice(0,-1);
+  updateDots();
+}
+
+function updateDots(){
+
+  for(let i=1;i<=4;i++){
+
+    const el = document.getElementById("d"+i);
+
+    if(i <= currentPin.length){
+      el.classList.add("fill");
+    }else{
+      el.classList.remove("fill");
+    }
+  }
+}
+
+/* ======================
+DB
+====================== */
+
+let DB = {
+  todos: [],
+  expenses: []
+};
+
+function saveDB(){
+  localStorage.setItem("myspace_mini",JSON.stringify(DB));
+}
+
+function loadDB(){
+
+  const raw = localStorage.getItem("myspace_mini");
+
+  if(raw){
+    DB = JSON.parse(raw);
+  }
+}
+
+/* ======================
+INIT
+====================== */
+
+function init(){
+
+  loadDB();
+
+  renderTodos();
+  renderExpenses();
+  calcStorage();
+}
+
+/* ======================
+TAB
+====================== */
+
+function switchTab(tab,btn){
+
+  document.querySelectorAll(".tab")
+    .forEach(t=>t.classList.remove("active"));
+
+  btn.classList.add("active");
+
+  document.getElementById("todo")
+    .classList.add("hidden");
+
+  document.getElementById("expense")
+    .classList.add("hidden");
+
+  document.getElementById(tab)
+    .classList.remove("hidden");
+}
+
+/* ======================
+TODO
+====================== */
+
+function addTodo(){
+
+  const input = document.getElementById("todoInput");
+
+  if(!input.value.trim()) return;
+
+  DB.todos.unshift({
+    id: Date.now(),
+    text: input.value,
+    done:false,
+    createdAt:new Date().toISOString()
+  });
+
+  input.value = "";
+
+  saveDB();
+  renderTodos();
+}
+
+function toggleTodo(id){
+
+  const todo = DB.todos.find(t=>t.id===id);
+
+  todo.done = !todo.done;
+
+  saveDB();
+  renderTodos();
+}
+
+function renderTodos(){
+
+  const list = document.getElementById("todoList");
+
+  list.innerHTML = "";
+
+  document.getElementById("todoCount")
+    .innerText = DB.todos.length;
+
+  DB.todos.forEach(todo=>{
+
+    const div = document.createElement("div");
+
+    div.className = "todo-item";
+
+    div.innerHTML = `
+      <div class="check ${todo.done ? 'done':''}"
+           onclick="toggleTodo(${todo.id})">
+      </div>
+
+      <div>
+        <div class="todo-text ${todo.done ? 'done':''}">
+          ${todo.text}
+        </div>
+
+        <div class="todo-meta">
+          ${new Date(todo.createdAt).toLocaleString()}
+        </div>
+      </div>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+/* ======================
+IMAGE COMPRESS
+====================== */
+
+let compressedImage = "";
+
+function pickImage(){
+  document.getElementById("imageInput").click();
+}
+
+function handleImage(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+
+    const img = new Image();
+
+    img.onload = function(){
+
+      const canvas = document.createElement("canvas");
+
+      const maxWidth = 480;
+
+      const scale = maxWidth / img.width;
+
+      canvas.width = maxWidth;
+      canvas.height = img.height * scale;
+
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+      compressedImage =
+        canvas.toDataURL("image/jpeg",0.35);
+
+      alert("Ảnh đã tối ưu");
+    };
+
+    img.src = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+/* ======================
+EXPENSE
+====================== */
+
+function saveExpense(){
+
+  const name =
+    document.getElementById("expenseName").value;
+
+  const price =
+    document.getElementById("expensePrice").value;
+
+  if(!name || !price){
+    alert("Nhập đủ thông tin");
+    return;
+  }
+
+  DB.expenses.unshift({
+    id: Date.now(),
+    name,
+    price,
+    image: compressedImage,
+    createdAt:new Date().toISOString()
+  });
+
+  saveDB();
+
+  document.getElementById("expenseName").value="";
+  document.getElementById("expensePrice").value="";
+
+  compressedImage="";
+
+  renderExpenses();
+  calcStorage();
+}
+
+function renderExpenses(){
+
+  const list =
+    document.getElementById("expenseList");
+
+  list.innerHTML = "";
+
+  let total = 0;
+
+  DB.expenses.forEach(exp=>{
+
+    total += Number(exp.price);
+
+    const div = document.createElement("div");
+
+    div.className = "expense-item";
+
+    div.innerHTML = `
+      <img class="expense-img"
+           src="${exp.image || ''}">
+
+      <div style="flex:1">
+
+        <div style="font-weight:600">
+          ${exp.name}
+        </div>
+
+        <div class="money">
+          ${Number(exp.price).toLocaleString()}đ
+        </div>
+
+        <div class="todo-meta">
+          ${new Date(exp.createdAt).toLocaleString()}
+        </div>
+
+      </div>
+    `;
+
+    list.appendChild(div);
+  });
+
+  document.getElementById("totalMoney")
+    .innerText =
+      total.toLocaleString() + "đ";
+}
+
+/* ======================
+STORAGE
+====================== */
+
+function calcStorage(){
+
+  const data =
+    localStorage.getItem("myspace_mini") || "";
+
+  const sizeKB =
+    (new Blob([data]).size / 1024).toFixed(1);
+
+  document.getElementById("storageInfo")
+    .innerText =
+      "Storage: " + sizeKB + " KB";
+}
+
+/* ======================
+ARCHIVE
+====================== */
+
+function archiveOldImages(){
+
+  const now = new Date();
+
+  DB.expenses = DB.expenses.map(exp=>{
+
+    const d = new Date(exp.createdAt);
+
+    const isOld =
+      d.getMonth() !== now.getMonth() ||
+      d.getFullYear() !== now.getFullYear();
+
+    if(isOld){
+
+      return {
+        ...exp,
+        image:""
+      };
+    }
+
+    return exp;
+  });
+
+  saveDB();
+
+  renderExpenses();
+  calcStorage();
+
+  alert("Đã xoá ảnh tháng cũ");
+}
+
+/* ======================
+PWA
+====================== */
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>
