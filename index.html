@@ -20,513 +20,131 @@
   --radius:20px;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
 body{
   background:var(--bg);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   overflow-x:hidden;
-  padding-bottom: 90px; /* Nhường chỗ cho Bottom Nav */
+  padding-bottom: 90px; 
 }
 
-/* Kéo gradient nhẹ cho background thêm sâu */
 body::before {
-  content: "";
-  position: fixed;
-  top: -20%;
-  left: -10%;
-  width: 50vw;
-  height: 50vw;
+  content: ""; position: fixed; top: -20%; left: -10%; width: 50vw; height: 50vw;
   background: radial-gradient(circle, rgba(108,124,255,0.15) 0%, rgba(0,0,0,0) 70%);
   z-index: -1;
 }
 
-button,input,select,textarea{
-  font-family:inherit;
-  color:inherit;
-}
-
-.hidden{
-  display:none!important;
-}
+button,input,select,textarea{ font-family:inherit; color:inherit; }
+.hidden{ display:none!important; }
 
 /* LOCK */
 #lock{
-  position:fixed;
-  inset:0;
-  background:var(--bg);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
+  position:fixed; inset:0; background:var(--bg);
+  display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999;
 }
-
-.logo{
-  font-size:32px;
-  font-weight:700;
-  margin-bottom:30px;
-  background: linear-gradient(135deg, #fff, #8e96a3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.pin-box{
-  display:flex;
-  gap:16px;
-  margin-bottom:40px;
-}
-
-.dot{
-  width:16px;
-  height:16px;
-  border-radius:50%;
-  border:2px solid var(--muted);
-  transition: 0.2s ease;
-}
-
-.dot.fill{
-  background:var(--accent);
-  border-color:var(--accent);
-  box-shadow: 0 0 10px rgba(108,124,255,0.5);
-}
-
-.pinpad{
-  display:grid;
-  grid-template-columns:repeat(3,80px);
-  gap:16px;
-}
-
-.key{
-  height:80px;
-  border:1px solid var(--line);
-  border-radius:50%;
-  background:var(--card);
-  backdrop-filter: blur(10px);
-  color:#fff;
-  font-size:24px;
-  font-weight:500;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.key:active{
-  background:var(--accent);
-  transform: scale(0.92);
-}
+.logo{ font-size:32px; font-weight:700; margin-bottom:30px; background: linear-gradient(135deg, #fff, #8e96a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.pin-box{ display:flex; gap:16px; margin-bottom:40px; }
+.dot{ width:16px; height:16px; border-radius:50%; border:2px solid var(--muted); transition: 0.2s ease; }
+.dot.fill{ background:var(--accent); border-color:var(--accent); box-shadow: 0 0 10px rgba(108,124,255,0.5); }
+.pinpad{ display:grid; grid-template-columns:repeat(3,80px); gap:16px; }
+.key{ height:80px; border:1px solid var(--line); border-radius:50%; background:var(--card); backdrop-filter: blur(10px); color:#fff; font-size:24px; font-weight:500; cursor:pointer; transition:0.2s; }
+.key:active{ background:var(--accent); transform: scale(0.92); }
 
 /* APP */
-.app{
-  max-width:700px;
-  margin:auto;
-  animation: fadeIn 0.4s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.header{
-  padding:30px 20px 20px;
-}
-
-.title{
-  font-size:28px;
-  font-weight:800;
-  letter-spacing: -0.5px;
-}
-
-.sub{
-  color:var(--muted);
-  margin-top:4px;
-  font-size:14px;
-}
-
-.section{
-  padding:0 16px;
-}
-
+.app{ max-width:700px; margin:auto; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.header{ padding:30px 20px 20px; }
+.title{ font-size:28px; font-weight:800; letter-spacing: -0.5px; }
+.sub{ color:var(--muted); margin-top:4px; font-size:14px; }
+.section{ padding:0 16px; }
 .card{
-  background:var(--card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:20px;
-  margin-bottom:16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  background:var(--card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border:1px solid var(--line); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+.row{ display:flex; justify-content:space-between; align-items:center; }
 
 /* BOTTOM NAVIGATION */
 .bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 85px;
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  padding-top: 12px;
-  padding-bottom: env(safe-area-inset-bottom);
-  z-index: 1000;
+  position: fixed; bottom: 0; left: 0; right: 0; height: 85px;
+  background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: flex-start;
+  padding-top: 12px; padding-bottom: env(safe-area-inset-bottom); z-index: 1000;
 }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); background: none; border: none; font-size: 11px; font-weight: 500; flex: 1; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.nav-item.active { color: var(--accent); transform: translateY(-2px); }
+.nav-icon { font-size: 22px; margin-bottom: 2px; filter: grayscale(100%) opacity(0.7); transition: 0.3s ease; }
+.nav-item.active .nav-icon { filter: grayscale(0%) opacity(1); }
 
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: var(--muted);
-  background: none;
-  border: none;
-  font-size: 11px;
-  font-weight: 500;
-  flex: 1;
-  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-item.active {
-  color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.nav-icon {
-  font-size: 22px;
-  margin-bottom: 2px;
-  filter: grayscale(100%) opacity(0.7);
-  transition: 0.3s ease;
-}
-
-.nav-item.active .nav-icon {
-  filter: grayscale(0%) opacity(1);
-}
-
-/* SEGMENTED CONTROL (Thống kê) */
-.segment-control {
-  display: flex;
-  background: rgba(0,0,0,0.3);
-  border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 20px;
-  border: 1px solid var(--line);
-}
-
-.segment-btn {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 14px;
-  transition: 0.3s ease;
-}
-
-.segment-btn.active {
-  background: var(--card);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+/* SEGMENTED CONTROL */
+.segment-control { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--line); }
+.segment-btn { flex: 1; text-align: center; padding: 10px; border-radius: 8px; border: none; background: transparent; color: var(--muted); font-weight: 600; font-size: 14px; transition: 0.3s ease; }
+.segment-btn.active { background: var(--card); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
 /* MODAL */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter: blur(5px);
-  z-index:2000;
-  align-items:flex-end;
-  justify-content:center;
-  animation: fadeIn 0.3s ease;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-content{
-  background: #13161c;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  border-radius:32px 32px 0 0;
-  padding:30px 24px;
-  width:100%;
-  max-height:90vh;
-  overflow-y:auto;
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes slideUp{
-  from{transform:translateY(100%);}
-  to{transform:translateY(0);}
-}
-
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:24px;
-}
-
-.modal-title{
-  font-size:22px;
-  font-weight:700;
-}
-
-.modal-close{
-  background:rgba(255,255,255,0.1);
-  border-radius: 50%;
-  border:none;
-  color:var(--text);
-  font-size:20px;
-  width:36px;
-  height:36px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+.modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index:2000; align-items:flex-end; justify-content:center; animation: fadeIn 0.3s ease; }
+.modal.show{ display:flex; }
+.modal-content{ background: #13161c; border-top: 1px solid rgba(255,255,255,0.1); border-radius:32px 32px 0 0; padding:30px 24px; width:100%; max-height:90vh; overflow-y:auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes slideUp{ from{transform:translateY(100%);} to{transform:translateY(0);} }
+.modal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+.modal-title{ font-size:22px; font-weight:700; }
+.modal-close{ background:rgba(255,255,255,0.1); border-radius: 50%; border:none; color:var(--text); font-size:20px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
 
 /* INPUT */
-.input{
-  width:100%;
-  background:rgba(0,0,0,0.2);
-  border:1px solid var(--line);
-  color:#fff;
-  border-radius:14px;
-  padding:14px 16px;
-  margin-top:8px;
-  font-size:15px;
-  transition: 0.2s ease;
-}
+.input{ width:100%; background:rgba(0,0,0,0.2); border:1px solid var(--line); color:#fff; border-radius:14px; padding:14px 16px; margin-top:8px; font-size:15px; transition: 0.2s ease; }
+.input:focus{ outline:none; border-color:var(--accent); background:rgba(108,124,255,0.05); }
+textarea.input{ resize:vertical; min-height:90px; }
+.input-group{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:12px; }
+.input-group .input{ margin-top:0; }
+.label{ font-size:13px; font-weight: 500; color:var(--muted); margin-top:16px; margin-bottom:4px; display:block; }
+.btn{ width:100%; border:none; border-radius:16px; padding:16px; margin-top:24px; background:var(--accent); color:#fff; font-size:16px; font-weight:600; transition:0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor:pointer; }
+.btn:active{ transform: scale(0.97); opacity:0.9; }
+.btn-secondary{ background:rgba(255,255,255,0.08); border: 1px solid var(--line); }
+.btn-danger{ background:rgba(255,93,115,0.15); color: var(--red); border: 1px solid rgba(255,93,115,0.3); }
 
-.input:focus{
-  outline:none;
-  border-color:var(--accent);
-  background:rgba(108,124,255,0.05);
-}
-
-textarea.input{
-  resize:vertical;
-  min-height:90px;
-}
-
-.input-group{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-  margin-top:12px;
-}
-
-.input-group .input{
-  margin-top:0;
-}
-
-.label{
-  font-size:13px;
-  font-weight: 500;
-  color:var(--muted);
-  margin-top:16px;
-  margin-bottom:4px;
-  display:block;
-}
-
-.btn{
-  width:100%;
-  border:none;
-  border-radius:16px;
-  padding:16px;
-  margin-top:24px;
-  background:var(--accent);
-  color:#fff;
-  font-size:16px;
-  font-weight:600;
-  transition:0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn:active{
-  transform: scale(0.97);
-  opacity:0.9;
-}
-
-.btn-secondary{
-  background:rgba(255,255,255,0.08);
-  border: 1px solid var(--line);
-}
-
-.btn-danger{
-  background:rgba(255,93,115,0.15);
-  color: var(--red);
-  border: 1px solid rgba(255,93,115,0.3);
-}
+/* QUICK TEMPLATES */
+.template-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-top: 8px; -webkit-overflow-scrolling: touch; }
+.template-btn { flex-shrink: 0; background: rgba(255,255,255,0.08); border: 1px solid var(--line); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.2s; }
+.template-btn:active { background: var(--accent); border-color: var(--accent); }
 
 /* ITEMS LIST */
-.todo-item, .expense-item {
-  display:flex;
-  gap:14px;
-  padding:16px;
-  background:rgba(0,0,0,0.2);
-  border:1px solid var(--line);
-  border-radius:16px;
-  margin-bottom:12px;
-  transition: 0.2s ease;
-}
-
-.todo-item:active, .expense-item:active {
-  background:rgba(255,255,255,0.02);
-  transform: scale(0.98);
-}
-
-.check{
-  width:26px;
-  height:26px;
-  border-radius:8px;
-  border:2px solid var(--muted);
-  flex-shrink:0;
-  margin-top:2px;
-  transition:0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.check.done{
-  background:var(--green);
-  border-color:var(--green);
-}
-.check.done::after {
-  content: "✓";
-  color: #000;
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: 800;
-  font-size: 14px;
-}
-
-.todo-content, .expense-content{
-  flex:1;
-  min-width:0;
-}
-
-.todo-text, .expense-name{
-  font-size: 15px;
-  font-weight:600;
-  word-break:break-word;
-}
-
-.todo-text.done{
-  text-decoration:line-through;
-  opacity:0.4;
-}
-
-.badge{
-  font-size:11px;
-  padding:4px 8px;
-  border-radius:6px;
-  background:rgba(255,255,255,0.05);
-  color:var(--muted);
-  border: 1px solid var(--line);
-}
+.todo-item, .expense-item { display:flex; gap:14px; padding:16px; background:rgba(0,0,0,0.2); border:1px solid var(--line); border-radius:16px; margin-bottom:12px; transition: 0.2s ease; }
+.todo-item:active, .expense-item:active { background:rgba(255,255,255,0.02); transform: scale(0.98); }
+.check{ width:26px; height:26px; border-radius:8px; border:2px solid var(--muted); flex-shrink:0; margin-top:2px; transition:0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+.check.done{ background:var(--green); border-color:var(--green); }
+.check.done::after { content: "✓"; color: #000; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; font-size: 14px; }
+.todo-content, .expense-content{ flex:1; min-width:0; }
+.todo-text, .expense-name{ font-size: 15px; font-weight:600; word-break:break-word; }
+.todo-text.done{ text-decoration:line-through; opacity:0.4; }
+.badge{ font-size:11px; padding:4px 8px; border-radius:6px; background:rgba(255,255,255,0.05); color:var(--muted); border: 1px solid var(--line); }
 .badge.high{ background:rgba(255,93,115,0.1); color:var(--red); border-color: rgba(255,93,115,0.2);}
 .badge.medium{ background:rgba(255,193,7,0.1); color:var(--yellow); border-color: rgba(255,193,7,0.2);}
-
-.expense-img{
-  width:64px;
-  height:64px;
-  object-fit:cover;
-  border-radius:12px;
-  flex-shrink:0;
-  background:rgba(0,0,0,0.3);
-  border: 1px solid var(--line);
-}
-
-.expense-price{
-  color:var(--green);
-  font-weight:700;
-  font-size:15px;
-  margin-top: 4px;
-}
+.expense-img{ width:64px; height:64px; object-fit:cover; border-radius:12px; flex-shrink:0; background:rgba(0,0,0,0.3); border: 1px solid var(--line); }
+.expense-price{ color:var(--green); font-weight:700; font-size:15px; margin-top: 4px; }
 
 /* STATS */
-.stats-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-bottom:12px;
-}
-
-.stat-card{
-  background:rgba(0,0,0,0.2);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:16px;
-  text-align:center;
-}
-
-.stat-value{
-  font-size:24px;
-  font-weight:800;
-  color:var(--accent);
-}
-
-.category-row{
-  display:flex;
-  justify-content:space-between;
-  padding:14px 0;
-  border-bottom:1px solid var(--line);
-  font-size:14px;
-}
-
+.stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.stat-card{ background:rgba(0,0,0,0.2); border:1px solid var(--line); border-radius:16px; padding:16px; text-align:center; }
+.stat-value{ font-size:24px; font-weight:800; color:var(--accent); }
+.category-row{ display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line); font-size:14px; }
 .category-row:last-child{ border-bottom:none; }
 .category-amount{ color:var(--green); font-weight:600; margin:0 12px; }
 .bar{ height:6px; background:linear-gradient(90deg, var(--accent), #9b9aff); border-radius:3px; flex:1; min-width:20px; }
 
 /* SETTINGS */
-.setting-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 0;
-  border-bottom:1px solid var(--line);
-}
+.setting-row{ display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid var(--line); }
 .setting-row:last-child{ border-bottom:none; }
-
-.toggle{
-  width:50px;
-  height:30px;
-  background:rgba(255,255,255,0.1);
-  border:none;
-  border-radius:15px;
-  position:relative;
-  transition:0.3s;
-}
-.toggle::after{
-  content:''; position:absolute; width:26px; height:26px; background:#fff; border-radius:50%; top:2px; left:2px; transition:0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+.toggle{ width:50px; height:30px; background:rgba(255,255,255,0.1); border:none; border-radius:15px; position:relative; transition:0.3s; }
+.toggle::after{ content:''; position:absolute; width:26px; height:26px; background:#fff; border-radius:50%; top:2px; left:2px; transition:0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .toggle.on{ background:var(--accent); }
 .toggle.on::after{ left:22px; }
-
 .empty-state{ text-align:center; padding:50px 20px; color:var(--muted); }
 .empty-icon{ font-size:48px; margin-bottom:16px; filter: grayscale(100%) opacity(0.5); }
+
+/* CONFETTI */
+.confetti { position: fixed; width: 10px; height: 10px; z-index: 9999; animation: fall 1s linear forwards; }
+@keyframes fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 </style>
 </head>
 
@@ -538,42 +156,53 @@ textarea.input{
     <div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div>
   </div>
   <div class="pinpad">
-    <button class="key" onclick="press(1)">1</button>
-    <button class="key" onclick="press(2)">2</button>
-    <button class="key" onclick="press(3)">3</button>
-    <button class="key" onclick="press(4)">4</button>
-    <button class="key" onclick="press(5)">5</button>
-    <button class="key" onclick="press(6)">6</button>
-    <button class="key" onclick="press(7)">7</button>
-    <button class="key" onclick="press(8)">8</button>
-    <button class="key" onclick="press(9)">9</button>
-    <button class="key" style="opacity:0"></button>
-    <button class="key" onclick="press(0)">0</button>
-    <button class="key" onclick="del()">⌫</button>
+    <button class="key" onclick="press(1)">1</button><button class="key" onclick="press(2)">2</button><button class="key" onclick="press(3)">3</button>
+    <button class="key" onclick="press(4)">4</button><button class="key" onclick="press(5)">5</button><button class="key" onclick="press(6)">6</button>
+    <button class="key" onclick="press(7)">7</button><button class="key" onclick="press(8)">8</button><button class="key" onclick="press(9)">9</button>
+    <button class="key" style="opacity:0"></button><button class="key" onclick="press(0)">0</button><button class="key" onclick="del()">⌫</button>
   </div>
 </div>
 
 <div class="app hidden" id="app">
 
   <div class="header">
-    <div class="title" id="pageTitle">Chi tiêu</div>
+    <div class="title" id="pageTitle">Chi tiêu & Tài sản</div>
     <div class="sub" id="pageSub">Quản lý dòng tiền thông minh</div>
   </div>
 
   <div id="expenses" class="tab-content">
     <div class="section">
-      <div class="card">
-        <div style="font-size:28px;font-weight:800;color:var(--green)" id="expenseTotal">0đ</div>
-        <div class="sub">Tổng chi tiêu tháng này</div>
-        <div class="sub" id="storageInfo" style="margin-top:8px; font-size:12px;">Storage: 0 KB</div>
+      
+      <div class="card" style="background: linear-gradient(135deg, rgba(108,124,255,0.15) 0%, rgba(23,26,33,0.8) 100%); border-color: rgba(108,124,255,0.3);">
+        <div class="row">
+          <div>
+            <div class="sub" style="color:rgba(255,255,255,0.7)">Tổng tài sản hiện có</div>
+            <div style="font-size:28px;font-weight:800;color:#fff;margin-top:2px" id="totalBalance">0đ</div>
+          </div>
+          <button style="background:var(--accent); color:#fff; border-radius:12px; padding:8px 12px; border:none; font-weight:600; font-size:12px; cursor:pointer; box-shadow:0 4px 12px rgba(108,124,255,0.4);" onclick="openWalletModal()">Quản lý Ví ✏️</button>
+        </div>
+        
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:20px;" id="walletDashboardList">
+          </div>
       </div>
 
       <div class="card">
-        <button class="btn" style="margin-top:0" onclick="openCamera()">📸 Chụp ảnh biên lai / sản phẩm</button>
+        <div class="row">
+            <div><div style="font-size:18px;font-weight:700" id="expenseTotal">0đ</div><div class="sub">Đã chi (tháng này)</div></div>
+            <div style="text-align:right"><div class="sub" id="storageInfo" style="font-size:11px;">Storage: 0 KB</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <button class="btn" style="margin-top:0" onclick="openCamera()">📸 Chụp biên lai / sản phẩm</button>
         <div class="input-group" style="margin-top:12px">
             <button class="btn btn-secondary" style="margin-top:0" onclick="openUpload()">📁 Tải ảnh lên</button>
             <button class="btn btn-secondary" style="margin-top:0; color:var(--red)" onclick="openExpenseNoImage()">💰 Nhập tay</button>
         </div>
+      </div>
+      
+      <div class="card" style="padding: 12px 20px;">
+         <input id="searchExpenseInput" class="input" style="margin-top:0; background:transparent; border:none; padding:0" placeholder="🔍 Tìm kiếm khoản chi..." oninput="renderExpenses()">
       </div>
 
       <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImage(event)">
@@ -591,7 +220,6 @@ textarea.input{
           <div><div style="font-size:22px;font-weight:800;color:var(--red)" id="todoOverdue">0</div><div class="sub">Quá hạn</div></div>
         </div>
       </div>
-
       <div class="card">
         <button class="btn" style="margin-top:0; margin-bottom:16px;" onclick="openTodoModal()">+ Thêm công việc mới</button>
         <div class="input-group" style="margin-top:0">
@@ -629,36 +257,15 @@ textarea.input{
             </div>
             <button class="btn btn-secondary" onclick="exportExpenseStatsTxt()">📥 Xuất báo cáo (TXT)</button>
           </div>
-
-          <div class="card">
-            <div class="sub">Tổng chi tiêu (Theo bộ lọc)</div>
-            <div style="font-size:24px;font-weight:800;color:var(--green);margin-top:4px" id="statExpenseTotal">0đ</div>
-          </div>
-          <div class="card">
-            <div style="font-size:14px;font-weight:700;margin-bottom:12px">📁 Phân bổ theo danh mục</div>
-            <div id="expenseCategoryStats"></div>
-          </div>
-          <div class="card">
-            <div style="font-size:14px;font-weight:700;margin-bottom:12px">📅 Biểu đồ theo ngày</div>
-            <div id="expenseDailyStats"></div>
-          </div>
+          <div class="card"><div class="sub">Tổng chi tiêu</div><div style="font-size:24px;font-weight:800;color:var(--green);margin-top:4px" id="statExpenseTotal">0đ</div></div>
+          <div class="card"><div style="font-size:14px;font-weight:700;margin-bottom:12px">📁 Phân bổ theo danh mục</div><div id="expenseCategoryStats"></div></div>
+          <div class="card"><div style="font-size:14px;font-weight:700;margin-bottom:12px">📅 Biểu đồ theo ngày</div><div id="expenseDailyStats"></div></div>
       </div>
 
       <div id="viewTodoStats" class="hidden">
-          <div class="card">
-            <div class="stats-grid">
-              <div class="stat-card"><div class="stat-value" id="statTodoTotal">0</div><div class="stat-label">Tổng cộng</div></div>
-              <div class="stat-card"><div class="stat-value" id="statTodoCompletion">0%</div><div class="stat-label">Tỷ lệ xong</div></div>
-            </div>
-          </div>
-          <div class="card">
-            <div style="font-size:14px;font-weight:700;margin-bottom:12px">💼 Theo danh mục</div>
-            <div id="todoCategoryStats"></div>
-          </div>
-          <div class="card">
-            <div style="font-size:14px;font-weight:700;margin-bottom:12px">⏱️ Theo ưu tiên</div>
-            <div id="todoPriorityStats"></div>
-          </div>
+          <div class="card"><div class="stats-grid"><div class="stat-card"><div class="stat-value" id="statTodoTotal">0</div><div class="stat-label">Tổng cộng</div></div><div class="stat-card"><div class="stat-value" id="statTodoCompletion">0%</div><div class="stat-label">Tỷ lệ xong</div></div></div></div>
+          <div class="card"><div style="font-size:14px;font-weight:700;margin-bottom:12px">💼 Theo danh mục</div><div id="todoCategoryStats"></div></div>
+          <div class="card"><div style="font-size:14px;font-weight:700;margin-bottom:12px">⏱️ Theo ưu tiên</div><div id="todoPriorityStats"></div></div>
       </div>
     </div>
   </div>
@@ -679,8 +286,13 @@ textarea.input{
           <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 16px" onclick="archiveOldImages()">Dọn</button>
         </div>
         <div class="setting-row">
-          <div><div style="font-weight:600">Sao lưu Backup</div><div class="sub">Lưu file JSON</div></div>
+          <div><div style="font-weight:600">Sao lưu (Export)</div><div class="sub">Tải file dữ liệu .json</div></div>
           <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 16px" onclick="exportData()">Lưu</button>
+        </div>
+        <div class="setting-row">
+          <div><div style="font-weight:600">Khôi phục (Import)</div><div class="sub">Đọc file .json cũ</div></div>
+          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 16px; color:var(--green)" onclick="document.getElementById('importFile').click()">Mở</button>
+          <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)">
         </div>
         <div class="setting-row" style="border-bottom:none">
           <div><div style="font-weight:600; color:var(--red)">Khôi phục cài đặt gốc</div><div class="sub">Xoá sạch dữ liệu</div></div>
@@ -693,22 +305,27 @@ textarea.input{
 </div>
 
 <div class="bottom-nav" id="bottomNav">
-  <button class="nav-item active" onclick="switchMainTab('expenses', this)">
-    <div class="nav-icon">💰</div>
-    <span>Chi tiêu</span>
-  </button>
-  <button class="nav-item" onclick="switchMainTab('todos', this)">
-    <div class="nav-icon">📋</div>
-    <span>Todo</span>
-  </button>
-  <button class="nav-item" onclick="switchMainTab('stats', this)">
-    <div class="nav-icon">📊</div>
-    <span>Thống kê</span>
-  </button>
-  <button class="nav-item" onclick="switchMainTab('settings', this)">
-    <div class="nav-icon">⚙️</div>
-    <span>Cài đặt</span>
-  </button>
+  <button class="nav-item active" onclick="switchMainTab('expenses', this)"><div class="nav-icon">💰</div><span>Chi tiêu</span></button>
+  <button class="nav-item" onclick="switchMainTab('todos', this)"><div class="nav-icon">📋</div><span>Todo</span></button>
+  <button class="nav-item" onclick="switchMainTab('stats', this)"><div class="nav-icon">📊</div><span>Thống kê</span></button>
+  <button class="nav-item" onclick="switchMainTab('settings', this)"><div class="nav-icon">⚙️</div><span>Cài đặt</span></button>
+</div>
+
+<div class="modal" id="walletModal">
+  <div class="modal-content">
+    <div class="modal-header" style="margin-bottom: 16px;">
+      <div class="modal-title">Nguồn tiền của bạn</div>
+      <button class="modal-close" onclick="closeModal('walletModal')">✕</button>
+    </div>
+    
+    <div class="sub" style="margin-bottom:16px;">Quản lý tất cả các nguồn tiền (Nên kèm Emoji ở tên ví cho đẹp).</div>
+
+    <div id="walletModalList">
+      </div>
+
+    <button class="btn btn-secondary" style="margin-top:8px; border: 1px dashed var(--muted); background:transparent" onclick="addNewWalletRow()">+ Thêm nguồn tiền</button>
+    <button class="btn" style="margin-top:16px" onclick="saveWallets()">Lưu cập nhật</button>
+  </div>
 </div>
 
 <div class="modal" id="expenseModal">
@@ -718,21 +335,37 @@ textarea.input{
       <button class="modal-close" onclick="closeModal('expenseModal')">✕</button>
     </div>
 
+    <div class="template-scroll">
+      <button class="template-btn" onclick="applyTemplate('Ăn uống', '☕ Cà phê')">☕ Cà phê</button>
+      <button class="template-btn" onclick="applyTemplate('Ăn uống', '🍜 Ăn sáng')">🍜 Ăn sáng</button>
+      <button class="template-btn" onclick="applyTemplate('Di chuyển', '⛽ Đổ xăng')">⛽ Đổ xăng</button>
+      <button class="template-btn" onclick="applyTemplate('Mua sắm', '🛒 Siêu thị')">🛒 Siêu thị</button>
+    </div>
+
     <img id="previewExpense" class="input hidden" style="width:100%;border-radius:16px;margin-bottom:16px;max-height:220px;object-fit:cover;border:1px solid var(--line);" />
 
-    <label class="label" style="margin-top:0">Số tiền (Bắt buộc) <span style="color:var(--red)">*</span></label>
+    <label class="label" style="margin-top:12px">Số tiền (Bắt buộc) <span style="color:var(--red)">*</span></label>
     <input id="expensePrice" class="input" type="number" placeholder="0" style="font-size:24px; font-weight:700; color:var(--green)">
     <div id="priceSuggestions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"></div>
 
-    <label class="label">Danh mục (Không bắt buộc)</label>
-    <select id="expenseCategory" class="input">
-      <option value="">-- Bỏ qua --</option>
-      <option value="Ăn uống">Ăn uống</option>
-      <option value="Di chuyển">Di chuyển</option>
-      <option value="Giải trí">Giải trí</option>
-      <option value="Mua sắm">Mua sắm</option>
-      <option value="Khác">Khác</option>
-    </select>
+    <div class="input-group">
+      <div>
+        <label class="label">Trừ vào ví</label>
+        <select id="expenseWallet" class="input">
+          </select>
+      </div>
+      <div>
+        <label class="label">Danh mục</label>
+        <select id="expenseCategory" class="input">
+          <option value="">-- Bỏ qua --</option>
+          <option value="Ăn uống">Ăn uống</option>
+          <option value="Di chuyển">Di chuyển</option>
+          <option value="Giải trí">Giải trí</option>
+          <option value="Mua sắm">Mua sắm</option>
+          <option value="Khác">Khác</option>
+        </select>
+      </div>
+    </div>
 
     <label class="label">Tên khoản chi / Ghi chú (Không bắt buộc)</label>
     <input id="expenseName" class="input" placeholder="Ví dụ: Cà phê sáng...">
@@ -755,20 +388,12 @@ textarea.input{
 
     <div class="input-group">
       <div>
-        <label class="label">Mức độ ưu tiên</label>
-        <select id="todoPriority" class="input">
-          <option value="low">Thấp</option>
-          <option value="medium" selected>Trung bình</option>
-          <option value="high">Cao</option>
-        </select>
+        <label class="label">Ưu tiên</label>
+        <select id="todoPriority" class="input"><option value="low">Thấp</option><option value="medium" selected>Trung bình</option><option value="high">Cao</option></select>
       </div>
       <div>
         <label class="label">Phân loại</label>
-        <select id="todoCategory" class="input">
-          <option value="Cá nhân">Cá nhân</option>
-          <option value="Công việc">Công việc</option>
-          <option value="Khác">Khác</option>
-        </select>
+        <select id="todoCategory" class="input"><option value="Cá nhân">Cá nhân</option><option value="Công việc">Công việc</option><option value="Khác">Khác</option></select>
       </div>
     </div>
 
@@ -783,41 +408,41 @@ textarea.input{
 /* ======================
 CORE & NAVIGATION
 ====================== */
-
 const DEFAULT_PIN = "6089";
 let currentPin = "";
-let DB = { todos: [], expenses: [], pin: DEFAULT_PIN, pinEnabled: true };
+let DB = { 
+  todos: [], 
+  expenses: [], 
+  pin: DEFAULT_PIN, 
+  pinEnabled: true,
+  wallets: [] // Chuyển thành Array để linh hoạt số lượng
+};
 
 function switchMainTab(tabId, btnElement) {
-  // Đổi màu icon bottom nav
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  btnElement.classList.add('active');
-
-  // Đổi trang
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-  document.getElementById(tabId).classList.remove('hidden');
-
-  // Đổi Header Titles tương ứng
-  const title = document.getElementById("pageTitle");
-  const sub = document.getElementById("pageSub");
-  if(tabId === 'expenses') { title.innerText = "Chi tiêu"; sub.innerText = "Quản lý dòng tiền thông minh"; }
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); btnElement.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(tabId).classList.remove('hidden');
+  const title = document.getElementById("pageTitle"); const sub = document.getElementById("pageSub");
+  if(tabId === 'expenses') { title.innerText = "Chi tiêu & Tài sản"; sub.innerText = "Quản lý dòng tiền thông minh"; }
   else if(tabId === 'todos') { title.innerText = "Todo"; sub.innerText = "Danh sách công việc của bạn"; }
   else if(tabId === 'stats') { title.innerText = "Thống kê"; sub.innerText = "Báo cáo tổng quan dữ liệu"; }
   else if(tabId === 'settings') { title.innerText = "Cài đặt"; sub.innerText = "Tuỳ chỉnh hệ thống"; }
 }
 
 function switchStatView(viewType) {
-  document.getElementById("btnStatExpense").classList.remove("active");
-  document.getElementById("btnStatTodo").classList.remove("active");
-  document.getElementById("viewExpenseStats").classList.add("hidden");
-  document.getElementById("viewTodoStats").classList.add("hidden");
+  document.getElementById("btnStatExpense").classList.remove("active"); document.getElementById("btnStatTodo").classList.remove("active");
+  document.getElementById("viewExpenseStats").classList.add("hidden"); document.getElementById("viewTodoStats").classList.add("hidden");
+  if(viewType === 'expense') { document.getElementById("btnStatExpense").classList.add("active"); document.getElementById("viewExpenseStats").classList.remove("hidden"); } 
+  else { document.getElementById("btnStatTodo").classList.add("active"); document.getElementById("viewTodoStats").classList.remove("hidden"); }
+}
 
-  if(viewType === 'expense') {
-    document.getElementById("btnStatExpense").classList.add("active");
-    document.getElementById("viewExpenseStats").classList.remove("hidden");
-  } else {
-    document.getElementById("btnStatTodo").classList.add("active");
-    document.getElementById("viewTodoStats").classList.remove("hidden");
+function triggerConfetti() {
+  if (navigator.vibrate) navigator.vibrate(50);
+  const colors = ['#6c7cff', '#3bd17f', '#ff5d73', '#ffc107', '#ffffff'];
+  for (let i = 0; i < 40; i++) {
+    let div = document.createElement('div'); div.className = 'confetti';
+    div.style.left = Math.random() * 100 + 'vw'; div.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    div.style.animationDuration = (Math.random() * 1 + 0.5) + 's'; div.style.animationDelay = (Math.random() * 0.2) + 's';
+    document.body.appendChild(div); setTimeout(() => div.remove(), 2000);
   }
 }
 
@@ -827,463 +452,318 @@ PIN LOCK
 function press(n){
   if(!DB.pinEnabled) return;
   if(currentPin.length >= 4) return;
-  currentPin += n;
-  updateDots();
+  currentPin += n; updateDots();
   if(currentPin.length === 4){
     setTimeout(() => {
       if(currentPin === DB.pin || currentPin === DEFAULT_PIN){
-        document.getElementById("lock").classList.add("hidden");
-        document.getElementById("app").classList.remove("hidden");
-        document.getElementById("bottomNav").style.display = "flex";
-        init();
-      }else{
-        alert("Mã PIN không đúng!");
-        currentPin = "";
-        updateDots();
-      }
+        document.getElementById("lock").classList.add("hidden"); document.getElementById("app").classList.remove("hidden"); document.getElementById("bottomNav").style.display = "flex"; init();
+      } else { alert("Mã PIN không đúng!"); currentPin = ""; updateDots(); }
     }, 150);
   }
 }
-
-function del(){
-  if(!DB.pinEnabled) return;
-  currentPin = currentPin.slice(0, -1);
-  updateDots();
-}
-
-function updateDots(){
-  for(let i = 1; i <= 4; i++){
-    const el = document.getElementById("d" + i);
-    if(i <= currentPin.length) el.classList.add("fill");
-    else el.classList.remove("fill");
-  }
-}
+function del(){ if(!DB.pinEnabled) return; currentPin = currentPin.slice(0, -1); updateDots(); }
+function updateDots(){ for(let i = 1; i <= 4; i++){ const el = document.getElementById("d" + i); if(i <= currentPin.length) el.classList.add("fill"); else el.classList.remove("fill"); } }
 
 /* ======================
-DATABASE & INIT
+DATABASE & INIT & MIGRATION
 ====================== */
 function saveDB(){ localStorage.setItem("myspace", JSON.stringify(DB)); }
 
 function loadDB(){
   const raw = localStorage.getItem("myspace");
-  if(raw) DB = JSON.parse(raw);
-  if(DB.pinEnabled === false){
-    document.getElementById("lock").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
-    init();
-  } else {
-    document.getElementById("bottomNav").style.display = "none";
+  if(raw) {
+    DB = JSON.parse(raw);
+    // Tính năng tự động chuyển đổi từ dữ liệu 4 ví cũ sang Array Ví động (Migration)
+    if (DB.wallets && !Array.isArray(DB.wallets)) {
+        let newWallets = [];
+        newWallets.push({ id: 'w_cash', name: '💵 Tiền mặt', balance: DB.wallets.cash || 0 });
+        if(DB.walletNames) {
+            newWallets.push({ id: 'w_bank1', name: '🏦 ' + (DB.walletNames.bank1 || "Ngân hàng 1"), balance: DB.wallets.bank1 || 0 });
+            newWallets.push({ id: 'w_bank2', name: '🏦 ' + (DB.walletNames.bank2 || "Ngân hàng 2"), balance: DB.wallets.bank2 || 0 });
+        }
+        newWallets.push({ id: 'w_savings', name: '🐷 Tiết kiệm', balance: DB.wallets.savings || 0 });
+        DB.wallets = newWallets;
+    } else if (!DB.wallets) {
+        // Mặc định tạo 2 ví cơ bản nếu là app mới
+        DB.wallets = [
+            { id: 'w_' + Date.now(), name: '💵 Tiền mặt', balance: 0 },
+            { id: 'w_' + (Date.now()+1), name: '🏦 Ngân hàng', balance: 0 }
+        ];
+    }
   }
+  
+  if(DB.pinEnabled === false){ document.getElementById("lock").classList.add("hidden"); document.getElementById("app").classList.remove("hidden"); init(); } 
+  else { document.getElementById("bottomNav").style.display = "none"; }
 }
 
-function init(){
-  applyQuickFilter();
-  renderTodos();
-  renderExpenses();
-  calcStorage();
-  updatePasscodeToggle();
+function init(){ 
+  applyQuickFilter(); 
+  renderTodos(); 
+  renderExpenses(); 
+  renderWallets(); 
+  calcStorage(); 
+  updatePasscodeToggle(); 
 }
 
 /* ======================
-MODALS & CAMERA
+DYNAMIC WALLETS (VÍ ĐỘNG)
+====================== */
+
+function renderWalletModalList() {
+  const list = document.getElementById('walletModalList');
+  if(DB.wallets.length === 0) {
+      list.innerHTML = '<div class="sub" style="text-align:center; padding: 20px 0;">Chưa có ví nào</div>';
+      return;
+  }
+  
+  list.innerHTML = DB.wallets.map(w => `
+      <div style="display:grid; grid-template-columns: 2fr 2fr 40px; gap:8px; margin-bottom:12px; align-items:center;">
+          <input class="input" style="margin-top:0" value="${w.name}" id="wname_${w.id}" placeholder="Tên (VD: 📱 Momo)">
+          <input class="input" style="margin-top:0" type="number" value="${w.balance}" id="wbal_${w.id}" placeholder="Số dư">
+          <button style="background:rgba(255,93,115,0.15); border:1px solid rgba(255,93,115,0.3); border-radius:12px; color:var(--red); height:100%; font-size:16px; cursor:pointer;" onclick="removeWalletRow('${w.id}')">✕</button>
+      </div>
+  `).join("");
+}
+
+function openWalletModal() {
+  renderWalletModalList();
+  openModal('walletModal');
+}
+
+function addNewWalletRow() {
+  DB.wallets.push({ id: 'w_' + Date.now(), name: '💳 Ví mới', balance: 0 });
+  renderWalletModalList();
+}
+
+function removeWalletRow(id) {
+  if(confirm("Bạn có chắc chắn muốn xoá ví này?")) {
+      DB.wallets = DB.wallets.filter(w => w.id !== id);
+      renderWalletModalList();
+  }
+}
+
+function saveWallets() {
+  DB.wallets.forEach(w => {
+      const nameInput = document.getElementById('wname_' + w.id);
+      const balInput = document.getElementById('wbal_' + w.id);
+      if(nameInput && balInput) {
+          w.name = nameInput.value.trim() || 'Ví chưa đặt tên';
+          w.balance = parseFloat(balInput.value) || 0;
+      }
+  });
+  saveDB();
+  closeModal('walletModal');
+  renderWallets();
+}
+
+function renderWallets() {
+  const total = DB.wallets.reduce((sum, w) => sum + (w.balance || 0), 0);
+  document.getElementById("totalBalance").innerText = total.toLocaleString() + "đ";
+
+  const list = document.getElementById("walletDashboardList");
+  if(DB.wallets.length === 0) {
+      list.innerHTML = '<div class="sub" style="grid-column: span 2;">Vui lòng thêm nguồn tiền...</div>';
+      return;
+  }
+  
+  list.innerHTML = DB.wallets.map(w => {
+      const isNegative = w.balance < 0;
+      return `
+      <div style="background:rgba(0,0,0,0.4); padding:12px; border-radius:12px; border: 1px solid rgba(255,255,255,0.05);">
+          <div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${w.name}">${w.name}</div>
+          <div style="font-size:15px;font-weight:700;margin-top:4px;color:${isNegative ? 'var(--red)' : '#fff'}">${(w.balance||0).toLocaleString()}đ</div>
+      </div>
+      `;
+  }).join("");
+}
+
+function getWalletName(id) {
+  const w = DB.wallets.find(x => x.id === id);
+  return w ? w.name : 'Ví đã xoá';
+}
+
+function populateExpenseWalletDropdown() {
+  const sel = document.getElementById("expenseWallet");
+  let options = `<option value="none">-- Không trừ ví --</option>`;
+  options += DB.wallets.map(w => `<option value="${w.id}">${w.name} (${(w.balance||0).toLocaleString()}đ)</option>`).join("");
+  sel.innerHTML = options;
+}
+
+/* ======================
+MODALS, CAMERA & QUICK TEMPLATE
 ====================== */
 let currentPhoto = null;
 function openModal(id){ document.getElementById(id).classList.add("show"); }
 function closeModal(id){ document.getElementById(id).classList.remove("show"); }
 
-function openExpenseNoImage() {
-  currentPhoto = null;
-  document.getElementById("previewExpense").classList.add("hidden");
-  document.getElementById("previewExpense").src = "";
-  resetExpenseForm();
-  openModal("expenseModal");
-}
+function applyTemplate(cat, name) { document.getElementById("expenseCategory").value = cat; document.getElementById("expenseName").value = name; document.getElementById("expensePrice").focus(); }
 
+function openExpenseNoImage() {
+  currentPhoto = null; document.getElementById("previewExpense").classList.add("hidden"); document.getElementById("previewExpense").src = "";
+  resetExpenseForm(); openModal("expenseModal");
+}
 function openCamera(){ document.getElementById("cameraInput").click(); }
 function openUpload(){ document.getElementById("uploadInput").click(); }
-
 async function handleImage(e){
-  const file = e.target.files[0];
-  if(!file) return;
+  const file = e.target.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = (event) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const scale = 380 / img.width;
-      canvas.width = 380; canvas.height = img.height * scale;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      
+    const img = new Image(); img.onload = () => {
+      const canvas = document.createElement("canvas"); const scale = 380 / img.width; canvas.width = 380; canvas.height = img.height * scale;
+      const ctx = canvas.getContext("2d"); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       currentPhoto = canvas.toDataURL("image/jpeg", 0.3);
-      const preview = document.getElementById("previewExpense");
-      preview.src = currentPhoto;
-      preview.classList.remove("hidden");
-      resetExpenseForm();
-      openModal("expenseModal");
-    };
-    img.src = event.target.result;
-  };
-  reader.readAsDataURL(file);
+      const preview = document.getElementById("previewExpense"); preview.src = currentPhoto; preview.classList.remove("hidden");
+      resetExpenseForm(); openModal("expenseModal");
+    }; img.src = event.target.result;
+  }; reader.readAsDataURL(file);
 }
 
 function resetExpenseForm() {
-  document.getElementById("expensePrice").value = "";
-  document.getElementById("expenseName").value = "";
-  document.getElementById("expenseCategory").value = "";
-  document.getElementById("priceSuggestions").innerHTML = "";
-  
+  document.getElementById("expensePrice").value = ""; document.getElementById("expenseName").value = ""; document.getElementById("expenseCategory").value = ""; document.getElementById("priceSuggestions").innerHTML = "";
+  populateExpenseWalletDropdown(); // Cập nhật dropdown ví
   document.getElementById("expenseModalTitle").innerText = "Khoản chi mới";
-  const btn = document.getElementById("btnSaveExpense");
-  if(btn){
-    btn.innerText = "Lưu ngay";
-    btn.onclick = saveExpense;
-  }
+  const btn = document.getElementById("btnSaveExpense"); if(btn){ btn.innerText = "Lưu ngay"; btn.onclick = saveExpense; }
 }
 
 /* ======================
-EXPENSES
+EXPENSES (AUTO DEDUCT)
 ====================== */
 document.getElementById("expensePrice").addEventListener("input", () => {
-  const price = parseFloat(document.getElementById("expensePrice").value) || 0;
-  const sugDiv = document.getElementById("priceSuggestions");
+  const price = parseFloat(document.getElementById("expensePrice").value) || 0; const sugDiv = document.getElementById("priceSuggestions");
   if(price === 0){ sugDiv.innerHTML = ""; return; }
   const suggestions = [price * 1000, price * 10000, price * 100000];
-  sugDiv.innerHTML = suggestions.map(s => 
-    `<button class="btn btn-secondary" style="width:auto;flex:1;padding:8px;margin-top:0;font-size:12px;border-radius:10px" onclick="document.getElementById('expensePrice').value=${s}">
-      ${s >= 1000000 ? (s/1000000).toFixed(1)+'M' : (s/1000).toFixed(0)+'K'}
-    </button>`
-  ).join("");
+  sugDiv.innerHTML = suggestions.map(s => `<button class="btn btn-secondary" style="width:auto;flex:1;padding:8px;margin-top:0;font-size:12px;border-radius:10px" onclick="document.getElementById('expensePrice').value=${s}">${s >= 1000000 ? (s/1000000).toFixed(1)+'M' : (s/1000).toFixed(0)+'K'}</button>`).join("");
 });
 
 function saveExpense(){
   const price = parseFloat(document.getElementById("expensePrice").value);
   if(!price){ alert("Vui lòng nhập số tiền!"); return; }
-
   const name = document.getElementById("expenseName").value.trim() || "Chưa phân loại";
   const category = document.getElementById("expenseCategory").value || "Khác";
+  const walletKey = document.getElementById("expenseWallet").value;
+  
+  // Tự động trừ ví
+  if(walletKey && walletKey !== 'none') {
+    const w = DB.wallets.find(x => x.id === walletKey);
+    if(w) w.balance -= price;
+  }
 
-  DB.expenses.unshift({
-    id: Date.now(),
-    name, price, category, note: "",
-    image: currentPhoto || "",
-    createdAt: new Date().toISOString()
-  });
-
-  saveDB();
-  closeModal("expenseModal");
-  renderExpenses();
-  renderStats();
-  calcStorage();
+  DB.expenses.unshift({ id: Date.now(), name, price, category, wallet: walletKey, note: "", image: currentPhoto || "", createdAt: new Date().toISOString() });
+  saveDB(); closeModal("expenseModal"); renderExpenses(); renderStats(); renderWallets(); calcStorage();
 }
 
 function editExpense(id) {
-  const exp = DB.expenses.find(e => e.id === id);
-  if(!exp) return;
-
-  document.getElementById("expenseModalTitle").innerText = "Sửa khoản chi";
+  const exp = DB.expenses.find(e => e.id === id); if(!exp) return;
   
+  populateExpenseWalletDropdown();
+  document.getElementById("expenseModalTitle").innerText = "Sửa khoản chi";
   document.getElementById("expensePrice").value = exp.price;
   document.getElementById("expenseCategory").value = (exp.category === "Khác" || !exp.category) ? "" : exp.category;
   document.getElementById("expenseName").value = exp.name === "Chưa phân loại" ? "" : exp.name;
-  
+  if(exp.wallet) document.getElementById("expenseWallet").value = exp.wallet;
+
   const preview = document.getElementById("previewExpense");
-  if(exp.image) {
-    preview.src = exp.image;
-    preview.classList.remove("hidden");
-    currentPhoto = exp.image;
-  } else {
-    preview.src = "";
-    preview.classList.add("hidden");
-    currentPhoto = null;
-  }
+  if(exp.image) { preview.src = exp.image; preview.classList.remove("hidden"); currentPhoto = exp.image; } 
+  else { preview.src = ""; preview.classList.add("hidden"); currentPhoto = null; }
 
-  const btn = document.getElementById("btnSaveExpense");
-  btn.innerText = "Cập nhật";
+  const btn = document.getElementById("btnSaveExpense"); btn.innerText = "Cập nhật";
   btn.onclick = () => {
-    const price = parseFloat(document.getElementById("expensePrice").value);
-    if(!price){ alert("Vui lòng nhập số tiền!"); return; }
+    const newPrice = parseFloat(document.getElementById("expensePrice").value); if(!newPrice){ alert("Vui lòng nhập số tiền!"); return; }
+    const newWalletKey = document.getElementById("expenseWallet").value;
     
-    exp.price = price;
-    exp.name = document.getElementById("expenseName").value.trim() || "Chưa phân loại";
-    exp.category = document.getElementById("expenseCategory").value || "Khác";
-    exp.image = currentPhoto || "";
-    
-    saveDB(); 
-    closeModal("expenseModal"); 
-    renderExpenses(); 
-    renderStats(); 
-    calcStorage();
-    
-    // Reset lại trạng thái nút
-    btn.innerText = "Lưu ngay";
-    btn.onclick = saveExpense;
-  };
+    // Hoàn trả lại ví cũ
+    if(exp.wallet && exp.wallet !== 'none') {
+       const oldW = DB.wallets.find(x => x.id === exp.wallet);
+       if(oldW) oldW.balance += exp.price; 
+    }
+    // Trừ ví mới
+    if(newWalletKey && newWalletKey !== 'none') {
+       const newW = DB.wallets.find(x => x.id === newWalletKey);
+       if(newW) newW.balance -= newPrice;
+    }
 
-  openModal("expenseModal");
+    exp.price = newPrice; exp.wallet = newWalletKey; exp.name = document.getElementById("expenseName").value.trim() || "Chưa phân loại"; exp.category = document.getElementById("expenseCategory").value || "Khác"; exp.image = currentPhoto || "";
+    saveDB(); closeModal("expenseModal"); renderExpenses(); renderStats(); renderWallets(); calcStorage();
+    btn.innerText = "Lưu ngay"; btn.onclick = saveExpense;
+  }; openModal("expenseModal");
 }
 
 function deleteExpense(id){
+  const exp = DB.expenses.find(e => e.id === id);
   if(!confirm("Xoá khoản chi này?")) return;
+  
+  // Tự động hoàn tiền vào ví nếu xoá
+  if(exp && exp.wallet && exp.wallet !== 'none') {
+     const w = DB.wallets.find(x => x.id === exp.wallet);
+     if(w) w.balance += exp.price;
+  }
+  
   DB.expenses = DB.expenses.filter(e => e.id !== id);
-  saveDB(); renderExpenses(); renderStats(); calcStorage();
+  saveDB(); renderExpenses(); renderStats(); renderWallets(); calcStorage();
 }
 
 function renderExpenses(){
-  const list = document.getElementById("expenseList");
+  const list = document.getElementById("expenseList"); const searchQuery = (document.getElementById("searchExpenseInput").value || "").toLowerCase();
   const now = new Date();
-  const thisMonth = DB.expenses.filter(e => new Date(e.createdAt).getMonth() === now.getMonth() && new Date(e.createdAt).getFullYear() === now.getFullYear());
+  let data = DB.expenses.filter(e => {
+      if(searchQuery !== "") return (e.name||"").toLowerCase().includes(searchQuery) || (e.category||"").toLowerCase().includes(searchQuery);
+      return new Date(e.createdAt).getMonth() === now.getMonth() && new Date(e.createdAt).getFullYear() === now.getFullYear();
+  });
+  document.getElementById("expenseTotal").innerText = data.reduce((sum, e) => sum + e.price, 0).toLocaleString() + "đ";
 
-  document.getElementById("expenseTotal").innerText = thisMonth.reduce((sum, e) => sum + e.price, 0).toLocaleString() + "đ";
-
-  if(thisMonth.length === 0){
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div>Không có khoản chi nào</div>';
-    return;
-  }
-  list.innerHTML = thisMonth.map(e => `
+  if(data.length === 0){ list.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div>Không có khoản chi nào</div>'; return; }
+  list.innerHTML = data.map(e => {
+    let walletBadge = "";
+    if(e.wallet && e.wallet !== 'none') {
+       walletBadge = `<span class="badge" style="background:rgba(108,124,255,0.15); color:#9b9aff; border-color:rgba(108,124,255,0.3)">${getWalletName(e.wallet)}</span>`;
+    }
+    return `
     <div class="expense-item">
       ${e.image ? `<img src="${e.image}" class="expense-img">` : '<div class="expense-img" style="display:flex;align-items:center;justify-content:center;font-size:24px">🏷️</div>'}
       <div class="expense-content">
         <div class="expense-name">${e.name}</div>
         <div class="expense-price">${e.price.toLocaleString()}đ</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">${e.category} • ${new Date(e.createdAt).toLocaleDateString('vi')}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px; display:flex; gap:6px; align-items:center;">
+          <span>${e.category}</span> • <span>${new Date(e.createdAt).toLocaleDateString('vi')}</span> ${walletBadge}
+        </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px">
         <button style="background:none;border:none;color:var(--accent);padding:4px;font-size:16px" onclick="editExpense(${e.id})">✏️</button>
         <button style="background:none;border:none;color:var(--muted);padding:4px;font-size:16px" onclick="deleteExpense(${e.id})">✕</button>
       </div>
-    </div>
-  `).join("");
+    </div>`;
+  }).join("");
 }
 
 /* ======================
 TODOS
 ====================== */
-function openTodoModal(){
-  document.getElementById("todoName").value = "";
-  document.getElementById("todoPriority").value = "medium";
-  document.getElementById("todoCategory").value = "Cá nhân";
-  document.getElementById("todoDueDate").value = "";
-  document.getElementById("todoCreatedInfo").innerText = "";
-  document.getElementById("todoModalTitle").innerText = "Thêm công việc";
-  document.getElementById("btnSaveTodo").innerText = "Tạo mới";
-  document.getElementById("btnSaveTodo").onclick = saveTodo;
-  openModal("todoModal");
-}
-
-function saveTodo(){
-  const name = document.getElementById("todoName").value.trim();
-  if(!name){ alert("Nhập tên công việc!"); return; }
-  DB.todos.unshift({
-    id: Date.now(), name, desc: "",
-    priority: document.getElementById("todoPriority").value,
-    category: document.getElementById("todoCategory").value,
-    dueDate: document.getElementById("todoDueDate").value,
-    recurring: "none", done: false,
-    createdAt: new Date().toISOString()
-  });
-  saveDB(); closeModal("todoModal"); renderTodos(); renderStats();
-}
-
-function toggleTodo(id){
-  const todo = DB.todos.find(t => t.id === id);
-  if(todo) todo.done = !todo.done;
-  saveDB(); renderTodos(); renderStats();
-}
-
-function deleteTodo(id){
-  DB.todos = DB.todos.filter(t => t.id !== id);
-  saveDB(); renderTodos(); renderStats();
-}
-
-function editTodo(id){
-  const todo = DB.todos.find(t => t.id === id);
-  if(!todo) return;
-  document.getElementById("todoCreatedInfo").innerText = "Tạo ngày: " + new Date(todo.createdAt).toLocaleString('vi');
-  document.getElementById("todoName").value = todo.name;
-  document.getElementById("todoPriority").value = todo.priority || "medium";
-  document.getElementById("todoCategory").value = todo.category || "Cá nhân";
-  document.getElementById("todoDueDate").value = (todo.dueDate && todo.dueDate.length === 10) ? todo.dueDate+"T00:00" : (todo.dueDate || "");
-  
-  document.getElementById("todoModalTitle").innerText = "Sửa công việc";
-  const btn = document.getElementById("btnSaveTodo");
-  btn.innerText = "Cập nhật";
-  btn.onclick = () => {
-    todo.name = document.getElementById("todoName").value;
-    todo.priority = document.getElementById("todoPriority").value;
-    todo.category = document.getElementById("todoCategory").value;
-    todo.dueDate = document.getElementById("todoDueDate").value;
-    saveDB(); closeModal("todoModal"); renderTodos(); renderStats();
-  };
-  openModal("todoModal");
-}
-
-function filterTodos(){
-  const search = document.getElementById("searchTodos").value.toLowerCase();
-  const status = document.getElementById("filterStatus").value;
-  document.querySelectorAll("#todoList .todo-item").forEach(item => {
-    const todo = DB.todos.find(t => t.id === parseInt(item.dataset.id));
-    if(!todo) return;
-    const mSearch = todo.name.toLowerCase().includes(search);
-    const mStatus = status==="" ? true : (status==="done" ? todo.done : !todo.done);
-    item.style.display = (mSearch && mStatus) ? "" : "none";
-  });
-}
-
-function renderTodos(){
-  const list = document.getElementById("todoList");
-  const now = new Date();
-  const total = DB.todos.length;
-  const done = DB.todos.filter(t => t.done).length;
-  const overdue = DB.todos.filter(t => t.dueDate && !t.done && new Date(t.dueDate) < now).length;
-
-  document.getElementById("todoTotal").innerText = total;
-  document.getElementById("todoDone").innerText = done;
-  document.getElementById("todoOverdue").innerText = overdue;
-
-  if(total === 0){ list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div>Chưa có task nào</div>'; return; }
-
-  list.innerHTML = DB.todos.map(todo => {
-    const isOverdue = todo.dueDate && !todo.done && new Date(todo.dueDate) < now;
-    let dueTxt = "";
-    if(todo.dueDate) {
-      const dt = new Date(todo.dueDate);
-      const timeStr = (dt.getHours()||dt.getMinutes()) ? `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')} ` : "";
-      dueTxt = `📅 ${timeStr}${dt.toLocaleDateString('vi')}`;
-    }
-    return `
-      <div class="todo-item" data-id="${todo.id}">
-        <div class="check ${todo.done ? 'done' : ''}" onclick="toggleTodo(${todo.id})"></div>
-        <div class="todo-content" onclick="editTodo(${todo.id})">
-          <div class="todo-text ${todo.done ? 'done' : ''}">${todo.name}</div>
-          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
-            <span class="badge ${todo.priority}">${todo.priority==='high'?'🔴 Cao':todo.priority==='medium'?'🟡 Trung':'🟢 Thấp'}</span>
-            <span class="badge">${todo.category}</span>
-            ${todo.dueDate ? `<span class="badge" style="${isOverdue?'color:var(--red);border-color:rgba(255,93,115,0.3)':''}">${dueTxt}</span>` : ''}
-          </div>
-        </div>
-        <button style="background:none;border:none;color:var(--muted);padding:8px" onclick="deleteTodo(${todo.id})">✕</button>
-      </div>
-    `;
-  }).join("");
-}
+function openTodoModal(){ document.getElementById("todoName").value = ""; document.getElementById("todoPriority").value = "medium"; document.getElementById("todoCategory").value = "Cá nhân"; document.getElementById("todoDueDate").value = ""; document.getElementById("todoCreatedInfo").innerText = ""; document.getElementById("todoModalTitle").innerText = "Thêm công việc"; const btn = document.getElementById("btnSaveTodo"); btn.innerText = "Tạo mới"; btn.onclick = saveTodo; openModal("todoModal"); }
+function saveTodo(){ const name = document.getElementById("todoName").value.trim(); if(!name){ alert("Nhập tên công việc!"); return; } DB.todos.unshift({ id: Date.now(), name, desc: "", priority: document.getElementById("todoPriority").value, category: document.getElementById("todoCategory").value, dueDate: document.getElementById("todoDueDate").value, recurring: "none", done: false, createdAt: new Date().toISOString() }); saveDB(); closeModal("todoModal"); renderTodos(); renderStats(); }
+function toggleTodo(id){ const todo = DB.todos.find(t => t.id === id); if(todo) { todo.done = !todo.done; if(todo.done) triggerConfetti(); } saveDB(); renderTodos(); renderStats(); }
+function deleteTodo(id){ DB.todos = DB.todos.filter(t => t.id !== id); saveDB(); renderTodos(); renderStats(); }
+function editTodo(id){ const todo = DB.todos.find(t => t.id === id); if(!todo) return; document.getElementById("todoCreatedInfo").innerText = "Tạo ngày: " + new Date(todo.createdAt).toLocaleString('vi'); document.getElementById("todoName").value = todo.name; document.getElementById("todoPriority").value = todo.priority || "medium"; document.getElementById("todoCategory").value = todo.category || "Cá nhân"; document.getElementById("todoDueDate").value = (todo.dueDate && todo.dueDate.length === 10) ? todo.dueDate+"T00:00" : (todo.dueDate || ""); document.getElementById("todoModalTitle").innerText = "Sửa công việc"; const btn = document.getElementById("btnSaveTodo"); btn.innerText = "Cập nhật"; btn.onclick = () => { todo.name = document.getElementById("todoName").value; todo.priority = document.getElementById("todoPriority").value; todo.category = document.getElementById("todoCategory").value; todo.dueDate = document.getElementById("todoDueDate").value; saveDB(); closeModal("todoModal"); renderTodos(); renderStats(); }; openModal("todoModal"); }
+function filterTodos(){ const search = document.getElementById("searchTodos").value.toLowerCase(); const status = document.getElementById("filterStatus").value; document.querySelectorAll("#todoList .todo-item").forEach(item => { const todo = DB.todos.find(t => t.id === parseInt(item.dataset.id)); if(!todo) return; const mSearch = todo.name.toLowerCase().includes(search); const mStatus = status==="" ? true : (status==="done" ? todo.done : !todo.done); item.style.display = (mSearch && mStatus) ? "" : "none"; }); }
+function renderTodos(){ const list = document.getElementById("todoList"); const now = new Date(); const total = DB.todos.length; const done = DB.todos.filter(t => t.done).length; const overdue = DB.todos.filter(t => t.dueDate && !t.done && new Date(t.dueDate) < now).length; document.getElementById("todoTotal").innerText = total; document.getElementById("todoDone").innerText = done; document.getElementById("todoOverdue").innerText = overdue; if(total === 0){ list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div>Chưa có task nào</div>'; return; } list.innerHTML = DB.todos.map(todo => { const isOverdue = todo.dueDate && !todo.done && new Date(todo.dueDate) < now; let dueTxt = ""; if(todo.dueDate) { const dt = new Date(todo.dueDate); const timeStr = (dt.getHours()||dt.getMinutes()) ? `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')} ` : ""; dueTxt = `📅 ${timeStr}${dt.toLocaleDateString('vi')}`; } return `<div class="todo-item" data-id="${todo.id}"><div class="check ${todo.done ? 'done' : ''}" onclick="toggleTodo(${todo.id})"></div><div class="todo-content" onclick="editTodo(${todo.id})"><div class="todo-text ${todo.done ? 'done' : ''}">${todo.name}</div><div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><span class="badge ${todo.priority}">${todo.priority==='high'?'🔴 Cao':todo.priority==='medium'?'🟡 Trung':'🟢 Thấp'}</span><span class="badge">${todo.category}</span>${todo.dueDate ? `<span class="badge" style="${isOverdue?'color:var(--red);border-color:rgba(255,93,115,0.3)':''}">${dueTxt}</span>` : ''}</div></div><button style="background:none;border:none;color:var(--muted);padding:8px" onclick="deleteTodo(${todo.id})">✕</button></div>`; }).join(""); }
 
 /* ======================
 STATS & FILTER
 ====================== */
-function applyQuickFilter() {
-  const val = document.getElementById("quickFilter").value;
-  const customGroup = document.getElementById("customDateRange");
-  if(val === "custom") { customGroup.style.display = "grid"; renderStats(); return; }
-  else customGroup.style.display = "none";
-
-  const now = new Date();
-  let from = new Date(), to = new Date();
-  if(val === "today") {} 
-  else if(val === "week") { from.setDate(now.getDate() - (now.getDay()||7) + 1); from.setHours(0,0,0,0); }
-  else if(val === "month") { from = new Date(now.getFullYear(), now.getMonth(), 1); }
-  
-  document.getElementById("statFilterFrom").value = from.toISOString().split('T')[0];
-  document.getElementById("statFilterTo").value = to.toISOString().split('T')[0];
-  renderStats();
-}
-
-function renderStats(){
-  // TODO STATS
-  const tTotal = DB.todos.length;
-  const tDone = DB.todos.filter(t => t.done).length;
-  document.getElementById("statTodoTotal").innerText = tTotal;
-  document.getElementById("statTodoCompletion").innerText = tTotal ? Math.round((tDone/tTotal)*100)+"%" : "0%";
-
-  const catTodo = {}; DB.todos.forEach(t => { catTodo[t.category] = (catTodo[t.category]||0) + 1; });
-  document.getElementById("todoCategoryStats").innerHTML = Object.entries(catTodo).map(([c, v]) => `<div class="category-row"><span>${c}</span><span class="category-amount">${v}</span></div>`).join("");
-
-  const prio = {high:0, medium:0, low:0}; DB.todos.forEach(t => { if(!t.done) prio[t.priority||'low']++; });
-  document.getElementById("todoPriorityStats").innerHTML = `
-    <div class="category-row"><span>🔴 Cao</span><span class="category-amount">${prio.high}</span></div>
-    <div class="category-row"><span>🟡 Trung bình</span><span class="category-amount">${prio.medium}</span></div>
-    <div class="category-row"><span>🟢 Thấp</span><span class="category-amount">${prio.low}</span></div>`;
-
-  // EXPENSE STATS
-  const from = document.getElementById("statFilterFrom").value;
-  const to = document.getElementById("statFilterTo").value;
-  let expData = DB.expenses;
-  if(from) { const fd = new Date(from); fd.setHours(0,0,0,0); expData = expData.filter(e => new Date(e.createdAt) >= fd); }
-  if(to) { const td = new Date(to); td.setHours(23,59,59,999); expData = expData.filter(e => new Date(e.createdAt) <= td); }
-  
-  const eTotal = expData.reduce((s, e) => s + e.price, 0);
-  document.getElementById("statExpenseTotal").innerText = eTotal.toLocaleString() + "đ";
-
-  const catExp = {}; expData.forEach(e => { catExp[e.category] = (catExp[e.category]||0) + e.price; });
-  document.getElementById("expenseCategoryStats").innerHTML = Object.entries(catExp).sort((a,b)=>b[1]-a[1]).map(([c, v]) => `
-    <div class="category-row"><span>${c}</span><span class="category-amount">${v.toLocaleString()}đ</span><span style="color:var(--muted);font-size:12px">${((v/eTotal)*100).toFixed(0)}%</span></div>
-  `).join("") || '<div class="sub">Chưa có dữ liệu</div>';
-
-  const daily = {}; expData.forEach(e => { const d = new Date(e.createdAt).toLocaleDateString('vi'); daily[d] = (daily[d]||0) + e.price; });
-  const days = Object.keys(daily).sort((a,b)=>{ const [d1,m1,y1]=a.split('/'); const [d2,m2,y2]=b.split('/'); return new Date(y1,m1-1,d1) - new Date(y2,m2-1,d2); }).slice(-7);
-  const maxD = Math.max(...Object.values(daily), 1);
-  document.getElementById("expenseDailyStats").innerHTML = days.map(d => `
-    <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
-      <div style="width:70px;font-size:12px;color:var(--muted)">${d}</div>
-      <div class="bar" style="width:${(daily[d]/maxD)*100}%"></div>
-      <div style="font-size:12px;font-weight:600">${daily[d].toLocaleString()}đ</div>
-    </div>
-  `).join("") || '<div class="sub">Chưa có dữ liệu</div>';
-}
-
-function exportExpenseStatsTxt() {
-  const from = document.getElementById("statFilterFrom").value;
-  const to = document.getElementById("statFilterTo").value;
-  let data = DB.expenses;
-  if(from) { const fd = new Date(from); fd.setHours(0,0,0,0); data = data.filter(e => new Date(e.createdAt) >= fd); }
-  if(to) { const td = new Date(to); td.setHours(23,59,59,999); data = data.filter(e => new Date(e.createdAt) <= td); }
-  data.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
-
-  let txt = "========================================================================\n                            BÁO CÁO CHI TIÊU                            \n";
-  txt += `      Từ ngày: ${from?from.split('-').reverse().join('/'):'---'}  -  Đến ngày: ${to?to.split('-').reverse().join('/'):'---'}\n========================================================================\n`;
-  txt += String("Ngày").padEnd(12) + " | " + String("Danh mục").padEnd(15) + " | " + String("Tên khoản chi").padEnd(20) + " | " + String("Số tiền").padStart(15) + "\n";
-  txt += "------------------------------------------------------------------------\n";
-  
-  let total = 0;
-  data.forEach(e => {
-    total += e.price;
-    txt += `${String(new Date(e.createdAt).toLocaleDateString('vi')).padEnd(12)} | ${String(e.category||"").substring(0,15).padEnd(15)} | ${String(e.name||"").substring(0,20).padEnd(20)} | ${(e.price.toLocaleString()+"đ").padStart(15)}\n`;
-  });
-  
-  txt += "------------------------------------------------------------------------\n";
-  txt += String("TỔNG CỘNG:").padEnd(53) + (total.toLocaleString() + "đ").padStart(15) + "\n========================================================================\n";
-  
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([txt], {type: 'text/plain;charset=utf-8'}));
-  a.download = `Bao_Cao_${new Date().toISOString().slice(0, 10)}.txt`;
-  a.click();
-}
+function applyQuickFilter() { const val = document.getElementById("quickFilter").value; const customGroup = document.getElementById("customDateRange"); if(val === "custom") { customGroup.style.display = "grid"; renderStats(); return; } else customGroup.style.display = "none"; const now = new Date(); let from = new Date(), to = new Date(); if(val === "today") {} else if(val === "week") { from.setDate(now.getDate() - (now.getDay()||7) + 1); from.setHours(0,0,0,0); } else if(val === "month") { from = new Date(now.getFullYear(), now.getMonth(), 1); } document.getElementById("statFilterFrom").value = from.toISOString().split('T')[0]; document.getElementById("statFilterTo").value = to.toISOString().split('T')[0]; renderStats(); }
+function renderStats(){ const tTotal = DB.todos.length; const tDone = DB.todos.filter(t => t.done).length; document.getElementById("statTodoTotal").innerText = tTotal; document.getElementById("statTodoCompletion").innerText = tTotal ? Math.round((tDone/tTotal)*100)+"%" : "0%"; const catTodo = {}; DB.todos.forEach(t => { catTodo[t.category] = (catTodo[t.category]||0) + 1; }); document.getElementById("todoCategoryStats").innerHTML = Object.entries(catTodo).map(([c, v]) => `<div class="category-row"><span>${c}</span><span class="category-amount">${v}</span></div>`).join(""); const prio = {high:0, medium:0, low:0}; DB.todos.forEach(t => { if(!t.done) prio[t.priority||'low']++; }); document.getElementById("todoPriorityStats").innerHTML = `<div class="category-row"><span>🔴 Cao</span><span class="category-amount">${prio.high}</span></div><div class="category-row"><span>🟡 Trung bình</span><span class="category-amount">${prio.medium}</span></div><div class="category-row"><span>🟢 Thấp</span><span class="category-amount">${prio.low}</span></div>`; const from = document.getElementById("statFilterFrom").value; const to = document.getElementById("statFilterTo").value; let expData = DB.expenses; if(from) { const fd = new Date(from); fd.setHours(0,0,0,0); expData = expData.filter(e => new Date(e.createdAt) >= fd); } if(to) { const td = new Date(to); td.setHours(23,59,59,999); expData = expData.filter(e => new Date(e.createdAt) <= td); } const eTotal = expData.reduce((s, e) => s + e.price, 0); document.getElementById("statExpenseTotal").innerText = eTotal.toLocaleString() + "đ"; const catExp = {}; expData.forEach(e => { catExp[e.category] = (catExp[e.category]||0) + e.price; }); document.getElementById("expenseCategoryStats").innerHTML = Object.entries(catExp).sort((a,b)=>b[1]-a[1]).map(([c, v]) => `<div class="category-row"><span>${c}</span><span class="category-amount">${v.toLocaleString()}đ</span><span style="color:var(--muted);font-size:12px">${((v/eTotal)*100).toFixed(0)}%</span></div>`).join("") || '<div class="sub">Chưa có dữ liệu</div>'; const daily = {}; expData.forEach(e => { const d = new Date(e.createdAt).toLocaleDateString('vi'); daily[d] = (daily[d]||0) + e.price; }); const days = Object.keys(daily).sort((a,b)=>{ const [d1,m1,y1]=a.split('/'); const [d2,m2,y2]=b.split('/'); return new Date(y1,m1-1,d1) - new Date(y2,m2-1,d2); }).slice(-7); const maxD = Math.max(...Object.values(daily), 1); document.getElementById("expenseDailyStats").innerHTML = days.map(d => `<div style="display:flex;align-items:center;gap:12px;padding:8px 0"><div style="width:70px;font-size:12px;color:var(--muted)">${d}</div><div class="bar" style="width:${(daily[d]/maxD)*100}%"></div><div style="font-size:12px;font-weight:600">${daily[d].toLocaleString()}đ</div></div>`).join("") || '<div class="sub">Chưa có dữ liệu</div>'; }
+function exportExpenseStatsTxt() { const from = document.getElementById("statFilterFrom").value; const to = document.getElementById("statFilterTo").value; let data = DB.expenses; if(from) { const fd = new Date(from); fd.setHours(0,0,0,0); data = data.filter(e => new Date(e.createdAt) >= fd); } if(to) { const td = new Date(to); td.setHours(23,59,59,999); data = data.filter(e => new Date(e.createdAt) <= td); } data.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt)); let txt = "========================================================================\n                            BÁO CÁO CHI TIÊU                            \n"; txt += `      Từ ngày: ${from?from.split('-').reverse().join('/'):'---'}  -  Đến ngày: ${to?to.split('-').reverse().join('/'):'---'}\n========================================================================\n`; txt += String("Ngày").padEnd(12) + " | " + String("Danh mục").padEnd(15) + " | " + String("Tên khoản chi").padEnd(20) + " | " + String("Số tiền").padStart(15) + "\n------------------------------------------------------------------------\n"; let total = 0; data.forEach(e => { total += e.price; txt += `${String(new Date(e.createdAt).toLocaleDateString('vi')).padEnd(12)} | ${String(e.category||"").substring(0,15).padEnd(15)} | ${String(e.name||"").substring(0,20).padEnd(20)} | ${(e.price.toLocaleString()+"đ").padStart(15)}\n`; }); txt += "------------------------------------------------------------------------\n" + String("TỔNG CỘNG:").padEnd(53) + (total.toLocaleString() + "đ").padStart(15) + "\n========================================================================\n"; const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], {type: 'text/plain;charset=utf-8'})); a.download = `Bao_Cao_${new Date().toISOString().slice(0, 10)}.txt`; a.click(); }
 
 /* ======================
-SETTINGS & STORAGE
+SETTINGS & IMPORT/EXPORT
 ====================== */
 function togglePasscode(){ DB.pinEnabled = !DB.pinEnabled; saveDB(); updatePasscodeToggle(); }
 function updatePasscodeToggle(){ document.getElementById("passcodeToggle").className = "toggle " + (DB.pinEnabled?"on":""); }
-function changePasscode(){
-  const p = prompt("Nhập PIN mới (4 số):");
-  if(p && p.length===4 && !isNaN(p)){ DB.pin = p; saveDB(); alert("Đã đổi!"); } else alert("Lỗi!");
-}
-function exportData(){
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'}));
-  a.download = 'myspace-backup.json'; a.click();
-}
-function resetAll(){
-  if(confirm("Xoá sạch dữ liệu?")){ DB={todos:[],expenses:[],pin:DEFAULT_PIN,pinEnabled:true}; saveDB(); location.reload(); }
-}
-function calcStorage(){
-  document.getElementById("storageInfo").innerText = "Storage: " + (new Blob([localStorage.getItem("myspace")||""]).size/1024).toFixed(1) + " KB";
-}
-function archiveOldImages(){
-  if(!confirm("Xoá TOÀN BỘ ảnh đính kèm để giảm dung lượng?")) return;
-  DB.expenses = DB.expenses.map(e => ({...e, image:""}));
-  saveDB(); renderExpenses(); calcStorage(); alert("Đã dọn dẹp ảnh!");
-}
+function changePasscode(){ const p = prompt("Nhập PIN mới (4 số):"); if(p && p.length===4 && !isNaN(p)){ DB.pin = p; saveDB(); alert("Đã đổi!"); } else alert("Lỗi!"); }
+function exportData(){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'})); a.download = 'myspace-backup.json'; a.click(); }
+function importData(e) { const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const parsedData = JSON.parse(ev.target.result); if(parsedData.todos !== undefined && parsedData.expenses !== undefined) { if(confirm("Dữ liệu hiện tại sẽ bị ghi đè. Bạn có chắc chắn muốn khôi phục?")) { DB = parsedData; saveDB(); alert("Khôi phục thành công! Đang tải lại app..."); location.reload(); } } else { alert("File JSON không hợp lệ hoặc không phải của My Space!"); } } catch(err) { alert("Lỗi đọc file JSON!"); } }; reader.readAsText(file); }
+function resetAll(){ if(confirm("Xoá sạch dữ liệu?")){ DB={todos:[],expenses:[],pin:DEFAULT_PIN,pinEnabled:true, wallets:[]}; saveDB(); location.reload(); } }
+function calcStorage(){ document.getElementById("storageInfo").innerText = "Storage: " + (new Blob([localStorage.getItem("myspace")||""]).size/1024).toFixed(1) + " KB"; }
+function archiveOldImages(){ if(!confirm("Xoá TOÀN BỘ ảnh đính kèm để giảm dung lượng?")) return; DB.expenses = DB.expenses.map(e => ({...e, image:""})); saveDB(); renderExpenses(); calcStorage(); alert("Đã dọn dẹp ảnh!"); }
 
 document.addEventListener("DOMContentLoaded", () => { loadDB(); });
 document.addEventListener("click", (e) => { if(e.target.classList.contains("modal")) e.target.classList.remove("show"); });
