@@ -2,21 +2,22 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>My Space</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{
-  --bg:#0f1115;
-  --card:#171a21;
-  --line:#242936;
+  --bg:#090b10;
+  --card:rgba(23, 26, 33, 0.7);
+  --glass:rgba(23, 26, 33, 0.85);
+  --line:rgba(255, 255, 255, 0.08);
   --text:#f3f5f7;
   --muted:#8e96a3;
   --accent:#6c7cff;
   --green:#3bd17f;
   --red:#ff5d73;
   --yellow:#ffc107;
-  --radius:18px;
+  --radius:20px;
 }
 
 *{
@@ -29,8 +30,21 @@
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   overflow-x:hidden;
+  padding-bottom: 90px; /* Nhường chỗ cho Bottom Nav */
+}
+
+/* Kéo gradient nhẹ cho background thêm sâu */
+body::before {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(108,124,255,0.15) 0%, rgba(0,0,0,0) 70%);
+  z-index: -1;
 }
 
 button,input,select,textarea{
@@ -58,62 +72,75 @@ button,input,select,textarea{
   font-size:32px;
   font-weight:700;
   margin-bottom:30px;
+  background: linear-gradient(135deg, #fff, #8e96a3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .pin-box{
   display:flex;
-  gap:12px;
-  margin-bottom:30px;
+  gap:16px;
+  margin-bottom:40px;
 }
 
 .dot{
-  width:18px;
-  height:18px;
+  width:16px;
+  height:16px;
   border-radius:50%;
-  border:2px solid #444;
+  border:2px solid var(--muted);
+  transition: 0.2s ease;
 }
 
 .dot.fill{
   background:var(--accent);
   border-color:var(--accent);
+  box-shadow: 0 0 10px rgba(108,124,255,0.5);
 }
 
 .pinpad{
   display:grid;
   grid-template-columns:repeat(3,80px);
-  gap:12px;
+  gap:16px;
 }
 
 .key{
   height:80px;
-  border:none;
+  border:1px solid var(--line);
   border-radius:50%;
   background:var(--card);
+  backdrop-filter: blur(10px);
   color:#fff;
   font-size:24px;
-  font-weight:600;
+  font-weight:500;
   cursor:pointer;
   transition:0.2s;
 }
 
 .key:active{
   background:var(--accent);
+  transform: scale(0.92);
 }
 
 /* APP */
 .app{
   max-width:700px;
   margin:auto;
-  padding-bottom:100px;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .header{
-  padding:24px 20px 10px;
+  padding:30px 20px 20px;
 }
 
 .title{
   font-size:28px;
-  font-weight:700;
+  font-weight:800;
+  letter-spacing: -0.5px;
 }
 
 .sub{
@@ -122,42 +149,19 @@ button,input,select,textarea{
   font-size:14px;
 }
 
-.tabs{
-  display:flex;
-  gap:8px;
-  padding:0 12px 16px;
-  overflow-x:auto;
-  scroll-behavior:smooth;
-  -webkit-overflow-scrolling:touch;
-}
-
-.tab{
-  flex-shrink:0;
-  border:none;
-  background:var(--card);
-  color:var(--muted);
-  padding:12px 16px;
-  border-radius:12px;
-  font-size:14px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.tab.active{
-  background:var(--accent);
-  color:#fff;
-}
-
 .section{
   padding:0 16px;
 }
 
 .card{
   background:var(--card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:12px;
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
 .row{
@@ -166,56 +170,138 @@ button,input,select,textarea{
   align-items:center;
 }
 
+/* BOTTOM NAVIGATION (Cách 1) */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 85px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 12px;
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
+  flex: 1;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item.active {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.nav-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+  filter: grayscale(100%) opacity(0.7);
+  transition: 0.3s ease;
+}
+
+.nav-item.active .nav-icon {
+  filter: grayscale(0%) opacity(1);
+}
+
+/* SEGMENTED CONTROL (Thống kê) */
+.segment-control {
+  display: flex;
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+}
+
+.segment-btn {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.segment-btn.active {
+  background: var(--card);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
 /* MODAL */
 .modal{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
   z-index:2000;
   align-items:flex-end;
   justify-content:center;
-  animation:slideUp 0.3s ease;
+  animation: fadeIn 0.3s ease;
 }
 
 .modal.show{
   display:flex;
 }
 
-@keyframes slideUp{
-  from{transform:translateY(100%);opacity:0}
-  to{transform:translateY(0);opacity:1}
-}
-
 .modal-content{
-  background:var(--card);
-  border-radius:24px 24px 0 0;
-  padding:24px;
+  background: #13161c;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-radius:32px 32px 0 0;
+  padding:30px 24px;
   width:100%;
   max-height:90vh;
   overflow-y:auto;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp{
+  from{transform:translateY(100%);}
+  to{transform:translateY(0);}
 }
 
 .modal-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
+  margin-bottom:24px;
 }
 
 .modal-title{
-  font-size:20px;
+  font-size:22px;
   font-weight:700;
 }
 
 .modal-close{
-  background:none;
+  background:rgba(255,255,255,0.1);
+  border-radius: 50%;
   border:none;
   color:var(--text);
-  font-size:24px;
-  cursor:pointer;
-  width:32px;
-  height:32px;
+  font-size:20px;
+  width:36px;
+  height:36px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -224,33 +310,31 @@ button,input,select,textarea{
 /* INPUT */
 .input{
   width:100%;
-  background:#10131a;
+  background:rgba(0,0,0,0.2);
   border:1px solid var(--line);
   color:#fff;
-  border-radius:12px;
-  padding:12px;
+  border-radius:14px;
+  padding:14px 16px;
   margin-top:8px;
-  font-size:14px;
+  font-size:15px;
+  transition: 0.2s ease;
 }
 
 .input:focus{
   outline:none;
   border-color:var(--accent);
-}
-
-select.input,textarea.input{
-  font-size:14px;
+  background:rgba(108,124,255,0.05);
 }
 
 textarea.input{
   resize:vertical;
-  min-height:80px;
+  min-height:90px;
 }
 
 .input-group{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:16px;
   margin-top:12px;
 }
 
@@ -259,9 +343,10 @@ textarea.input{
 }
 
 .label{
-  font-size:12px;
+  font-size:13px;
+  font-weight: 500;
   color:var(--muted);
-  margin-top:12px;
+  margin-top:16px;
   margin-bottom:4px;
   display:block;
 }
@@ -269,169 +354,116 @@ textarea.input{
 .btn{
   width:100%;
   border:none;
-  border-radius:12px;
-  padding:14px;
-  margin-top:16px;
+  border-radius:16px;
+  padding:16px;
+  margin-top:24px;
   background:var(--accent);
   color:#fff;
-  font-size:15px;
+  font-size:16px;
   font-weight:600;
-  cursor:pointer;
-  transition:0.2s;
+  transition:0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn:active{
-  opacity:0.8;
+  transform: scale(0.97);
+  opacity:0.9;
 }
 
 .btn-secondary{
-  background:#222836;
+  background:rgba(255,255,255,0.08);
+  border: 1px solid var(--line);
 }
 
 .btn-danger{
-  background:var(--red);
+  background:rgba(255,93,115,0.15);
+  color: var(--red);
+  border: 1px solid rgba(255,93,115,0.3);
 }
 
-/* TODO ITEM */
-.todo-item{
+/* ITEMS LIST */
+.todo-item, .expense-item {
   display:flex;
-  gap:12px;
-  padding:14px;
-  background:#10131a;
+  gap:14px;
+  padding:16px;
+  background:rgba(0,0,0,0.2);
   border:1px solid var(--line);
-  border-radius:12px;
-  margin-bottom:10px;
-  align-items:flex-start;
+  border-radius:16px;
+  margin-bottom:12px;
+  transition: 0.2s ease;
+}
+
+.todo-item:active, .expense-item:active {
+  background:rgba(255,255,255,0.02);
+  transform: scale(0.98);
 }
 
 .check{
-  width:24px;
-  height:24px;
-  border-radius:50%;
-  border:2px solid #555;
+  width:26px;
+  height:26px;
+  border-radius:8px;
+  border:2px solid var(--muted);
   flex-shrink:0;
   margin-top:2px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.check:hover{
-  border-color:var(--accent);
+  transition:0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .check.done{
   background:var(--green);
   border-color:var(--green);
 }
+.check.done::after {
+  content: "✓";
+  color: #000;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 800;
+  font-size: 14px;
+}
 
-.todo-content{
+.todo-content, .expense-content{
   flex:1;
   min-width:0;
 }
 
-.todo-text{
-  font-weight:500;
+.todo-text, .expense-name{
+  font-size: 15px;
+  font-weight:600;
   word-break:break-word;
 }
 
 .todo-text.done{
   text-decoration:line-through;
-  opacity:0.5;
-}
-
-.todo-meta{
-  display:flex;
-  gap:8px;
-  margin-top:6px;
-  flex-wrap:wrap;
+  opacity:0.4;
 }
 
 .badge{
   font-size:11px;
-  padding:3px 8px;
+  padding:4px 8px;
   border-radius:6px;
-  background:#1a1f2e;
+  background:rgba(255,255,255,0.05);
   color:var(--muted);
+  border: 1px solid var(--line);
 }
-
-.badge.high{
-  background:#5a2020;
-  color:#ff7070;
-}
-
-.badge.medium{
-  background:#5a4520;
-  color:#ffaa70;
-}
-
-.badge.low{
-  background:#205a20;
-  color:#70ff70;
-}
-
-.badge.overdue{
-  background:#5a2030;
-  color:var(--red);
-}
-
-.todo-actions{
-  display:flex;
-  gap:6px;
-}
-
-.icon-btn{
-  background:none;
-  border:none;
-  color:var(--muted);
-  cursor:pointer;
-  font-size:16px;
-  padding:4px;
-}
-
-.icon-btn:hover{
-  color:var(--accent);
-}
-
-/* EXPENSE ITEM */
-.expense-item{
-  display:flex;
-  gap:12px;
-  padding:12px;
-  background:#10131a;
-  border:1px solid var(--line);
-  border-radius:12px;
-  margin-bottom:10px;
-}
+.badge.high{ background:rgba(255,93,115,0.1); color:var(--red); border-color: rgba(255,93,115,0.2);}
+.badge.medium{ background:rgba(255,193,7,0.1); color:var(--yellow); border-color: rgba(255,193,7,0.2);}
 
 .expense-img{
-  width:60px;
-  height:60px;
+  width:64px;
+  height:64px;
   object-fit:cover;
-  border-radius:8px;
+  border-radius:12px;
   flex-shrink:0;
-  background:#222;
-}
-
-.expense-content{
-  flex:1;
-  min-width:0;
-}
-
-.expense-name{
-  font-weight:600;
-  margin-bottom:4px;
+  background:rgba(0,0,0,0.3);
+  border: 1px solid var(--line);
 }
 
 .expense-price{
   color:var(--green);
   font-weight:700;
-  font-size:14px;
-}
-
-.expense-meta{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:4px;
+  font-size:15px;
+  margin-top: 4px;
 }
 
 /* STATS */
@@ -443,123 +475,58 @@ textarea.input{
 }
 
 .stat-card{
-  background:#10131a;
+  background:rgba(0,0,0,0.2);
   border:1px solid var(--line);
-  border-radius:12px;
-  padding:14px;
+  border-radius:16px;
+  padding:16px;
   text-align:center;
 }
 
 .stat-value{
-  font-size:22px;
-  font-weight:700;
+  font-size:24px;
+  font-weight:800;
   color:var(--accent);
-}
-
-.stat-label{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:6px;
 }
 
 .category-row{
   display:flex;
   justify-content:space-between;
-  padding:12px 0;
+  padding:14px 0;
   border-bottom:1px solid var(--line);
   font-size:14px;
 }
 
-.category-row:last-child{
-  border-bottom:none;
-}
-
-.category-name{
-  flex:1;
-}
-
-.category-amount{
-  color:var(--green);
-  font-weight:600;
-  margin:0 12px;
-}
-
-.category-percent{
-  color:var(--muted);
-  font-size:12px;
-  min-width:40px;
-  text-align:right;
-}
-
-.chart-bar{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 0;
-}
-
-.bar{
-  height:6px;
-  background:var(--accent);
-  border-radius:3px;
-  flex:1;
-  min-width:20px;
-}
+.category-row:last-child{ border-bottom:none; }
+.category-amount{ color:var(--green); font-weight:600; margin:0 12px; }
+.bar{ height:6px; background:linear-gradient(90deg, var(--accent), #9b9aff); border-radius:3px; flex:1; min-width:20px; }
 
 /* SETTINGS */
 .setting-row{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:14px 0;
+  padding:16px 0;
   border-bottom:1px solid var(--line);
 }
-
-.setting-row:last-child{
-  border-bottom:none;
-}
+.setting-row:last-child{ border-bottom:none; }
 
 .toggle{
-  width:48px;
-  height:28px;
-  background:#555;
+  width:50px;
+  height:30px;
+  background:rgba(255,255,255,0.1);
   border:none;
-  border-radius:14px;
-  cursor:pointer;
+  border-radius:15px;
   position:relative;
   transition:0.3s;
 }
-
 .toggle::after{
-  content:'';
-  position:absolute;
-  width:24px;
-  height:24px;
-  background:#fff;
-  border-radius:50%;
-  top:2px;
-  left:2px;
-  transition:0.3s;
+  content:''; position:absolute; width:26px; height:26px; background:#fff; border-radius:50%; top:2px; left:2px; transition:0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.toggle.on{ background:var(--accent); }
+.toggle.on::after{ left:22px; }
 
-.toggle.on{
-  background:var(--accent);
-}
-
-.toggle.on::after{
-  left:22px;
-}
-
-.empty-state{
-  text-align:center;
-  padding:40px 20px;
-  color:var(--muted);
-}
-
-.empty-icon{
-  font-size:48px;
-  margin-bottom:12px;
-}
+.empty-state{ text-align:center; padding:50px 20px; color:var(--muted); }
+.empty-icon{ font-size:48px; margin-bottom:16px; filter: grayscale(100%) opacity(0.5); }
 </style>
 </head>
 
@@ -567,233 +534,149 @@ textarea.input{
 
 <div id="lock">
   <div class="logo">My Space</div>
-
   <div class="pin-box">
-    <div class="dot" id="d1"></div>
-    <div class="dot" id="d2"></div>
-    <div class="dot" id="d3"></div>
-    <div class="dot" id="d4"></div>
+    <div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div>
   </div>
-
   <div class="pinpad">
-    <button class="key" onclick="press(1)">1</button>
-    <button class="key" onclick="press(2)">2</button>
-    <button class="key" onclick="press(3)">3</button>
-    <button class="key" onclick="press(4)">4</button>
-    <button class="key" onclick="press(5)">5</button>
-    <button class="key" onclick="press(6)">6</button>
-    <button class="key" onclick="press(7)">7</button>
-    <button class="key" onclick="press(8)">8</button>
-    <button class="key" onclick="press(9)">9</button>
-    <button class="key"></button>
-    <button class="key" onclick="press(0)">0</button>
-    <button class="key" onclick="del()">⌫</button>
+    <button class="key" onclick="press(1)">1</button><button class="key" onclick="press(2)">2</button><button class="key" onclick="press(3)">3</button>
+    <button class="key" onclick="press(4)">4</button><button class="key" onclick="press(5)">5</button><button class="key" onclick="press(6)">6</button>
+    <button class="key" onclick="press(7)">7</button><button class="key" onclick="press(8)">8</button><button class="key" onclick="press(9)">9</button>
+    <button class="key" style="opacity:0"></button><button class="key" onclick="press(0)">0</button><button class="key" onclick="del()">⌫</button>
   </div>
 </div>
 
 <div class="app hidden" id="app">
 
   <div class="header">
-    <div class="title">My Space</div>
-    <div class="sub">Todo + Expense Tracker</div>
+    <div class="title" id="pageTitle">Todo</div>
+    <div class="sub" id="pageSub">Danh sách công việc của bạn</div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('todos',this)">📋 Todo</button>
-    <button class="tab" onclick="switchTab('expenses',this)">💰 Chi tiêu</button>
-    <button class="tab" onclick="switchTab('todo-stats',this)">📊 Todo Stats</button>
-    <button class="tab" onclick="switchTab('expense-stats',this)">📈 Chi tiêu Stats</button>
-    <button class="tab" onclick="switchTab('settings',this)">⚙️ Cài đặt</button>
-  </div>
-
-  <div id="todos">
+  <div id="todos" class="tab-content">
     <div class="section">
-      <div class="card">
+      <div class="card" style="padding: 16px;">
         <div class="row">
-          <div>
-            <div style="font-size:20px;font-weight:700" id="todoTotal">0</div>
-            <div class="sub">Tổng cộng</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700" id="todoDone">0</div>
-            <div class="sub">Hoàn thành</div>
-          </div>
-          <div>
-            <div style="font-size:20px;font-weight:700" id="todoOverdue">0</div>
-            <div class="sub">Quá hạn</div>
-          </div>
+          <div><div style="font-size:22px;font-weight:800" id="todoTotal">0</div><div class="sub">Tổng</div></div>
+          <div><div style="font-size:22px;font-weight:800;color:var(--green)" id="todoDone">0</div><div class="sub">Xong</div></div>
+          <div><div style="font-size:22px;font-weight:800;color:var(--red)" id="todoOverdue">0</div><div class="sub">Quá hạn</div></div>
         </div>
       </div>
 
       <div class="card">
-        <button class="btn" onclick="openTodoModal()">+ Thêm Todo</button>
-        <input id="searchTodos" class="input" placeholder="Tìm kiếm..." oninput="filterTodos()">
-        <select id="filterStatus" class="input" onchange="filterTodos()">
-          <option value="">Tất cả</option>
-          <option value="active">Đang làm</option>
-          <option value="done">Hoàn thành</option>
-          <option value="overdue">Quá hạn</option>
-        </select>
+        <button class="btn" style="margin-top:0; margin-bottom:16px;" onclick="openTodoModal()">+ Thêm công việc mới</button>
+        <div class="input-group" style="margin-top:0">
+            <input id="searchTodos" class="input" placeholder="Tìm kiếm..." oninput="filterTodos()">
+            <select id="filterStatus" class="input" onchange="filterTodos()">
+              <option value="">Tất cả</option>
+              <option value="active">Đang làm</option>
+              <option value="done">Hoàn thành</option>
+            </select>
+        </div>
       </div>
-
       <div id="todoList"></div>
     </div>
   </div>
 
-  <div id="expenses" class="hidden">
+  <div id="expenses" class="tab-content hidden">
     <div class="section">
       <div class="card">
-        <div style="font-size:20px;font-weight:700" id="expenseTotal">0đ</div>
-        <div class="sub">Tổng chi tiêu (tháng này)</div>
-        <div class="sub" id="storageInfo" style="margin-top:8px">Storage: 0 KB</div>
+        <div style="font-size:28px;font-weight:800;color:var(--green)" id="expenseTotal">0đ</div>
+        <div class="sub">Tổng chi tiêu tháng này</div>
+        <div class="sub" id="storageInfo" style="margin-top:8px; font-size:12px;">Storage: 0 KB</div>
       </div>
 
       <div class="card">
-        <button class="btn" onclick="openCamera()">📸 Chụp ảnh</button>
-        <button class="btn btn-secondary" onclick="openUpload()">📁 Upload ảnh</button>
-        <button class="btn btn-secondary" onclick="archiveOldImages()">🗑️ Dọn ảnh cũ (Giải phóng dung lượng)</button>
+        <button class="btn" style="margin-top:0" onclick="openCamera()">📸 Chụp ảnh biên lai / sản phẩm</button>
+        <div class="input-group" style="margin-top:12px">
+            <button class="btn btn-secondary" style="margin-top:0" onclick="openUpload()">📁 Tải ảnh lên</button>
+            <button class="btn btn-secondary" style="margin-top:0; color:var(--red)" onclick="openExpenseNoImage()">💰 Nhập tay</button>
+        </div>
       </div>
 
       <input type="file" id="cameraInput" accept="image/*" capture="environment" class="hidden" onchange="handleImage(event)">
       <input type="file" id="uploadInput" accept="image/*" class="hidden" onchange="handleImage(event)">
-
       <div id="expenseList"></div>
     </div>
   </div>
 
-  <div id="todo-stats" class="hidden">
+  <div id="stats" class="tab-content hidden">
     <div class="section">
-      <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">📊 Thống kê công việc</div>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value" id="statTodoTotal">0</div>
-            <div class="stat-label">Tổng cộng</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="statTodoDone">0</div>
-            <div class="stat-label">Hoàn thành</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="statTodoOverdue">0</div>
-            <div class="stat-label">Quá hạn</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="statTodoCompletion">0%</div>
-            <div class="stat-label">Tỷ lệ</div>
-          </div>
-        </div>
+      <div class="segment-control">
+        <button class="segment-btn active" id="btnStatExpense" onclick="switchStatView('expense')">Chi tiêu</button>
+        <button class="segment-btn" id="btnStatTodo" onclick="switchStatView('todo')">Todo</button>
       </div>
 
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px">💼 Theo danh mục</div>
-        <div id="todoCategoryStats"></div>
-      </div>
-
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px">⏱️ Theo ưu tiên</div>
-        <div id="todoPriorityStats"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="expense-stats" class="hidden">
-    <div class="section">
-      
-      <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">🔍 Bộ lọc thời gian</div>
-        
-        <div class="input-group" style="grid-template-columns: 1fr; margin-bottom: 12px;">
-          <div>
-            <label class="label">Lọc nhanh</label>
-            <select id="quickFilter" class="input" onchange="applyQuickFilter()">
+      <div id="viewExpenseStats">
+          <div class="card">
+            <div style="font-size:16px;font-weight:700;margin-bottom:12px">🔍 Bộ lọc thời gian</div>
+            <select id="quickFilter" class="input" style="margin-top:0; margin-bottom:12px" onchange="applyQuickFilter()">
               <option value="month">Tháng này</option>
               <option value="week">Tuần này</option>
               <option value="today">Hôm nay</option>
               <option value="custom">Tuỳ chọn khoảng ngày...</option>
             </select>
+            <div class="input-group" id="customDateRange" style="display:none; margin-top:0">
+              <div><label class="label" style="margin-top:0">Từ ngày</label><input id="statFilterFrom" class="input" type="date" onchange="renderExpenseStats()"></div>
+              <div><label class="label" style="margin-top:0">Đến ngày</label><input id="statFilterTo" class="input" type="date" onchange="renderExpenseStats()"></div>
+            </div>
+            <button class="btn btn-secondary" onclick="exportExpenseStatsTxt()">📥 Xuất báo cáo (TXT)</button>
           </div>
-        </div>
 
-        <div class="input-group" id="customDateRange" style="display:none;">
-          <div>
-            <label class="label">Từ ngày</label>
-            <input id="statFilterFrom" class="input" type="date" onchange="renderExpenseStats()">
+          <div class="card">
+            <div class="sub">Tổng chi tiêu (Theo bộ lọc)</div>
+            <div style="font-size:24px;font-weight:800;color:var(--green);margin-top:4px" id="statExpenseTotal">0đ</div>
           </div>
-          <div>
-            <label class="label">Đến ngày</label>
-            <input id="statFilterTo" class="input" type="date" onchange="renderExpenseStats()">
+          <div class="card">
+            <div style="font-size:14px;font-weight:700;margin-bottom:12px">📁 Phân bổ theo danh mục</div>
+            <div id="expenseCategoryStats"></div>
           </div>
-        </div>
-        <button class="btn btn-secondary" style="margin-top:16px" onclick="exportExpenseStatsTxt()">📥 Xuất báo cáo (TXT)</button>
+          <div class="card">
+            <div style="font-size:14px;font-weight:700;margin-bottom:12px">📅 Biểu đồ theo ngày</div>
+            <div id="expenseDailyStats"></div>
+          </div>
       </div>
 
-      <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:12px">💰 Tổng quan chi tiêu</div>
-        <div class="stats-grid" style="grid-template-columns: 1fr;">
-          <div class="stat-card">
-            <div class="stat-value" id="statExpenseTotal">0đ</div>
-            <div class="stat-label">Tổng chi tiêu trong khoảng thời gian lọc</div>
+      <div id="viewTodoStats" class="hidden">
+          <div class="card">
+            <div class="stats-grid">
+              <div class="stat-card"><div class="stat-value" id="statTodoTotal">0</div><div class="stat-label">Tổng cộng</div></div>
+              <div class="stat-card"><div class="stat-value" id="statTodoCompletion">0%</div><div class="stat-label">Tỷ lệ xong</div></div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px">📁 Theo danh mục</div>
-        <div id="expenseCategoryStats"></div>
-      </div>
-
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:12px">📅 Biểu đồ theo ngày</div>
-        <div id="expenseDailyStats"></div>
+          <div class="card">
+            <div style="font-size:14px;font-weight:700;margin-bottom:12px">💼 Theo danh mục</div>
+            <div id="todoCategoryStats"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:14px;font-weight:700;margin-bottom:12px">⏱️ Theo ưu tiên</div>
+            <div id="todoPriorityStats"></div>
+          </div>
       </div>
     </div>
   </div>
 
-  <div id="settings" class="hidden">
+  <div id="settings" class="tab-content hidden">
     <div class="section">
       <div class="card">
-        <div style="font-size:16px;font-weight:700;margin-bottom:16px">⚙️ Cài đặt</div>
-
-        <div class="setting-row">
-          <div>
-            <div style="font-weight:600">Passcode</div>
-            <div class="sub">Bật/tắt khóa PIN</div>
-          </div>
+        <div class="setting-row" style="padding-top:0">
+          <div><div style="font-weight:600">Khóa Passcode</div><div class="sub">Bảo mật khi mở App</div></div>
           <button class="toggle" id="passcodeToggle" onclick="togglePasscode()"></button>
         </div>
-
         <div class="setting-row">
-          <div>
-            <div style="font-weight:600">Thay đổi Passcode</div>
-            <div class="sub">PIN hiện tại: 6089</div>
-          </div>
-          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="changePasscode()">Đổi</button>
+          <div><div style="font-weight:600">Đổi Passcode</div><div class="sub">PIN hiện tại: 4 số</div></div>
+          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 16px" onclick="changePasscode()">Đổi</button>
         </div>
-
         <div class="setting-row">
-          <div>
-            <div style="font-weight:600">Xuất dữ liệu</div>
-            <div class="sub">Lưu JSON backup toàn bộ App</div>
-          </div>
-          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="exportData()">Xuất</button>
+          <div><div style="font-weight:600">Dọn dẹp bộ nhớ</div><div class="sub">Xóa toàn bộ ảnh đính kèm</div></div>
+          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 16px" onclick="archiveOldImages()">Dọn</button>
         </div>
-
         <div class="setting-row">
-          <div>
-            <div style="font-weight:600">Xoá tất cả dữ liệu</div>
-            <div class="sub">Không thể hoàn tác</div>
-          </div>
-          <button class="btn btn-danger" style="width:auto;margin-top:0;padding:8px 12px;font-size:12px" onclick="resetAll()">Xoá</button>
+          <div><div style="font-weight:600">Sao lưu Backup</div><div class="sub">Lưu file JSON</div></div>
+          <button class="btn btn-secondary" style="width:auto;margin-top:0;padding:8px 16px" onclick="exportData()">Lưu</button>
         </div>
-      </div>
-
-      <div class="card">
-        <div style="font-size:12px;color:var(--muted)">
-          <div style="margin-bottom:8px">📱 <strong>My Space v3.0</strong></div>
-          <div>✅ Privacy-first - Tất cả dữ liệu lưu trên máy</div>
-          <div>✅ Offline-ready - Hoạt động khi không có internet</div>
-          <div>✅ Progressive Web App</div>
+        <div class="setting-row" style="border-bottom:none">
+          <div><div style="font-weight:600; color:var(--red)">Khôi phục cài đặt gốc</div><div class="sub">Xoá sạch dữ liệu</div></div>
+          <button class="btn btn-danger" style="width:auto;margin-top:0;padding:8px 16px" onclick="resetAll()">Xoá</button>
         </div>
       </div>
     </div>
@@ -801,115 +684,152 @@ textarea.input{
 
 </div>
 
+<div class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" onclick="switchMainTab('todos', this)">
+    <div class="nav-icon">📋</div>
+    <span>Todo</span>
+  </button>
+  <button class="nav-item" onclick="switchMainTab('expenses', this)">
+    <div class="nav-icon">💰</div>
+    <span>Chi tiêu</span>
+  </button>
+  <button class="nav-item" onclick="switchMainTab('stats', this)">
+    <div class="nav-icon">📊</div>
+    <span>Thống kê</span>
+  </button>
+  <button class="nav-item" onclick="switchMainTab('settings', this)">
+    <div class="nav-icon">⚙️</div>
+    <span>Cài đặt</span>
+  </button>
+</div>
+
 <div class="modal" id="expenseModal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title">Thêm chi tiêu</div>
-      <button class="modal-close" onclick="closeModal('expenseModal')">×</button>
+      <div class="modal-title">Khoản chi mới</div>
+      <button class="modal-close" onclick="closeModal('expenseModal')">✕</button>
     </div>
 
-    <img id="previewExpense" class="input" style="width:100%;border-radius:12px;margin-bottom:16px;max-height:200px;object-fit:cover" />
+    <img id="previewExpense" class="input hidden" style="width:100%;border-radius:16px;margin-bottom:16px;max-height:220px;object-fit:cover;border:1px solid var(--line);" />
 
-    <label class="label">Danh mục</label>
+    <label class="label" style="margin-top:0">Số tiền (Bắt buộc) <span style="color:var(--red)">*</span></label>
+    <input id="expensePrice" class="input" type="number" placeholder="0" style="font-size:24px; font-weight:700; color:var(--green)">
+    <div id="priceSuggestions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"></div>
+
+    <label class="label">Danh mục (Không bắt buộc)</label>
     <select id="expenseCategory" class="input">
-      <option value="">-- Chọn --</option>
-      <option value="Ăn uống">🍔 Ăn uống</option>
-      <option value="Di chuyển">🚗 Di chuyển</option>
-      <option value="Giải trí">🎬 Giải trí</option>
-      <option value="Mua sắm">🛍️ Mua sắm</option>
-      <option value="Sức khỏe">⚕️ Sức khỏe</option>
-      <option value="Giáo dục">📚 Giáo dục</option>
-      <option value="Khác">📌 Khác</option>
+      <option value="">-- Bỏ qua --</option>
+      <option value="Ăn uống">Ăn uống</option>
+      <option value="Di chuyển">Di chuyển</option>
+      <option value="Giải trí">Giải trí</option>
+      <option value="Mua sắm">Mua sắm</option>
+      <option value="Khác">Khác</option>
     </select>
 
-    <label class="label">Tên sản phẩm</label>
-    <input id="expenseName" class="input" placeholder="Ví dụ: Cơm chiên">
+    <label class="label">Tên khoản chi / Ghi chú (Không bắt buộc)</label>
+    <input id="expenseName" class="input" placeholder="Ví dụ: Cà phê sáng...">
 
-    <label class="label">Giá tiền</label>
-    <input id="expensePrice" class="input" type="number" placeholder="Nhập giá">
-    <div id="priceSuggestions" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>
-
-    <label class="label">Ghi chú</label>
-    <textarea id="expenseNote" class="input" placeholder="Thêm ghi chú (tuỳ chọn)"></textarea>
-
-    <button class="btn" onclick="saveExpense()">Lưu chi tiêu</button>
-    <button class="btn btn-secondary" onclick="closeModal('expenseModal')">Huỷ</button>
+    <button class="btn" onclick="saveExpense()">Lưu ngay</button>
   </div>
 </div>
 
 <div class="modal" id="todoModal">
   <div class="modal-content">
     <div class="modal-header">
-      <div class="modal-title">Thêm công việc</div>
-      <button class="modal-close" onclick="closeModal('todoModal')">×</button>
+      <div class="modal-title" id="todoModalTitle">Thêm công việc</div>
+      <button class="modal-close" onclick="closeModal('todoModal')">✕</button>
     </div>
     
     <div id="todoCreatedInfo" style="font-size:12px;color:var(--accent);margin-bottom:16px;font-weight:600;"></div>
 
-    <label class="label">Tên công việc</label>
-    <input id="todoName" class="input" placeholder="Ví dụ: Mua sắm đồ tết">
-
-    <label class="label">Mô tả (tuỳ chọn)</label>
-    <textarea id="todoDesc" class="input" placeholder="Thêm chi tiết..."></textarea>
+    <label class="label" style="margin-top:0">Tên công việc <span style="color:var(--red)">*</span></label>
+    <input id="todoName" class="input" placeholder="Nhập tên việc cần làm">
 
     <div class="input-group">
       <div>
-        <label class="label">Ưu tiên</label>
+        <label class="label">Mức độ ưu tiên</label>
         <select id="todoPriority" class="input">
-          <option value="low">🟢 Thấp</option>
-          <option value="medium">🟡 Trung bình</option>
-          <option value="high">🔴 Cao</option>
+          <option value="low">Thấp</option>
+          <option value="medium" selected>Trung bình</option>
+          <option value="high">Cao</option>
         </select>
       </div>
       <div>
-        <label class="label">Danh mục</label>
+        <label class="label">Phân loại</label>
         <select id="todoCategory" class="input">
-          <option value="Personal">Cá nhân</option>
-          <option value="Work">Công việc</option>
-          <option value="Health">Sức khỏe</option>
-          <option value="Other">Khác</option>
+          <option value="Cá nhân">Cá nhân</option>
+          <option value="Công việc">Công việc</option>
+          <option value="Khác">Khác</option>
         </select>
       </div>
     </div>
 
-    <label class="label">Hạn chót</label>
+    <label class="label">Thời gian hẹn (Tuỳ chọn)</label>
     <input id="todoDueDate" class="input" type="datetime-local">
 
-    <label class="label">Lặp lại</label>
-    <select id="todoRecurring" class="input">
-      <option value="none">Không lặp</option>
-      <option value="daily">Mỗi ngày</option>
-      <option value="weekly">Mỗi tuần</option>
-      <option value="monthly">Mỗi tháng</option>
-    </select>
-
-    <button class="btn" onclick="saveTodo()">Tạo công việc</button>
-    <button class="btn btn-secondary" onclick="closeModal('todoModal')">Huỷ</button>
+    <button class="btn" id="btnSaveTodo" onclick="saveTodo()">Tạo công việc</button>
   </div>
 </div>
 
 <script>
 /* ======================
-PIN LOCK
+CORE & NAVIGATION
 ====================== */
 
 const DEFAULT_PIN = "6089";
 let currentPin = "";
-let pinEnabled = true;
+let DB = { todos: [], expenses: [], pin: DEFAULT_PIN, pinEnabled: true };
 
+function switchMainTab(tabId, btnElement) {
+  // Đổi màu icon bottom nav
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  btnElement.classList.add('active');
+
+  // Đổi trang
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById(tabId).classList.remove('hidden');
+
+  // Đổi Header Titles
+  const title = document.getElementById("pageTitle");
+  const sub = document.getElementById("pageSub");
+  if(tabId === 'todos') { title.innerText = "Todo"; sub.innerText = "Danh sách công việc của bạn"; }
+  else if(tabId === 'expenses') { title.innerText = "Chi tiêu"; sub.innerText = "Quản lý dòng tiền thông minh"; }
+  else if(tabId === 'stats') { title.innerText = "Thống kê"; sub.innerText = "Báo cáo tổng quan dữ liệu"; }
+  else if(tabId === 'settings') { title.innerText = "Cài đặt"; sub.innerText = "Tuỳ chỉnh hệ thống"; }
+}
+
+function switchStatView(viewType) {
+  document.getElementById("btnStatExpense").classList.remove("active");
+  document.getElementById("btnStatTodo").classList.remove("active");
+  document.getElementById("viewExpenseStats").classList.add("hidden");
+  document.getElementById("viewTodoStats").classList.add("hidden");
+
+  if(viewType === 'expense') {
+    document.getElementById("btnStatExpense").classList.add("active");
+    document.getElementById("viewExpenseStats").classList.remove("hidden");
+  } else {
+    document.getElementById("btnStatTodo").classList.add("active");
+    document.getElementById("viewTodoStats").classList.remove("hidden");
+  }
+}
+
+/* ======================
+PIN LOCK
+====================== */
 function press(n){
-  if(!pinEnabled) return;
+  if(!DB.pinEnabled) return;
   if(currentPin.length >= 4) return;
   currentPin += n;
   updateDots();
   if(currentPin.length === 4){
     setTimeout(() => {
-      if(currentPin === localStorage.getItem("pin") || currentPin === DEFAULT_PIN){
+      if(currentPin === DB.pin || currentPin === DEFAULT_PIN){
         document.getElementById("lock").classList.add("hidden");
         document.getElementById("app").classList.remove("hidden");
+        document.getElementById("bottomNav").style.display = "flex";
         init();
       }else{
-        alert("Sai PIN!");
+        alert("Mã PIN không đúng!");
         currentPin = "";
         updateDots();
       }
@@ -918,7 +838,7 @@ function press(n){
 }
 
 function del(){
-  if(!pinEnabled) return;
+  if(!DB.pinEnabled) return;
   currentPin = currentPin.slice(0, -1);
   updateDots();
 }
@@ -926,84 +846,30 @@ function del(){
 function updateDots(){
   for(let i = 1; i <= 4; i++){
     const el = document.getElementById("d" + i);
-    if(i <= currentPin.length){
-      el.classList.add("fill");
-    }else{
-      el.classList.remove("fill");
-    }
+    if(i <= currentPin.length) el.classList.add("fill");
+    else el.classList.remove("fill");
   }
 }
 
 /* ======================
-DATABASE
+DATABASE & INIT
 ====================== */
-
-let DB = {
-  todos: [],
-  expenses: [],
-  pin: DEFAULT_PIN,
-  pinEnabled: true,
-  lastCleanupMonth: null
-};
-
-function saveDB(){
-  localStorage.setItem("myspace", JSON.stringify(DB));
-}
+function saveDB(){ localStorage.setItem("myspace", JSON.stringify(DB)); }
 
 function loadDB(){
   const raw = localStorage.getItem("myspace");
-  if(raw){
-    DB = JSON.parse(raw);
-  }
-  pinEnabled = DB.pinEnabled !== false;
-  
-  if(!pinEnabled){
+  if(raw) DB = JSON.parse(raw);
+  if(DB.pinEnabled === false){
     document.getElementById("lock").classList.add("hidden");
     document.getElementById("app").classList.remove("hidden");
     init();
-  }
-}
-
-function applyQuickFilter() {
-  const val = document.getElementById("quickFilter").value;
-  const fromEl = document.getElementById("statFilterFrom");
-  const toEl = document.getElementById("statFilterTo");
-  const customGroup = document.getElementById("customDateRange");
-  
-  const now = new Date();
-  let fromDate = new Date();
-  let toDate = new Date();
-  
-  if(val === "custom") {
-    customGroup.style.display = "grid";
-    renderExpenseStats();
-    return;
   } else {
-    customGroup.style.display = "none";
+    document.getElementById("bottomNav").style.display = "none";
   }
-
-  if(val === "today") {
-    fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    toDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  } else if(val === "week") {
-    fromDate = new Date(now);
-    // Tính lùi về thứ 2 đầu tuần
-    const day = now.getDay() || 7; 
-    fromDate.setDate(now.getDate() - day + 1);
-    fromDate.setHours(0,0,0,0);
-  } else if(val === "month") {
-    fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
-  }
-
-  if(fromEl && toEl) {
-    fromEl.value = fromDate.toISOString().split('T')[0];
-    toEl.value = toDate.toISOString().split('T')[0];
-  }
-  renderExpenseStats();
 }
 
 function init(){
-  applyQuickFilter(); // Khởi tạo filter lúc load app
+  applyQuickFilter();
   renderTodos();
   renderExpenses();
   calcStorage();
@@ -1011,62 +877,41 @@ function init(){
 }
 
 /* ======================
-MODALS
+MODALS & CAMERA
 ====================== */
-
 let currentPhoto = null;
+function openModal(id){ document.getElementById(id).classList.add("show"); }
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
 
-function openModal(id){
-  document.getElementById(id).classList.add("show");
-}
-
-function closeModal(id){
-  document.getElementById(id).classList.remove("show");
-}
-
-function openCamera(){
+function openExpenseNoImage() {
   currentPhoto = null;
-  document.getElementById("cameraInput").click();
+  document.getElementById("previewExpense").classList.add("hidden");
+  document.getElementById("previewExpense").src = "";
+  resetExpenseForm();
+  openModal("expenseModal");
 }
 
-function openUpload(){
-  currentPhoto = null;
-  document.getElementById("uploadInput").click();
-}
-
-function openTodoModal(){
-  closeModal("expenseModal");
-  document.getElementById("todoName").value = "";
-  document.getElementById("todoDesc").value = "";
-  document.getElementById("todoPriority").value = "medium";
-  document.getElementById("todoCategory").value = "Personal";
-  document.getElementById("todoDueDate").value = "";
-  document.getElementById("todoRecurring").value = "none";
-  document.getElementById("todoCreatedInfo").innerText = ""; 
-  openModal("todoModal");
-}
+function openCamera(){ document.getElementById("cameraInput").click(); }
+function openUpload(){ document.getElementById("uploadInput").click(); }
 
 async function handleImage(e){
   const file = e.target.files[0];
   if(!file) return;
-
   const reader = new FileReader();
   reader.onload = (event) => {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      const maxWidth = 380;
-      const scale = maxWidth / img.width;
-      
-      canvas.width = maxWidth;
-      canvas.height = img.height * scale;
-      
+      const scale = 380 / img.width;
+      canvas.width = 380; canvas.height = img.height * scale;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       
-      currentPhoto = canvas.toDataURL("image/jpeg", 0.2);
-      document.getElementById("previewExpense").src = currentPhoto;
-      
+      currentPhoto = canvas.toDataURL("image/jpeg", 0.3);
+      const preview = document.getElementById("previewExpense");
+      preview.src = currentPhoto;
+      preview.classList.remove("hidden");
+      resetExpenseForm();
       openModal("expenseModal");
     };
     img.src = event.target.result;
@@ -1074,60 +919,39 @@ async function handleImage(e){
   reader.readAsDataURL(file);
 }
 
-/* ======================
-EXPENSE FUNCTIONS
-====================== */
+function resetExpenseForm() {
+  document.getElementById("expensePrice").value = "";
+  document.getElementById("expenseName").value = "";
+  document.getElementById("expenseCategory").value = "";
+  document.getElementById("priceSuggestions").innerHTML = "";
+}
 
-function showPriceSuggestions(){
+/* ======================
+EXPENSES (Bypass logic)
+====================== */
+document.getElementById("expensePrice").addEventListener("input", () => {
   const price = parseFloat(document.getElementById("expensePrice").value) || 0;
   const sugDiv = document.getElementById("priceSuggestions");
-  
-  if(price === 0){
-    sugDiv.innerHTML = "";
-    return;
-  }
-
-  const suggestions = [
-    price * 1000,
-    price * 10000,
-    price * 100000,
-    price * 1000000
-  ];
-
+  if(price === 0){ sugDiv.innerHTML = ""; return; }
+  const suggestions = [price * 1000, price * 10000, price * 100000];
   sugDiv.innerHTML = suggestions.map(s => 
-    `<button class="btn btn-secondary" style="width:auto;flex:1;min-width:70px;padding:8px;margin-top:0;font-size:12px" onclick="setPriceFromSuggest(${s})">
-      ${formatPrice(s)}
+    `<button class="btn btn-secondary" style="width:auto;flex:1;padding:8px;margin-top:0;font-size:12px;border-radius:10px" onclick="document.getElementById('expensePrice').value=${s}">
+      ${s >= 1000000 ? (s/1000000).toFixed(1)+'M' : (s/1000).toFixed(0)+'K'}
     </button>`
   ).join("");
-}
-
-function formatPrice(num){
-  if(num >= 1000000) return (num/1000000).toFixed(1) + "M";
-  if(num >= 1000) return (num/1000).toFixed(0) + "K";
-  return num.toString();
-}
-
-function setPriceFromSuggest(price){
-  document.getElementById("expensePrice").value = price;
-}
+});
 
 function saveExpense(){
-  const name = document.getElementById("expenseName").value;
   const price = parseFloat(document.getElementById("expensePrice").value);
-  const category = document.getElementById("expenseCategory").value;
-  const note = document.getElementById("expenseNote").value;
+  if(!price){ alert("Vui lòng nhập số tiền!"); return; }
 
-  if(!name || !price || !category){
-    alert("Điền đủ thông tin!");
-    return;
-  }
+  // Bypass logic: Tự điền nếu user để trống
+  const name = document.getElementById("expenseName").value.trim() || "Chưa phân loại";
+  const category = document.getElementById("expenseCategory").value || "Khác";
 
   DB.expenses.unshift({
     id: Date.now(),
-    name,
-    price,
-    category,
-    note,
+    name, price, category, note: "",
     image: currentPhoto || "",
     createdAt: new Date().toISOString()
   });
@@ -1137,552 +961,269 @@ function saveExpense(){
   renderExpenses();
   renderStats();
   calcStorage();
-  currentPhoto = null;
-  document.getElementById("expenseName").value = "";
-  document.getElementById("expensePrice").value = "";
-  document.getElementById("expenseNote").value = "";
-  document.getElementById("priceSuggestions").innerHTML = "";
 }
 
 function deleteExpense(id){
-  if(!confirm("Xoá toàn bộ khoản chi tiêu này?")) return;
+  if(!confirm("Xoá khoản chi này?")) return;
   DB.expenses = DB.expenses.filter(e => e.id !== id);
-  saveDB();
-  renderExpenses();
-  renderStats();
-  calcStorage();
+  saveDB(); renderExpenses(); renderStats(); calcStorage();
 }
 
 function renderExpenses(){
   const list = document.getElementById("expenseList");
   const now = new Date();
-  
-  const thisMonth = DB.expenses.filter(e => {
-    const d = new Date(e.createdAt);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  });
+  const thisMonth = DB.expenses.filter(e => new Date(e.createdAt).getMonth() === now.getMonth() && new Date(e.createdAt).getFullYear() === now.getFullYear());
 
-  const total = thisMonth.reduce((sum, e) => sum + e.price, 0);
-  
-  document.getElementById("expenseTotal").innerText = total.toLocaleString() + "đ";
+  document.getElementById("expenseTotal").innerText = thisMonth.reduce((sum, e) => sum + e.price, 0).toLocaleString() + "đ";
 
   if(thisMonth.length === 0){
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">💰</div>Chưa có chi tiêu</div>';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div>Không có khoản chi nào</div>';
     return;
   }
-
   list.innerHTML = thisMonth.map(e => `
     <div class="expense-item">
-      ${e.image ? `<img src="${e.image}" class="expense-img">` : '<div class="expense-img"></div>'}
+      ${e.image ? `<img src="${e.image}" class="expense-img">` : '<div class="expense-img" style="display:flex;align-items:center;justify-content:center;font-size:24px">🏷️</div>'}
       <div class="expense-content">
         <div class="expense-name">${e.name}</div>
         <div class="expense-price">${e.price.toLocaleString()}đ</div>
-        <div class="expense-meta">${e.category} • ${new Date(e.createdAt).toLocaleDateString('vi')}</div>
-        ${e.note ? `<div class="expense-meta" style="color:var(--accent)">${e.note}</div>` : ''}
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">${e.category} • ${new Date(e.createdAt).toLocaleDateString('vi')}</div>
       </div>
-      <button class="icon-btn" onclick="deleteExpense(${e.id})">🗑️</button>
+      <button style="background:none;border:none;color:var(--muted);padding:8px" onclick="deleteExpense(${e.id})">✕</button>
     </div>
   `).join("");
 }
 
 /* ======================
-TODO FUNCTIONS
+TODOS
 ====================== */
+function openTodoModal(){
+  document.getElementById("todoName").value = "";
+  document.getElementById("todoPriority").value = "medium";
+  document.getElementById("todoCategory").value = "Cá nhân";
+  document.getElementById("todoDueDate").value = "";
+  document.getElementById("todoCreatedInfo").innerText = "";
+  document.getElementById("todoModalTitle").innerText = "Thêm công việc";
+  document.getElementById("btnSaveTodo").innerText = "Tạo mới";
+  document.getElementById("btnSaveTodo").onclick = saveTodo;
+  openModal("todoModal");
+}
 
 function saveTodo(){
-  const name = document.getElementById("todoName").value;
-  if(!name.trim()){
-    alert("Nhập tên công việc!");
-    return;
-  }
-
+  const name = document.getElementById("todoName").value.trim();
+  if(!name){ alert("Nhập tên công việc!"); return; }
   DB.todos.unshift({
-    id: Date.now(),
-    name,
-    desc: document.getElementById("todoDesc").value,
+    id: Date.now(), name, desc: "",
     priority: document.getElementById("todoPriority").value,
     category: document.getElementById("todoCategory").value,
     dueDate: document.getElementById("todoDueDate").value,
-    recurring: document.getElementById("todoRecurring").value,
-    done: false,
+    recurring: "none", done: false,
     createdAt: new Date().toISOString()
   });
-
-  saveDB();
-  closeModal("todoModal");
-  renderTodos();
-  renderStats();
+  saveDB(); closeModal("todoModal"); renderTodos(); renderStats();
 }
 
 function toggleTodo(id){
   const todo = DB.todos.find(t => t.id === id);
   if(todo) todo.done = !todo.done;
-  saveDB();
-  renderTodos();
-  renderStats();
+  saveDB(); renderTodos(); renderStats();
 }
 
 function deleteTodo(id){
-  if(!confirm("Xoá công việc?")) return;
   DB.todos = DB.todos.filter(t => t.id !== id);
-  saveDB();
-  renderTodos();
-  renderStats();
+  saveDB(); renderTodos(); renderStats();
 }
 
 function editTodo(id){
   const todo = DB.todos.find(t => t.id === id);
   if(!todo) return;
-  
-  const createdStr = new Date(todo.createdAt).toLocaleString('vi');
-  document.getElementById("todoCreatedInfo").innerText = "⏰ Ngày tạo: " + createdStr;
-
+  document.getElementById("todoCreatedInfo").innerText = "Tạo ngày: " + new Date(todo.createdAt).toLocaleString('vi');
   document.getElementById("todoName").value = todo.name;
-  document.getElementById("todoDesc").value = todo.desc || "";
   document.getElementById("todoPriority").value = todo.priority || "medium";
-  document.getElementById("todoCategory").value = todo.category || "Personal";
+  document.getElementById("todoCategory").value = todo.category || "Cá nhân";
+  document.getElementById("todoDueDate").value = (todo.dueDate && todo.dueDate.length === 10) ? todo.dueDate+"T00:00" : (todo.dueDate || "");
   
-  let dDate = todo.dueDate || "";
-  if(dDate && dDate.length === 10) dDate += "T00:00";
-  document.getElementById("todoDueDate").value = dDate;
-  
-  document.getElementById("todoRecurring").value = todo.recurring || "none";
-
-  openModal("todoModal");
-  
-  const btn = document.querySelector("#todoModal .btn");
+  document.getElementById("todoModalTitle").innerText = "Sửa công việc";
+  const btn = document.getElementById("btnSaveTodo");
+  btn.innerText = "Cập nhật";
   btn.onclick = () => {
     todo.name = document.getElementById("todoName").value;
-    todo.desc = document.getElementById("todoDesc").value;
     todo.priority = document.getElementById("todoPriority").value;
     todo.category = document.getElementById("todoCategory").value;
     todo.dueDate = document.getElementById("todoDueDate").value;
-    todo.recurring = document.getElementById("todoRecurring").value;
-    saveDB();
-    closeModal("todoModal");
-    renderTodos();
-    renderStats();
-    
-    btn.onclick = saveTodo;
-    btn.innerText = "Tạo công việc";
+    saveDB(); closeModal("todoModal"); renderTodos(); renderStats();
   };
-  btn.innerText = "Cập nhật công việc";
+  openModal("todoModal");
 }
 
 function filterTodos(){
   const search = document.getElementById("searchTodos").value.toLowerCase();
   const status = document.getElementById("filterStatus").value;
-  
-  const items = document.querySelectorAll("#todoList .todo-item");
-  const now = new Date();
-
-  items.forEach(item => {
-    const id = parseInt(item.dataset.id);
-    const todo = DB.todos.find(t => t.id === id);
+  document.querySelectorAll("#todoList .todo-item").forEach(item => {
+    const todo = DB.todos.find(t => t.id === parseInt(item.dataset.id));
     if(!todo) return;
-
-    const matchesSearch = todo.name.toLowerCase().includes(search);
-    let matchesStatus = true;
-
-    if(status === "active") matchesStatus = !todo.done;
-    if(status === "done") matchesStatus = todo.done;
-    if(status === "overdue"){
-      if(todo.dueDate){
-        const dueDate = new Date(todo.dueDate);
-        matchesStatus = dueDate < now && !todo.done;
-      }else{
-        matchesStatus = false;
-      }
-    }
-
-    item.style.display = (matchesSearch && matchesStatus) ? "" : "none";
+    const mSearch = todo.name.toLowerCase().includes(search);
+    const mStatus = status==="" ? true : (status==="done" ? todo.done : !todo.done);
+    item.style.display = (mSearch && mStatus) ? "" : "none";
   });
 }
 
 function renderTodos(){
   const list = document.getElementById("todoList");
   const now = new Date();
-
   const total = DB.todos.length;
   const done = DB.todos.filter(t => t.done).length;
-  const overdue = DB.todos.filter(t => {
-    if(t.done || !t.dueDate) return false;
-    const dueDate = new Date(t.dueDate);
-    return dueDate < now;
-  }).length;
+  const overdue = DB.todos.filter(t => t.dueDate && !t.done && new Date(t.dueDate) < now).length;
 
   document.getElementById("todoTotal").innerText = total;
   document.getElementById("todoDone").innerText = done;
   document.getElementById("todoOverdue").innerText = overdue;
 
-  if(total === 0){
-    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>Chưa có công việc</div>';
-    return;
-  }
+  if(total === 0){ list.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div>Chưa có task nào</div>'; return; }
 
   list.innerHTML = DB.todos.map(todo => {
     const isOverdue = todo.dueDate && !todo.done && new Date(todo.dueDate) < now;
-    
-    let dueDateText = "";
+    let dueTxt = "";
     if(todo.dueDate) {
       const dt = new Date(todo.dueDate);
-      const h = dt.getHours().toString().padStart(2, '0');
-      const m = dt.getMinutes().toString().padStart(2, '0');
-      const timeStr = (h !== "00" || m !== "00") ? `${h}:${m} ` : "";
-      dueDateText = `📅 ${timeStr}${dt.toLocaleDateString('vi')}`;
+      const timeStr = (dt.getHours()||dt.getMinutes()) ? `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')} ` : "";
+      dueTxt = `📅 ${timeStr}${dt.toLocaleDateString('vi')}`;
     }
-
     return `
       <div class="todo-item" data-id="${todo.id}">
         <div class="check ${todo.done ? 'done' : ''}" onclick="toggleTodo(${todo.id})"></div>
-        <div class="todo-content">
+        <div class="todo-content" onclick="editTodo(${todo.id})">
           <div class="todo-text ${todo.done ? 'done' : ''}">${todo.name}</div>
-          <div class="todo-meta">
-            <span class="badge priority-${todo.priority} ${todo.priority === 'high' ? 'high' : todo.priority === 'medium' ? 'medium' : 'low'}">
-              ${todo.priority === 'high' ? '🔴 Cao' : todo.priority === 'medium' ? '🟡 Trung' : '🟢 Thấp'}
-            </span>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+            <span class="badge ${todo.priority}">${todo.priority==='high'?'🔴 Cao':todo.priority==='medium'?'🟡 Trung':'🟢 Thấp'}</span>
             <span class="badge">${todo.category}</span>
-            ${todo.dueDate ? `<span class="badge ${isOverdue ? 'overdue' : ''}">
-              ${isOverdue ? '⏰ Quá hạn' : dueDateText}
-            </span>` : ''}
-            ${todo.recurring !== 'none' ? `<span class="badge">🔁 ${todo.recurring}</span>` : ''}
+            ${todo.dueDate ? `<span class="badge" style="${isOverdue?'color:var(--red);border-color:rgba(255,93,115,0.3)':''}">${dueTxt}</span>` : ''}
           </div>
-          ${todo.desc ? `<div class="sub" style="margin-top:6px">${todo.desc}</div>` : ''}
         </div>
-        <div class="todo-actions">
-          <button class="icon-btn" onclick="editTodo(${todo.id})">✏️</button>
-          <button class="icon-btn" onclick="deleteTodo(${todo.id})">🗑️</button>
-        </div>
+        <button style="background:none;border:none;color:var(--muted);padding:8px" onclick="deleteTodo(${todo.id})">✕</button>
       </div>
     `;
   }).join("");
 }
 
 /* ======================
-STATISTICS & EXPORT
+STATS & FILTER
 ====================== */
+function applyQuickFilter() {
+  const val = document.getElementById("quickFilter").value;
+  const customGroup = document.getElementById("customDateRange");
+  if(val === "custom") { customGroup.style.display = "grid"; renderStats(); return; }
+  else customGroup.style.display = "none";
+
+  const now = new Date();
+  let from = new Date(), to = new Date();
+  if(val === "today") {} 
+  else if(val === "week") { from.setDate(now.getDate() - (now.getDay()||7) + 1); from.setHours(0,0,0,0); }
+  else if(val === "month") { from = new Date(now.getFullYear(), now.getMonth(), 1); }
+  
+  document.getElementById("statFilterFrom").value = from.toISOString().split('T')[0];
+  document.getElementById("statFilterTo").value = to.toISOString().split('T')[0];
+  renderStats();
+}
 
 function renderStats(){
-  renderTodoStats();
-  renderExpenseStats();
-}
+  // TODO STATS
+  const tTotal = DB.todos.length;
+  const tDone = DB.todos.filter(t => t.done).length;
+  document.getElementById("statTodoTotal").innerText = tTotal;
+  document.getElementById("statTodoCompletion").innerText = tTotal ? Math.round((tDone/tTotal)*100)+"%" : "0%";
 
-function renderTodoStats(){
-  const total = DB.todos.length;
-  const done = DB.todos.filter(t => t.done).length;
-  const overdue = DB.todos.filter(t => {
-    if(t.done || !t.dueDate) return false;
-    const dueDate = new Date(t.dueDate);
-    const now = new Date();
-    return dueDate < now;
-  }).length;
+  const catTodo = {}; DB.todos.forEach(t => { catTodo[t.category] = (catTodo[t.category]||0) + 1; });
+  document.getElementById("todoCategoryStats").innerHTML = Object.entries(catTodo).map(([c, v]) => `<div class="category-row"><span>${c}</span><span class="category-amount">${v}</span></div>`).join("");
 
-  document.getElementById("statTodoTotal").innerText = total;
-  document.getElementById("statTodoDone").innerText = done;
-  document.getElementById("statTodoOverdue").innerText = overdue;
-  document.getElementById("statTodoCompletion").innerText = total ? Math.round((done/total)*100) + "%" : "0%";
+  const prio = {high:0, medium:0, low:0}; DB.todos.forEach(t => { if(!t.done) prio[t.priority||'low']++; });
+  document.getElementById("todoPriorityStats").innerHTML = `
+    <div class="category-row"><span>🔴 Cao</span><span class="category-amount">${prio.high}</span></div>
+    <div class="category-row"><span>🟡 Trung bình</span><span class="category-amount">${prio.medium}</span></div>
+    <div class="category-row"><span>🟢 Thấp</span><span class="category-amount">${prio.low}</span></div>`;
 
-  // Category stats
-  const categories = {};
-  DB.todos.forEach(t => {
-    if(!categories[t.category]) categories[t.category] = {total: 0, done: 0};
-    categories[t.category].total++;
-    if(t.done) categories[t.category].done++;
-  });
-
-  const catDiv = document.getElementById("todoCategoryStats");
-  if(Object.keys(categories).length === 0){
-    catDiv.innerHTML = '<div class="sub">Không có dữ liệu</div>';
-  }else{
-    catDiv.innerHTML = Object.entries(categories).map(([cat, stats]) => `
-      <div class="category-row">
-        <div class="category-name">${cat}</div>
-        <div class="category-amount">${stats.done}/${stats.total}</div>
-        <div class="category-percent">${Math.round((stats.done/stats.total)*100)}%</div>
-      </div>
-    `).join("");
-  }
-
-  // Priority stats
-  const priorities = {high: 0, medium: 0, low: 0};
-  DB.todos.forEach(t => {
-    if(!t.done) priorities[t.priority || 'low']++;
-  });
-
-  const priDiv = document.getElementById("todoPriorityStats");
-  priDiv.innerHTML = `
-    <div class="category-row">
-      <div class="category-name">🔴 Cao</div>
-      <div class="category-amount">${priorities.high}</div>
-    </div>
-    <div class="category-row">
-      <div class="category-name">🟡 Trung</div>
-      <div class="category-amount">${priorities.medium}</div>
-    </div>
-    <div class="category-row">
-      <div class="category-name">🟢 Thấp</div>
-      <div class="category-amount">${priorities.low}</div>
-    </div>
-  `;
-}
-
-function renderExpenseStats(){
-  const fromVal = document.getElementById("statFilterFrom").value;
-  const toVal = document.getElementById("statFilterTo").value;
+  // EXPENSE STATS
+  const from = document.getElementById("statFilterFrom").value;
+  const to = document.getElementById("statFilterTo").value;
+  let expData = DB.expenses;
+  if(from) { const fd = new Date(from); fd.setHours(0,0,0,0); expData = expData.filter(e => new Date(e.createdAt) >= fd); }
+  if(to) { const td = new Date(to); td.setHours(23,59,59,999); expData = expData.filter(e => new Date(e.createdAt) <= td); }
   
-  let data = DB.expenses;
-  
-  if(fromVal) {
-    const startDate = new Date(fromVal);
-    startDate.setHours(0,0,0,0);
-    data = data.filter(e => new Date(e.createdAt) >= startDate);
-  }
-  if(toVal) {
-    const endDate = new Date(toVal);
-    endDate.setHours(23,59,59,999);
-    data = data.filter(e => new Date(e.createdAt) <= endDate);
-  }
+  const eTotal = expData.reduce((s, e) => s + e.price, 0);
+  document.getElementById("statExpenseTotal").innerText = eTotal.toLocaleString() + "đ";
 
-  const total = data.reduce((sum, e) => sum + e.price, 0);
+  const catExp = {}; expData.forEach(e => { catExp[e.category] = (catExp[e.category]||0) + e.price; });
+  document.getElementById("expenseCategoryStats").innerHTML = Object.entries(catExp).sort((a,b)=>b[1]-a[1]).map(([c, v]) => `
+    <div class="category-row"><span>${c}</span><span class="category-amount">${v.toLocaleString()}đ</span><span style="color:var(--muted);font-size:12px">${((v/eTotal)*100).toFixed(0)}%</span></div>
+  `).join("") || '<div class="sub">Chưa có dữ liệu</div>';
 
-  document.getElementById("statExpenseTotal").innerText = total.toLocaleString() + "đ";
-
-  // Category stats
-  const categories = {};
-  data.forEach(e => {
-    if(!categories[e.category]) categories[e.category] = 0;
-    categories[e.category] += e.price;
-  });
-
-  const catDiv = document.getElementById("expenseCategoryStats");
-  if(total === 0){
-    catDiv.innerHTML = '<div class="sub">Không có dữ liệu</div>';
-  }else{
-    catDiv.innerHTML = Object.entries(categories)
-      .sort((a, b) => b[1] - a[1])
-      .map(([cat, amount]) => `
-        <div class="category-row">
-          <div class="category-name">${cat}</div>
-          <div class="category-amount">${amount.toLocaleString()}đ</div>
-          <div class="category-percent">${((amount/total)*100).toFixed(1)}%</div>
-        </div>
-      `).join("");
-  }
-
-  // Daily stats for chart
-  const dailyData = {};
-  data.forEach(e => {
-    const d = new Date(e.createdAt);
-    const dateStr = d.toLocaleDateString('vi');
-    if(!dailyData[dateStr]) dailyData[dateStr] = 0;
-    dailyData[dateStr] += e.price;
-  });
-
-  const days = Object.keys(dailyData).sort((a,b) => {
-     const [d1, m1, y1] = a.split('/');
-     const [d2, m2, y2] = b.split('/');
-     return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
-  }).slice(-7); // Chỉ lấy 7 ngày gần nhất trong khoảng lọc để biểu đồ không bị nát
-  
-  const maxDaily = Math.max(...Object.values(dailyData), 1);
-
-  const dayDiv = document.getElementById("expenseDailyStats");
-  if(days.length === 0) {
-      dayDiv.innerHTML = '<div class="sub">Không có dữ liệu</div>';
-  } else {
-      dayDiv.innerHTML = days.map(date => {
-        const amount = dailyData[date];
-        const percent = (amount / maxDaily) * 100;
-        return `
-          <div class="chart-bar">
-            <div style="min-width:60px;font-size:12px">${date}</div>
-            <div class="bar" style="width:${percent}%"></div>
-            <div style="min-width:50px;text-align:right;font-size:12px;color:var(--green)">${amount.toLocaleString()}đ</div>
-          </div>
-        `;
-      }).join("");
-  }
+  const daily = {}; expData.forEach(e => { const d = new Date(e.createdAt).toLocaleDateString('vi'); daily[d] = (daily[d]||0) + e.price; });
+  const days = Object.keys(daily).sort((a,b)=>{ const [d1,m1,y1]=a.split('/'); const [d2,m2,y2]=b.split('/'); return new Date(y1,m1-1,d1) - new Date(y2,m2-1,d2); }).slice(-7);
+  const maxD = Math.max(...Object.values(daily), 1);
+  document.getElementById("expenseDailyStats").innerHTML = days.map(d => `
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+      <div style="width:70px;font-size:12px;color:var(--muted)">${d}</div>
+      <div class="bar" style="width:${(daily[d]/maxD)*100}%"></div>
+      <div style="font-size:12px;font-weight:600">${daily[d].toLocaleString()}đ</div>
+    </div>
+  `).join("") || '<div class="sub">Chưa có dữ liệu</div>';
 }
 
 function exportExpenseStatsTxt() {
-  const fromVal = document.getElementById("statFilterFrom").value;
-  const toVal = document.getElementById("statFilterTo").value;
-  
+  const from = document.getElementById("statFilterFrom").value;
+  const to = document.getElementById("statFilterTo").value;
   let data = DB.expenses;
-  if(fromVal) {
-    const startDate = new Date(fromVal);
-    startDate.setHours(0,0,0,0);
-    data = data.filter(e => new Date(e.createdAt) >= startDate);
-  }
-  if(toVal) {
-    const endDate = new Date(toVal);
-    endDate.setHours(23,59,59,999);
-    data = data.filter(e => new Date(e.createdAt) <= endDate);
-  }
-
+  if(from) { const fd = new Date(from); fd.setHours(0,0,0,0); data = data.filter(e => new Date(e.createdAt) >= fd); }
+  if(to) { const td = new Date(to); td.setHours(23,59,59,999); data = data.filter(e => new Date(e.createdAt) <= td); }
   data.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-  let txt = "========================================================================\n";
-  txt +=    "                            BÁO CÁO CHI TIÊU                            \n";
-  txt +=    `      Từ ngày: ${fromVal ? fromVal.split('-').reverse().join('/') : '---'}  -  Đến ngày: ${toVal ? toVal.split('-').reverse().join('/') : '---'}\n`;
-  txt +=    "========================================================================\n";
-  
-  // Header bảng
-  txt += String("Ngày").padEnd(12) + " | " + 
-         String("Danh mục").padEnd(15) + " | " + 
-         String("Tên khoản chi").padEnd(20) + " | " + 
-         String("Số tiền").padStart(15) + "\n";
+  let txt = "========================================================================\n                            BÁO CÁO CHI TIÊU                            \n";
+  txt += `      Từ ngày: ${from?from.split('-').reverse().join('/'):'---'}  -  Đến ngày: ${to?to.split('-').reverse().join('/'):'---'}\n========================================================================\n`;
+  txt += String("Ngày").padEnd(12) + " | " + String("Danh mục").padEnd(15) + " | " + String("Tên khoản chi").padEnd(20) + " | " + String("Số tiền").padStart(15) + "\n";
   txt += "------------------------------------------------------------------------\n";
   
   let total = 0;
   data.forEach(e => {
     total += e.price;
-    const d = new Date(e.createdAt).toLocaleDateString('vi');
-    const cat = (e.category || "").substring(0, 15).padEnd(15);
-    const name = (e.name || "").substring(0, 20).padEnd(20);
-    const price = e.price.toLocaleString() + "đ";
-    
-    txt += `${String(d).padEnd(12)} | ${cat} | ${name} | ${price.padStart(15)}\n`;
+    txt += `${String(new Date(e.createdAt).toLocaleDateString('vi')).padEnd(12)} | ${String(e.category||"").substring(0,15).padEnd(15)} | ${String(e.name||"").substring(0,20).padEnd(20)} | ${(e.price.toLocaleString()+"đ").padStart(15)}\n`;
   });
   
   txt += "------------------------------------------------------------------------\n";
-  txt += String("TỔNG CỘNG:").padEnd(53) + (total.toLocaleString() + "đ").padStart(15) + "\n";
-  txt += "========================================================================\n";
-
-  const blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
+  txt += String("TỔNG CỘNG:").padEnd(53) + (total.toLocaleString() + "đ").padStart(15) + "\n========================================================================\n";
+  
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `Bao_Cao_Chi_Tieu_${new Date().toISOString().slice(0, 10)}.txt`;
+  a.href = URL.createObjectURL(new Blob([txt], {type: 'text/plain;charset=utf-8'}));
+  a.download = `Bao_Cao_${new Date().toISOString().slice(0, 10)}.txt`;
   a.click();
 }
 
 /* ======================
-SETTINGS
+SETTINGS & STORAGE
 ====================== */
-
-function togglePasscode(){
-  DB.pinEnabled = !DB.pinEnabled;
-  saveDB();
-  updatePasscodeToggle();
-  alert(DB.pinEnabled ? "Đã bật Passcode" : "Đã tắt Passcode");
-}
-
-function updatePasscodeToggle(){
-  const toggle = document.getElementById("passcodeToggle");
-  if(DB.pinEnabled){
-    toggle.classList.add("on");
-  }else{
-    toggle.classList.remove("on");
-  }
-}
-
+function togglePasscode(){ DB.pinEnabled = !DB.pinEnabled; saveDB(); updatePasscodeToggle(); }
+function updatePasscodeToggle(){ document.getElementById("passcodeToggle").className = "toggle " + (DB.pinEnabled?"on":""); }
 function changePasscode(){
-  const newPin = prompt("Nhập PIN mới (4 số):");
-  if(!newPin || newPin.length !== 4 || isNaN(newPin)){
-    alert("PIN phải là 4 số!");
-    return;
-  }
-  DB.pin = newPin;
-  saveDB();
-  alert("Đã đổi PIN!");
+  const p = prompt("Nhập PIN mới (4 số):");
+  if(p && p.length===4 && !isNaN(p)){ DB.pin = p; saveDB(); alert("Đã đổi!"); } else alert("Lỗi!");
 }
-
 function exportData(){
-  const json = JSON.stringify(DB, null, 2);
-  const blob = new Blob([json], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'myspace-backup-' + new Date().toISOString().slice(0, 10) + '.json';
-  a.click();
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'}));
+  a.download = 'myspace-backup.json'; a.click();
 }
-
 function resetAll(){
-  if(!confirm("⚠️ Xoá TẤT CẢ dữ liệu? Không thể hoàn tác!")) return;
-  if(!confirm("Bạn chắc chắn?")) return;
-  
-  DB = {
-    todos: [],
-    expenses: [],
-    pin: DEFAULT_PIN,
-    pinEnabled: true,
-    lastCleanupMonth: null
-  };
-  saveDB();
-  alert("Đã xoá tất cả!");
-  location.reload();
+  if(confirm("Xoá sạch dữ liệu?")){ DB={todos:[],expenses:[],pin:DEFAULT_PIN,pinEnabled:true}; saveDB(); location.reload(); }
 }
-
-/* ======================
-STORAGE & CLEANUP
-====================== */
-
 function calcStorage(){
-  const data = localStorage.getItem("myspace") || "";
-  const sizeKB = (new Blob([data]).size / 1024).toFixed(1);
-  document.getElementById("storageInfo").innerText = "Storage: " + sizeKB + " KB";
+  document.getElementById("storageInfo").innerText = "Storage: " + (new Blob([localStorage.getItem("myspace")||""]).size/1024).toFixed(1) + " KB";
 }
-
 function archiveOldImages(){
-  if(!confirm("⚠️ Bạn có chắc muốn xoá TOÀN BỘ ảnh đính kèm để giải phóng dung lượng?\n(Các khoản chi tiêu vẫn được giữ nguyên, chỉ xoá hình ảnh)")) return;
-  
-  const sizeBefore = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-  
-  let deletedCount = 0;
-  DB.expenses = DB.expenses.map(e => {
-    if(e.image) deletedCount++;
-    return { ...e, image: "" };
-  });
-
-  saveDB();
-  const sizeAfter = (new Blob([JSON.stringify(DB)]).size / 1024).toFixed(1);
-  alert(`✅ Đã xoá ${deletedCount} ảnh.\n📉 Tiết kiệm được: ${(sizeBefore - sizeAfter).toFixed(1)} KB`);
-  
-  renderExpenses();
-  calcStorage();
+  if(!confirm("Xoá TOÀN BỘ ảnh đính kèm để giảm dung lượng?")) return;
+  DB.expenses = DB.expenses.map(e => ({...e, image:""}));
+  saveDB(); renderExpenses(); calcStorage(); alert("Đã dọn dẹp ảnh!");
 }
 
-/* ======================
-UI HELPERS
-====================== */
-
-function switchTab(tab, btn){
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  
-  document.querySelectorAll("[id$=s]:not(#d1):not(#d2):not(#d3):not(#d4):not(#d):not(#app):not(#lock)").forEach(el => {
-    if(['todos', 'expenses', 'todo-stats', 'expense-stats', 'settings'].includes(el.id)){
-      el.classList.add("hidden");
-    }
-  });
-  
-  document.getElementById(tab)?.classList.remove("hidden");
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadDB();
-  if(!pinEnabled) {
-    document.getElementById("lock").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
-    init();
-  }
-});
-
-// PWA
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js").catch(() => {});
-}
-
-// Close modals on outside click
-document.addEventListener("click", (e) => {
-  if(e.target.classList.contains("modal")){
-    e.target.classList.remove("show");
-  }
-});
-
-document.getElementById("expensePrice").addEventListener("input", showPriceSuggestions);
+document.addEventListener("DOMContentLoaded", () => { loadDB(); });
+document.addEventListener("click", (e) => { if(e.target.classList.contains("modal")) e.target.classList.remove("show"); });
 </script>
-
 </body>
 </html>
