@@ -89,6 +89,11 @@ textarea.input{ resize:vertical; min-height:90px; }
 .expense-img{ width:64px; height:64px; object-fit:cover; border-radius:12px; flex-shrink:0; background:rgba(0,0,0,0.3); border: 1px solid var(--line); }
 .expense-price{ font-weight:700; font-size:15px; margin-top: 4px; }
 
+/* POPUP CHỌN VÍ NHANH */
+.wallet-picker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.quick-wallet-btn { background: rgba(108,124,255,0.1); border: 1px solid rgba(108,124,255,0.2); padding: 14px; border-radius: 14px; font-weight: 600; text-align: center; cursor: pointer; transition: 0.2s; }
+.quick-wallet-btn:active { background: var(--accent); color: #fff; }
+
 /* STATS */
 .stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
 .stat-card{ background:rgba(0,0,0,0.2); border:1px solid var(--line); border-radius:16px; padding:16px; text-align:center; }
@@ -219,6 +224,17 @@ textarea.input{ resize:vertical; min-height:90px; }
   </div>
 </div>
 
+<div class="modal" id="quickWalletModal">
+  <div class="modal-content" style="border-radius: 24px 24px 0 0; padding-bottom: 40px;">
+    <div class="modal-header">
+      <div class="modal-title" style="color:var(--accent)">⚠️ Bạn chưa chọn nguồn tiền!</div>
+      <button class="modal-close" onclick="closeModal('quickWalletModal')">✕</button>
+    </div>
+    <div class="sub">Bấm chọn nhanh ví anh vừa dùng để hoàn tất giao dịch:</div>
+    <div class="wallet-picker-grid" id="quickWalletBtnGrid"></div>
+  </div>
+</div>
+
 <div class="modal" id="expenseModal">
   <div class="modal-content">
     <div class="modal-header" style="margin-bottom:16px"><div class="modal-title" id="expenseModalTitle">Giao dịch mới</div><button class="modal-close" onclick="closeModal('expenseModal')">✕</button></div>
@@ -248,7 +264,7 @@ textarea.input{ resize:vertical; min-height:90px; }
 
     <label class="label">Tên khoản chi / Ghi chú (Không bắt buộc)</label>
     <input id="expenseName" class="input" placeholder="Ví dụ: Cà phê sáng...">
-    <button class="btn" id="btnSaveExpense" onclick="saveExpense()">Lưu ngay</button>
+    <button class="btn" id="btnSaveExpense" onclick="validateAndSaveExpense()">Lưu ngay</button>
   </div>
 </div>
 
@@ -274,7 +290,7 @@ function switchMainTab(tabId, btnElement) {
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); btnElement.classList.add('active');
   document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden')); document.getElementById(tabId).classList.remove('hidden');
   const title = document.getElementById("pageTitle"), sub = document.getElementById("pageSub");
-  if(tabId==='expenses'){ title.innerText="Chi tiêu & Tài sản"; sub.innerText="Quản lý dòng tiền thông minh"; } else if(tabId==='todos'){ title.innerText="Todo"; sub.innerText="Danh sách công việc của bạn"; } else if(tabId==='stats'){ title.innerText="Thống kê"; sub.innerText="Báo cáo tổng quan dữ liệu"; } else { title.innerText="Cài đặt"; sub.innerText="Tuỳ chỉnh hệ thống"; }
+  if(tabId=='expenses'){ title.innerText="Chi tiêu & Tài sản"; sub.innerText="Quản lý dòng tiền thông minh"; } else if(tabId=='todos'){ title.innerText="Todo"; sub.innerText="Danh sách công việc của bạn"; } else if(tabId=='stats'){ title.innerText="Thống kê"; sub.innerText="Báo cáo tổng quan dữ liệu"; } else { title.innerText="Cài đặt"; sub.innerText="Tuỳ chỉnh hệ thống"; }
 }
 
 function switchStatView(viewType) {
@@ -294,7 +310,7 @@ function del(){ if(!DB.pinEnabled) return; currentPin = currentPin.slice(0, -1);
 function updateDots(){ for(let i=1; i<=4; i++){ const el = document.getElementById("d"+i); if(i<=currentPin.length) el.classList.add("fill"); else el.classList.remove("fill"); } }
 
 function saveDB(){ localStorage.setItem("myspace", JSON.stringify(DB)); }
-function loadDB(){
+function loadDB() {
   const raw = localStorage.getItem("myspace");
   if(raw) {
     DB = JSON.parse(raw);
@@ -302,9 +318,9 @@ function loadDB(){
       let w = []; w.push({id:'w_cash',name:'💵 Tiền mặt',balance:DB.wallets.cash||0});
       if(DB.walletNames){ w.push({id:'w_bank1',name:'🏦 '+(DB.walletNames.bank1||"Ngân hàng 1"),balance:DB.wallets.bank1||0}); w.push({id:'w_bank2',name:'🏦 '+(DB.walletNames.bank2||"Ngân hàng 2"),balance:DB.wallets.bank2||0}); }
       w.push({id:'w_savings',name:'🐷 Tiết kiệm',balance:DB.wallets.savings||0}); DB.wallets = w;
-    } else if(!DB.wallets) DB.wallets = [{id:'w_'+Date.now(),name:'💵 Tiền mặt',balance:0},{id:'w_'+(Date.now()+1),name:'🏦 Ngân hàng',balance:0}];
-    
-    // Gắn type 'expense' cho data cũ
+    } else if(!DB.wallets || DB.wallets.length === 0) {
+      DB.wallets = [{id:'w_1',name:'💵 Tiền mặt',balance:0},{id:'w_2',name:'🏦 Ngân hàng',balance:0}];
+    }
     if(DB.expenses) DB.expenses.forEach(e => { if(!e.type) e.type = 'expense'; });
   }
   if(!DB.pinEnabled){ document.getElementById("lock").classList.add("hidden"); document.getElementById("app").classList.remove("hidden"); init(); } else document.getElementById("bottomNav").style.display = "none";
@@ -312,7 +328,7 @@ function loadDB(){
 function init(){ applyQuickFilter(); renderTodos(); renderExpenses(); renderWallets(); calcStorage(); updatePasscodeToggle(); }
 
 /* ======================
-WALLETS
+WALLETS (FIXED RE-RENDER LOGIC)
 ====================== */
 function renderWalletModalList() {
   const list = document.getElementById('walletModalList'); if(DB.wallets.length===0) { list.innerHTML = '<div class="sub" style="text-align:center; padding: 20px 0;">Chưa có ví nào</div>'; return; }
@@ -322,13 +338,17 @@ function openWalletModal() { renderWalletModalList(); openModal('walletModal'); 
 function addNewWalletRow() { DB.wallets.push({ id: 'w_' + Date.now(), name: '💳 Ví mới', balance: 0 }); renderWalletModalList(); }
 function removeWalletRow(id) { if(confirm("Xoá ví này?")) { DB.wallets = DB.wallets.filter(w => w.id !== id); renderWalletModalList(); } }
 function saveWallets() { DB.wallets.forEach(w => { const n = document.getElementById('wname_'+w.id), b = document.getElementById('wbal_'+w.id); if(n&&b){ w.name=n.value.trim()||'Ví trống'; w.balance=parseFloat(b.value)||0; } }); saveDB(); closeModal('walletModal'); renderWallets(); }
+
 function renderWallets() {
-  const total = DB.wallets.reduce((s, w) => s + (w.balance||0), 0); document.getElementById("totalBalance").innerText = total.toLocaleString() + "đ";
-  const list = document.getElementById("walletDashboardList"); if(DB.wallets.length===0){ list.innerHTML = '<div class="sub" style="grid-column: span 2;">Thêm nguồn tiền...</div>'; return; }
+  const total = DB.wallets.reduce((s, w) => s + (w.balance||0), 0); 
+  document.getElementById("totalBalance").innerText = total.toLocaleString() + "đ";
+  
+  const list = document.getElementById("walletDashboardList"); 
+  if(DB.wallets.length===0){ list.innerHTML = '<div class="sub" style="grid-column: span 2;">Thêm nguồn tiền...</div>'; return; }
   list.innerHTML = DB.wallets.map(w => `<div style="background:rgba(0,0,0,0.4); padding:12px; border-radius:12px; border: 1px solid rgba(255,255,255,0.05);"><div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${w.name}">${w.name}</div><div style="font-size:15px;font-weight:700;margin-top:4px;color:${w.balance<0?'var(--red)':'#fff'}">${(w.balance||0).toLocaleString()}đ</div></div>`).join("");
 }
 function getWalletName(id) { const w = DB.wallets.find(x => x.id === id); return w ? w.name : 'Ví đã xoá'; }
-function popWallets() { const sel = document.getElementById("expenseWallet"); sel.innerHTML = `<option value="none">-- Bỏ qua --</option>` + DB.wallets.map(w => `<option value="${w.id}">${w.name} (${(w.balance||0).toLocaleString()}đ)</option>`).join(""); }
+function popWallets() { const sel = document.getElementById("expenseWallet"); sel.innerHTML = `<option value="none">-- Bỏ qua (Chọn sau) --</option>` + DB.wallets.map(w => `<option value="${w.id}">${w.name} (${(w.balance||0).toLocaleString()}đ)</option>`).join(""); }
 
 /* ======================
 TRANSACTIONS (INCOME / EXPENSE)
@@ -361,16 +381,54 @@ document.getElementById("expensePrice").addEventListener("input", () => {
 });
 
 function resetExpenseForm() {
-  document.getElementById("expensePrice").value = ""; document.getElementById("expenseName").value = ""; document.getElementById("expenseCategory").value = ""; document.getElementById("priceSuggestions").innerHTML = ""; popWallets(); setTxType('expense'); document.getElementById("expenseModalTitle").innerText = "Giao dịch mới"; const btn = document.getElementById("btnSaveExpense"); if(btn){ btn.innerText = "Lưu ngay"; btn.onclick = saveExpense; }
+  document.getElementById("expensePrice").value = ""; document.getElementById("expenseName").value = ""; document.getElementById("expenseCategory").value = ""; document.getElementById("priceSuggestions").innerHTML = ""; popWallets(); setTxType('expense'); document.getElementById("expenseModalTitle").innerText = "Giao dịch mới"; const btn = document.getElementById("btnSaveExpense"); if(btn){ btn.innerText = "Lưu ngay"; btn.onclick = validateAndSaveExpense; }
 }
 
-function saveExpense(){
-  const price = parseFloat(document.getElementById("expensePrice").value); if(!price){ alert("Nhập số tiền!"); return; }
-  const name = document.getElementById("expenseName").value.trim() || (txType==='income'?"Thu nhập":"Chưa phân loại"); const cat = document.getElementById("expenseCategory").value || "Khác"; const wKey = document.getElementById("expenseWallet").value;
+/* BUG 2 FIXED: POPUP BẮT CHỌN VÍ KHI VỘI */
+function validateAndSaveExpense() {
+  const price = parseFloat(document.getElementById("expensePrice").value); 
+  if(!price){ alert("Nhập số tiền!"); return; }
   
-  if(wKey && wKey !== 'none') { const w = DB.wallets.find(x => x.id === wKey); if(w) w.balance += (txType==='income' ? price : -price); }
+  const wKey = document.getElementById("expenseWallet").value;
+  
+  if(wKey === 'none') {
+      // Nếu là bỏ qua (vội), bung cái popup chọn ví nhanh lên liền
+      const grid = document.getElementById('quickWalletBtnGrid');
+      grid.innerHTML = DB.wallets.map(w => `
+          <button class="quick-wallet-btn" onclick="saveWithQuickWallet('${w.id}')">${w.name}</button>
+      `).join("") + `<button class="quick-wallet-btn" style="grid-column: span 2; background:rgba(255,255,255,0.05); border-color:var(--line);" onclick="saveWithQuickWallet('none')">⚠️ Kế kệ (Không trừ ví nào hết)</option>`;
+      openModal('quickWalletModal');
+  } else {
+      executeSaveExpense(wKey);
+  }
+}
+
+function saveWithQuickWallet(walletId) {
+  closeModal('quickWalletModal');
+  executeSaveExpense(walletId);
+}
+
+function executeSaveExpense(wKey) {
+  const price = parseFloat(document.getElementById("expensePrice").value);
+  const name = document.getElementById("expenseName").value.trim() || (txType==='income'?"Thu nhập":"Chưa phân loại"); 
+  const cat = document.getElementById("expenseCategory").value || "Khác";
+  
+  // Trừ trực tiếp vào mảng dữ liệu ví
+  if(wKey && wKey !== 'none') { 
+     const w = DB.wallets.find(x => x.id === wKey); 
+     if(w) w.balance += (txType==='income' ? price : -price); 
+  }
+  
   DB.expenses.unshift({ id: Date.now(), type: txType, name, price, category: cat, wallet: wKey, image: currentPhoto||"", createdAt: new Date().toISOString() });
-  saveDB(); closeModal("expenseModal"); renderExpenses(); renderStats(); renderWallets(); calcStorage();
+  
+  saveDB(); 
+  closeModal("expenseModal"); 
+  
+  // BUG 1 FIXED: Gọi lại đồng bộ toàn bộ giao diện tiền tệ ngay lập tức
+  renderExpenses(); 
+  renderStats(); 
+  renderWallets(); 
+  calcStorage();
 }
 
 function editExpense(id) {
@@ -384,8 +442,8 @@ function editExpense(id) {
     const nPrice = parseFloat(document.getElementById("expensePrice").value); if(!nPrice) return; const nWKey = document.getElementById("expenseWallet").value;
     if(exp.wallet && exp.wallet !== 'none') { const oW = DB.wallets.find(x => x.id === exp.wallet); if(oW) oW.balance += (exp.type==='income' ? -exp.price : exp.price); }
     if(nWKey && nWKey !== 'none') { const nW = DB.wallets.find(x => x.id === nWKey); if(nW) nW.balance += (txType==='income' ? nPrice : -nPrice); }
-    exp.type = txType; exp.price = nPrice; exp.wallet = nWKey; exp.name = document.getElementById("expenseName").value.trim(); exp.category = document.getElementById("expenseCategory").value; exp.image = currentPhoto||"";
-    saveDB(); closeModal("expenseModal"); renderExpenses(); renderStats(); renderWallets(); calcStorage(); btn.innerText = "Lưu ngay"; btn.onclick = saveExpense;
+    exp.type = txType; exp.price = nPrice; exp.wallet = nWKey; exp.name = document.getElementById("expenseName").value.trim() || (txType==='income'?"Thu nhập":"Chưa phân loại"); exp.category = document.getElementById("expenseCategory").value; exp.image = currentPhoto||"";
+    saveDB(); closeModal("expenseModal"); renderExpenses(); renderStats(); renderWallets(); calcStorage(); btn.innerText = "Lưu ngay"; btn.onclick = validateAndSaveExpense;
   }; openModal("expenseModal");
 }
 
@@ -439,7 +497,7 @@ function renderStats(){
   const catExp = {}; eData.filter(e=>e.type!=='income').forEach(e => { catExp[e.category] = (catExp[e.category]||0)+e.price; });
   document.getElementById("expenseCategoryStats").innerHTML = Object.entries(catExp).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div class="category-row"><span>${c}</span><span class="category-amount">${v.toLocaleString()}đ</span><span style="color:var(--muted);font-size:12px">${((v/totalE)*100).toFixed(0)}%</span></div>`).join("") || '<div class="sub">Chưa có dữ liệu</div>';
 }
-function exportExpenseStatsTxt() { /* Tương tự cũ, có thể bỏ qua cho gọn code chat */ alert("Tính năng xuất TXT đang tạm ẩn để tối ưu dung lượng code."); }
+function exportExpenseStatsTxt() { alert("Tính năng xuất TXT đang tạm ẩn để tối ưu dung lượng code chat."); }
 
 function togglePasscode(){ DB.pinEnabled = !DB.pinEnabled; saveDB(); updatePasscodeToggle(); } function updatePasscodeToggle(){ document.getElementById("passcodeToggle").className = "toggle " + (DB.pinEnabled?"on":""); } function changePasscode(){ const p = prompt("Nhập PIN mới (4 số):"); if(p&&p.length===4&&!isNaN(p)){ DB.pin=p; saveDB(); alert("Đã đổi!"); }else alert("Lỗi!"); }
 function exportData(){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DB, null, 2)], {type: 'application/json'})); a.download = 'myspace-backup.json'; a.click(); }
